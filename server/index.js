@@ -4,7 +4,7 @@ const { json, urlencoded } = require("body-parser");
 const massive = require("massive");
 const session = require("express-session");
 
-const { understand } = require("./controllers/sms_controller");
+const { understand } = require("./controllers/sms/sms_controller");
 const { register, login, logout } = require("./controllers/auth_controller");
 
 const app = express();

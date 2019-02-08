@@ -9,12 +9,14 @@ module.exports = {
   understand: (req, res) => {
     const command = req.body.Body.split(" ")[0].toLowerCase();
     const twiml = new MessagingResponse();
-    if (command === "hi") {
-      twiml.message("Hello! How are you?");
-    } else {
-      twiml.message(
-        "Im sorry I did not quite understand that? Please try again"
-      );
+    switch (command) {
+      case "hi":
+        twiml.message(`Hello! How are you?`);
+        break;
+      default:
+        twiml.message(
+          `I'm sorry I didn't quite understand that? Please try again.`
+        );
     }
     res.writeHead(200, { "Content-Type": "text/xml" });
     res.end(twiml.toString());
