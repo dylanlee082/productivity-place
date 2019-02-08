@@ -1,0 +1,1 @@
+SELECT * FROM mortal WHERE username = $1

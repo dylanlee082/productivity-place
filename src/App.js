@@ -3,7 +3,7 @@ import "./App.css";
 import routes from "./routes";
 
 class App extends Component {
-  render() {
+  render(props) {
     return <div className="App">{routes}</div>;
   }
 }

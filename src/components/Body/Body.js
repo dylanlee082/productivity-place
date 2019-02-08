@@ -6,11 +6,11 @@ import { connect } from "react-redux";
 import { toggleOpen } from "../../ducks/reducer";
 import { Switch, Route } from "react-router-dom";
 
-import Sidebar from "./Sidebar/Sidebar";
-import TaskList from "./TaskList/TaskList";
-import Calendar from "./Calendar/Calendar";
-import Settings from "./Settings/Settings";
-import Contacts from "./Contacts/Contacts";
+import Sidebar from "../Sidebar";
+import TaskList from "./views/TaskList";
+import Calendar from "./views/Calendar";
+import Settings from "./views/Settings";
+import Contacts from "./views/Contacts";
 
 import CssBaseline from "@material-ui/core/CssBaseline";
 import AppBar from "@material-ui/core/AppBar";
@@ -74,7 +74,6 @@ const styles = theme => ({
 class Body extends Component {
   render() {
     const { classes, open, toggleOpen } = this.props;
-
     return (
       <div className={classes.root}>
         <CssBaseline />

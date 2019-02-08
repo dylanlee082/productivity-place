@@ -1,8 +1,10 @@
 import React, { Component } from "react";
+import { withRouter } from "react-router-dom";
+import axios from "axios";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import { connect } from "react-redux";
-import { toggleOpen } from "../../../ducks/reducer";
+import { toggleOpen } from "../ducks/reducer";
 import { Link } from "react-router-dom";
 import Drawer from "@material-ui/core/Drawer";
 import List from "@material-ui/core/List";
@@ -35,10 +37,19 @@ const styles = theme => ({
     padding: "0 8px",
     ...theme.mixins.toolbar,
     justifyContent: "flex-end"
+  },
+  link: {
+    textDecoration: "none"
   }
 });
 
 class Sidebar extends Component {
+  handleLogout = () => {
+    axios.get("/auth/logout").then(() => {
+      this.props.history.push("/");
+    });
+  };
+
   render() {
     const { classes, theme, open, toggleOpen } = this.props;
     return (
@@ -65,7 +76,7 @@ class Sidebar extends Component {
           <List>
             {["Tasks", "Calendar", "Contacts", "Settings"].map(
               (text, index) => (
-                <Link to={`/main/${text}`} key={text}>
+                <Link className={classes.link} to={`/main/${text}`} key={text}>
                   <ListItem button>
                     <ListItemIcon>
                       {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
@@ -75,6 +86,12 @@ class Sidebar extends Component {
                 </Link>
               )
             )}
+            <ListItem button onClick={() => this.handleLogout()}>
+              <ListItemIcon>
+                <InboxIcon />
+              </ListItemIcon>
+              <ListItemText primary="Logout" />
+            </ListItem>
           </List>
         </Drawer>
       </div>
@@ -93,7 +110,9 @@ Sidebar.propTypes = {
   theme: PropTypes.object.isRequired
 };
 
-export default connect(
-  mapStateToProps,
-  { toggleOpen }
-)(withStyles(styles, { withTheme: true })(Sidebar));
+export default withRouter(
+  connect(
+    mapStateToProps,
+    { toggleOpen }
+  )(withStyles(styles, { withTheme: true })(Sidebar))
+);
