@@ -24,7 +24,7 @@
 /* VARIABLES */
 
 :root {
-  --main-color: #1a8fff;
+  --main-color: #3f51b5;
   --text-color: #777;
   --text-color-light: #ccc;
   --border-color: #eee;
@@ -38,7 +38,7 @@
   box-sizing: border-box;
 }
 
-body {
+.body {
   font-family: "Open Sans", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
   font-size: 1em;
   font-weight: 300;
@@ -48,7 +48,7 @@ body {
   position: relative;
 }
 
-header {
+.header {
   display: block;
   width: 100%;
   padding: 1.75em 0;
@@ -56,18 +56,18 @@ header {
   background: var(--neutral-color);
 }
 
-header #logo {
+.header #logo {
   font-size: 175%;
   text-align: center;
   color: var(--main-color);
   line-height: 1;
 }
 
-header #logo .icon {
+.header #logo .icon {
   padding-right: 0.25em;
 }
 
-main {
+.main {
   display: block;
   margin: 0 auto;
   margin-top: 5em;
@@ -112,6 +112,14 @@ main {
 
 /* Calendar */
 
+.btn {
+  padding: 0.5em;
+  border: none;
+  margin: 0.2em;
+  background: var(--main-color);
+  color: white;
+}
+
 .calendar {
   display: block;
   position: relative;
@@ -149,8 +157,7 @@ main {
 
 .calendar .days {
   text-transform: uppercase;
-  font-weight: 400;
-  color: var(--text-color-light);
+  font-weight: 500;
   font-size: 70%;
   padding: 0.75em 0;
   border-bottom: 1px solid var(--border-color);
@@ -158,17 +165,12 @@ main {
 
 .calendar .body .cell {
   position: relative;
-  height: 5em;
+  height: 7.5em;
   border-right: 1px solid var(--border-color);
   overflow: hidden;
   cursor: pointer;
   background: var(--neutral-color);
   transition: 0.25s ease-out;
-}
-
-.calendar .body .cell:hover {
-  background: var(--bg-color);
-  transition: 0.5s ease-out;
 }
 
 .calendar .body .selected {
@@ -201,25 +203,6 @@ main {
 .calendar .body .disabled {
   color: var(--text-color-light);
   pointer-events: none;
-}
-
-.calendar .body .cell .bg {
-  font-weight: 700;
-  line-height: 1;
-  color: var(--main-color);
-  opacity: 0;
-  font-size: 8em;
-  position: absolute;
-  top: -0.2em;
-  right: -0.05em;
-  transition: 0.25s ease-out;
-  letter-spacing: -0.07em;
-}
-
-.calendar .body .cell:hover .bg,
-.calendar .body .selected .bg {
-  opacity: 0.05;
-  transition: 0.5s ease-in;
 }
 
 .calendar .body .col {

@@ -21,8 +21,12 @@ class Calendar extends Component {
         <div className="col col-center">
           <span>{dateFns.format(this.state.currentMonth, dateFormat)}</span>
         </div>
-        <div className="col col-end" onClick={this.nextMonth}>
-          <div className="icon">chevron_right</div>
+        <div className="col col-end">
+          <button className="btn">Calendar</button>
+          <button className="btn">Day</button>
+          <div onClick={this.nextMonth} className="icon">
+            chevron_right
+          </div>
         </div>
       </div>
     );
@@ -59,6 +63,37 @@ class Calendar extends Component {
     let day = startDate;
     let formattedDate = "";
 
+    let apptList = [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28
+    ];
+
     while (day <= endDate) {
       for (let i = 0; i < 7; i++) {
         formattedDate = dateFns.format(day, dateFormat);
@@ -76,7 +111,7 @@ class Calendar extends Component {
             onClick={() => this.onDateClick(dateFns.parse(cloneDay))}
           >
             <span className="number">{formattedDate}</span>
-            <span className="bg">{formattedDate}</span>
+            <h1>{apptList[formattedDate - 1]}</h1>
           </div>
         );
         day = dateFns.addDays(day, 1);
