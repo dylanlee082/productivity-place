@@ -30,7 +30,8 @@ CREATE TABLE appt (
     appt_id SERIAL PRIMARY KEY,
     appt_time TIMESTAMPTZ,
     name VARCHAR(24),
-    location VARCHAR(100)
+    location VARCHAR(100),
+    mortal_id INTEGER REFERENCES mortal(mortal_id)
 );
 
 INSERT INTO mortal (username, email)
