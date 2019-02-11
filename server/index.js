@@ -30,7 +30,9 @@ app.post("/auth/register", register);
 app.post("/auth/login", login);
 app.get("/auth/logout", logout);
 
+app.get("/api/appt", apptCon.read);
 app.post("/api/appt", apptCon.create);
+app.delete("/api/appt/:id", apptCon.delete);
 
 const PORT = process.env.SERVER_PORT;
 app.listen(PORT, () => console.log(`Listening on port: ${PORT}`));

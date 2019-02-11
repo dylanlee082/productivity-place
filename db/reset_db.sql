@@ -4,6 +4,12 @@ DROP TABLE list;
 DROP TABLE mortal;
 
 
+DROP TABLE task; 
+DROP TABLE appt; 
+DROP TABLE list;
+DROP TABLE mortal;
+
+
 CREATE TABLE mortal (
     mortal_id SERIAL PRIMARY KEY,
     username VARCHAR(30),
@@ -28,7 +34,7 @@ CREATE TABLE task (
 
 CREATE TABLE appt (
     appt_id SERIAL PRIMARY KEY,
-    appt_time TIMESTAMP,
+    appt_time TIMESTAMPTZ,
     name VARCHAR(24),
     location VARCHAR(100),
     mortal_id INTEGER REFERENCES mortal(mortal_id)

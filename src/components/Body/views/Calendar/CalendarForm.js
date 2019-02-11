@@ -7,7 +7,8 @@ import {
   TimePicker,
   DatePicker
 } from "material-ui-pickers";
-
+import { connect } from "react-redux";
+import { toggleCalendarForm } from "../../../../ducks/reducer";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Dialog from "@material-ui/core/Dialog";
@@ -18,7 +19,6 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 
 class FormDialog extends Component {
   state = {
-    open: false,
     appt: {
       date: new Date(),
       name: "",
@@ -27,12 +27,14 @@ class FormDialog extends Component {
     selectedDate: new Date()
   };
 
-  handleClickOpen = () => {
-    this.setState({ open: true });
-  };
-
-  handleClose = () => {
-    this.setState({ open: false });
+  componentDidMount = () => {
+    if (this.props.appt_id) {
+      this.setState({
+        date: this.props.date,
+        name: this.props.name,
+        location: this.props.location
+      });
+    }
   };
 
   handleDateChange = date => {
@@ -49,9 +51,9 @@ class FormDialog extends Component {
     axios
       .post("/api/appt", this.state.appt)
       .then(res => {
+        this.props.toggleCalendarForm();
         this.setState({
-          open: false,
-          appt: { date: "", name: "", location: "" },
+          appt: { date: new Date(), name: "", location: "" },
           selectedDate: new Date()
         });
       })
@@ -64,13 +66,13 @@ class FormDialog extends Component {
         <Button
           variant="outlined"
           color="primary"
-          onClick={this.handleClickOpen}
+          onClick={() => this.props.toggleCalendarForm(this.props.open)}
         >
           Open form dialog
         </Button>
         <Dialog
-          open={this.state.open}
-          onClose={this.handleClose}
+          open={this.props.open}
+          onClose={() => this.props.toggleCalendarForm(this.props.open)}
           aria-labelledby="form-dialog-title"
         >
           <DialogTitle id="form-dialog-title">
@@ -81,7 +83,7 @@ class FormDialog extends Component {
               To subscribe to this website, please enter your email address
               here. We will send updates occasionally.
             </DialogContentText>
-            {/* Build using the advanced Material-UI Pickers */}
+            {/* Built using the advanced Material-UI Pickers */}
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
               <DatePicker
                 margin="normal"
@@ -116,7 +118,10 @@ class FormDialog extends Component {
             />
           </DialogContent>
           <DialogActions>
-            <Button onClick={this.handleClose} color="primary">
+            <Button
+              onClick={() => this.props.toggleCalendarForm(this.props.open)}
+              color="primary"
+            >
               Cancel
             </Button>
             <Button onClick={this.handleSubmit} color="primary">
@@ -129,4 +134,13 @@ class FormDialog extends Component {
   }
 }
 
-export default FormDialog;
+const mapStateToProps = state => {
+  return {
+    open: state.calendarForm
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  { toggleCalendarForm }
+)(FormDialog);
