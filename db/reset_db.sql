@@ -28,7 +28,7 @@ CREATE TABLE task (
 
 CREATE TABLE appt (
     appt_id SERIAL PRIMARY KEY,
-    appt_time TIMESTAMPTZ,
+    appt_time TIMESTAMP,
     name VARCHAR(24),
     location VARCHAR(100),
     mortal_id INTEGER REFERENCES mortal(mortal_id)

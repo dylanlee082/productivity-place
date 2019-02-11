@@ -6,6 +6,7 @@ const session = require("express-session");
 
 const { understand } = require("./controllers/sms/sms_controller");
 const { register, login, logout } = require("./controllers/auth_controller");
+const apptCon = require("./controllers/appt_controller");
 
 const app = express();
 app.use(urlencoded({ extended: false }));
@@ -28,6 +29,8 @@ app.post("/sms", understand);
 app.post("/auth/register", register);
 app.post("/auth/login", login);
 app.get("/auth/logout", logout);
+
+app.post("/api/appt", apptCon.create);
 
 const PORT = process.env.SERVER_PORT;
 app.listen(PORT, () => console.log(`Listening on port: ${PORT}`));

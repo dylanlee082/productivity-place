@@ -1,4 +1,13 @@
-import React from "react";
+import "date-fns";
+import React, { Component } from "react";
+import axios from "axios";
+import DateFnsUtils from "@date-io/date-fns";
+import {
+  MuiPickersUtilsProvider,
+  TimePicker,
+  DatePicker
+} from "material-ui-pickers";
+
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Dialog from "@material-ui/core/Dialog";
@@ -7,9 +16,15 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 
-export default class FormDialog extends React.Component {
+class FormDialog extends Component {
   state = {
-    open: false
+    open: false,
+    appt: {
+      date: new Date(),
+      name: "",
+      location: ""
+    },
+    selectedDate: new Date()
   };
 
   handleClickOpen = () => {
@@ -18,6 +33,29 @@ export default class FormDialog extends React.Component {
 
   handleClose = () => {
     this.setState({ open: false });
+  };
+
+  handleDateChange = date => {
+    this.setState({ appt: { ...this.state.appt, date: date } });
+  };
+
+  handleChange = e => {
+    this.setState({
+      appt: { ...this.state.appt, [e.target.name]: e.target.value }
+    });
+  };
+
+  handleSubmit = () => {
+    axios
+      .post("/api/appt", this.state.appt)
+      .then(res => {
+        this.setState({
+          open: false,
+          appt: { date: "", name: "", location: "" },
+          selectedDate: new Date()
+        });
+      })
+      .catch(err => console.log(err));
   };
 
   render() {
@@ -35,27 +73,54 @@ export default class FormDialog extends React.Component {
           onClose={this.handleClose}
           aria-labelledby="form-dialog-title"
         >
-          <DialogTitle id="form-dialog-title">Subscribe</DialogTitle>
+          <DialogTitle id="form-dialog-title">
+            Create a new appointment
+          </DialogTitle>
           <DialogContent>
             <DialogContentText>
               To subscribe to this website, please enter your email address
               here. We will send updates occasionally.
             </DialogContentText>
+            {/* Build using the advanced Material-UI Pickers */}
+            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+              <DatePicker
+                margin="normal"
+                label="Date picker"
+                value={this.state.appt.date}
+                onChange={this.handleDateChange}
+              />
+              <TimePicker
+                margin="normal"
+                label="Time Picker"
+                value={this.state.appt.date}
+                onChange={this.handleDateChange}
+              />
+            </MuiPickersUtilsProvider>
             <TextField
               autoFocus
               margin="dense"
-              id="name"
-              label="Email Address"
-              type="email"
+              label="Who is the appointment with?"
+              type="string"
+              name="name"
               fullWidth
+              onChange={e => this.handleChange(e)}
+            />
+            <TextField
+              autoFocus
+              margin="dense"
+              label="Where is the appointment at?"
+              type="string"
+              name="location"
+              fullWidth
+              onChange={e => this.handleChange(e)}
             />
           </DialogContent>
           <DialogActions>
             <Button onClick={this.handleClose} color="primary">
               Cancel
             </Button>
-            <Button onClick={this.handleClose} color="primary">
-              Subscribe
+            <Button onClick={this.handleSubmit} color="primary">
+              Submit
             </Button>
           </DialogActions>
         </Dialog>
@@ -63,3 +128,5 @@ export default class FormDialog extends React.Component {
     );
   }
 }
+
+export default FormDialog;

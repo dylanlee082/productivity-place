@@ -17,6 +17,11 @@ import ListItemText from "@material-ui/core/ListItemText";
 import InboxIcon from "@material-ui/icons/MoveToInbox";
 import MailIcon from "@material-ui/icons/Mail";
 import IconButton from "@material-ui/core/IconButton";
+import ExpandLess from "@material-ui/icons/ExpandLess";
+import ExpandMore from "@material-ui/icons/ExpandMore";
+import Collapse from "@material-ui/core/Collapse";
+import StarBorder from "@material-ui/icons/StarBorder";
+import CalendarForm from "./Body/views/Calendar/CalendarForm";
 
 const drawerWidth = 240;
 
@@ -44,9 +49,19 @@ const styles = theme => ({
 });
 
 class Sidebar extends Component {
+  state = {
+    open: false
+  };
+
   handleLogout = () => {
     axios.get("/auth/logout").then(() => {
       this.props.history.push("/");
+    });
+  };
+
+  handleClick = () => {
+    this.setState({
+      open: !this.state.open
     });
   };
 
@@ -74,18 +89,59 @@ class Sidebar extends Component {
           </div>
           <Divider />
           <List>
-            {["Tasks", "Calendar", "Contacts", "Settings"].map(
-              (text, index) => (
-                <Link className={classes.link} to={`/main/${text}`} key={text}>
-                  <ListItem button>
-                    <ListItemIcon>
-                      {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                    </ListItemIcon>
-                    <ListItemText primary={text} />
-                  </ListItem>
-                </Link>
-              )
-            )}
+            <Link className={classes.link} to={"/main/tasks"}>
+              <ListItem button>
+                <ListItemIcon>
+                  <InboxIcon />
+                </ListItemIcon>
+                <ListItemText primary="Tasks" />
+              </ListItem>
+            </Link>
+            <Link
+              className={classes.link}
+              to={"/main/calendar"}
+              onClick={() => this.handleClick()}
+            >
+              <ListItem button>
+                <ListItemIcon>
+                  <MailIcon />
+                </ListItemIcon>
+                <ListItemText primary="Calendar" />
+                {this.state.open ? <ExpandLess /> : <ExpandMore />}
+              </ListItem>
+            </Link>
+            <Collapse in={this.state.open} timeout="auto" unmountOnExit>
+              <List component="div" disablePadding>
+                <ListItem button className={classes.nested}>
+                  <ListItemIcon>
+                    <StarBorder />
+                  </ListItemIcon>
+                  <CalendarForm />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon>
+                    <StarBorder />
+                  </ListItemIcon>
+                  <ListItemText primary="Day View" />
+                </ListItem>
+              </List>
+            </Collapse>
+            <Link className={classes.link} to={"/main/contacts"}>
+              <ListItem button>
+                <ListItemIcon>
+                  <InboxIcon />
+                </ListItemIcon>
+                <ListItemText primary="Contacts" />
+              </ListItem>
+            </Link>
+            <Link className={classes.link} to={"/main/settings"}>
+              <ListItem button>
+                <ListItemIcon>
+                  <MailIcon />
+                </ListItemIcon>
+                <ListItemText primary="Settings" />
+              </ListItem>
+            </Link>
             <ListItem button onClick={() => this.handleLogout()}>
               <ListItemIcon>
                 <InboxIcon />

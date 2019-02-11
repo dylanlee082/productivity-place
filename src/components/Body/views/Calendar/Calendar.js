@@ -1,60 +1,90 @@
 import React, { Component } from "react";
-import dateFns from "date-fns";
-import "./Calendar.module.css";
+import { withStyles } from "@material-ui/core/styles";
+import moment from "moment";
 
-class Calendar extends Component {
-  state = {
-    currentMonth: new Date(),
-    selectedDate: new Date()
+import Grid from "@material-ui/core/Grid";
+import Paper from "@material-ui/core/Paper";
+import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
+import ChevronRightIcon from "@material-ui/icons/ChevronRight";
+
+const styles = theme => ({
+  root: {
+    flexGrow: 1
+  },
+  paper: {
+    width: "230px",
+    height: "140px"
+  },
+  header: {
+    display: "flex",
+    justifyContent: "space-around",
+    alignItems: "center"
+  },
+  main: {
+    flexWrap: "nowrap"
+  },
+  days: {
+    width: "230px",
+    height: "40px",
+    flexWrap: "nowrap"
+  }
+});
+
+class TaskList extends Component {
+  constructor() {
+    super();
+    this.state = {
+      currentMonth: new Date(),
+      currentDate: new Date()
+    };
+  }
+
+  nextMonth = () => {
+    this.setState({
+      currentMonth: moment(this.state.currentMonth).add(1, "M")
+    });
   };
 
-  renderHeader() {
+  prevMonth = () => {
+    this.setState({
+      currentMonth: moment(this.state.currentMonth).subtract(1, "M")
+    });
+  };
+
+  renderHeader = classes => {
     const dateFormat = "MMMM YYYY";
-
     return (
-      <div className="header row flex-middle">
-        <div className="col col-start">
-          <div className="icon" onClick={this.prevMonth}>
-            chevron_left
-          </div>
-        </div>
-        <div className="col col-center">
-          <span>{dateFns.format(this.state.currentMonth, dateFormat)}</span>
-        </div>
-        <div className="col col-end">
-          <button className="btn">Calendar</button>
-          <button className="btn">Day</button>
-          <div onClick={this.nextMonth} className="icon">
-            chevron_right
-          </div>
-        </div>
-      </div>
+      <Grid container item xs={12} className={classes.header}>
+        <ChevronLeftIcon onClick={() => this.prevMonth()} />
+        <h1>{moment(this.state.currentMonth).format(dateFormat)}</h1>
+        <ChevronRightIcon onClick={() => this.nextMonth()} />
+      </Grid>
     );
-  }
+  };
 
-  renderDays() {
-    const dateFormat = "dddd";
-    const days = [];
-
-    let startDate = dateFns.startOfWeek(this.state.currentMonth);
-
+  renderDays = classes => {
+    let days = [];
     for (let i = 0; i < 7; i++) {
       days.push(
-        <div className="col col-center" key={i}>
-          {dateFns.format(dateFns.addDays(startDate, i), dateFormat)}
-        </div>
+        <Grid item>
+          <Paper className={classes.days}>
+            {moment()
+              .weekday(i)
+              .format("dddd")
+              .toString()}
+          </Paper>
+        </Grid>
       );
     }
+    return days;
+  };
 
-    return <div className="days row">{days}</div>;
-  }
-
-  renderCells() {
+  renderCells = classes => {
     const { currentMonth, selectedDate } = this.state;
-    const monthStart = dateFns.startOfMonth(currentMonth);
-    const monthEnd = dateFns.endOfMonth(monthStart);
-    const startDate = dateFns.startOfWeek(monthStart);
-    const endDate = dateFns.endOfWeek(monthEnd);
+    const monthStart = moment(currentMonth).startOf("month");
+    const monthEnd = moment(currentMonth).endOf("month");
+    const startDate = moment(monthStart).startOf("week");
+    const endDate = moment(monthEnd).endOf("week");
 
     const dateFormat = "D";
     const rows = [];
@@ -63,96 +93,42 @@ class Calendar extends Component {
     let day = startDate;
     let formattedDate = "";
 
-    let apptList = [
-      1,
-      2,
-      3,
-      4,
-      5,
-      6,
-      7,
-      8,
-      9,
-      10,
-      11,
-      12,
-      13,
-      14,
-      15,
-      16,
-      17,
-      18,
-      19,
-      20,
-      21,
-      22,
-      23,
-      24,
-      25,
-      26,
-      27,
-      28
-    ];
-
     while (day <= endDate) {
       for (let i = 0; i < 7; i++) {
-        formattedDate = dateFns.format(day, dateFormat);
+        formattedDate = moment(day).format(dateFormat);
         const cloneDay = day;
         days.push(
-          <div
-            className={`col cell ${
-              !dateFns.isSameMonth(day, monthStart)
-                ? "disabled"
-                : dateFns.isSameDay(day, selectedDate)
-                ? "selected"
-                : ""
-            }`}
-            key={day}
-            onClick={() => this.onDateClick(dateFns.parse(cloneDay))}
-          >
-            <span className="number">{formattedDate}</span>
-            <h1>{apptList[formattedDate - 1]}</h1>
-          </div>
+          <Grid item>
+            <Paper className={classes.paper}>{formattedDate}</Paper>
+          </Grid>
         );
-        day = dateFns.addDays(day, 1);
+        day = moment(day).add(1, "day");
       }
       rows.push(
-        <div className="row" key={day}>
+        <Grid container item xs={12} className={classes.main}>
           {days}
-        </div>
+        </Grid>
       );
       days = [];
     }
-    return <div className="body">{rows}</div>;
-  }
-
-  onDateClick = day => {
-    this.setState({
-      selectedDate: day
-    });
-  };
-
-  nextMonth = () => {
-    this.setState({
-      currentMonth: dateFns.addMonths(this.state.currentMonth, 1)
-    });
-  };
-
-  prevMonth = () => {
-    this.setState({
-      currentMonth: dateFns.subMonths(this.state.currentMonth, 1)
-    });
+    return rows;
   };
 
   render() {
+    const { classes } = this.props;
+
     return (
-      <div className="calendar">
-        {this.renderHeader()}
-        {this.renderDays()}
-        {this.renderCells()}
+      <div className={classes.root}>
+        {this.renderHeader(classes)}
+        <Grid container spacing={8}>
+          <Grid container item xs={12}>
+            {this.renderDays(classes)}
+          </Grid>
+          {this.renderCells(classes)}
+        </Grid>
       </div>
     );
   }
 }
 
-export default Calendar;
+export default withStyles(styles)(TaskList);
