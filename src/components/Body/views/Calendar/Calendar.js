@@ -3,13 +3,15 @@ import React, { Component } from "react";
 import axios from "axios";
 import moment from "moment";
 
-//Material-UI Imports
+//Material-UI Core Imports
 import { withStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
+import Chip from "@material-ui/core/Chip";
+
+//Material-UI Icon Imports
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
-import Chip from "@material-ui/core/Chip";
 
 //Material-UI Styling
 const styles = theme => ({
@@ -70,7 +72,6 @@ class Calendar extends Component {
 
   //Parse the appt list to make sure only the correct appt's are showing
   parseAppts = apptList => {
-    console.log("Hi");
     let arr = [];
     for (let i = 0; i < apptList.length; i++) {
       if (
@@ -80,7 +81,6 @@ class Calendar extends Component {
         //arr of objects with each object having the appt day as the key and the appt info as the value
         let obj = {};
         let time = moment(apptList[i].appt_time).format("D");
-        console.log(time);
         obj[time] = apptList[i];
         arr.push(obj);
       }
@@ -117,7 +117,7 @@ class Calendar extends Component {
     let days = [];
     for (let i = 0; i < 7; i++) {
       days.push(
-        <Grid item>
+        <Grid key={i} item>
           <Paper className={classes.days}>
             {moment()
               .weekday(i)
@@ -145,6 +145,7 @@ class Calendar extends Component {
       if (currentArr[i].hasOwnProperty(currentDate)) {
         arr.push(
           <Chip
+            key={i}
             label={this.state.currentArr[i][currentDate].name}
             onDelete={() =>
               this.handleDelete(currentArr[i][currentDate].appt_id)
@@ -172,7 +173,6 @@ class Calendar extends Component {
     let day = startDate;
     let formattedDate = "";
 
-    console.log(this.state.currentArr);
     while (day <= endDate) {
       for (let i = 0; i < 7; i++) {
         //gets the numbers only from the date
@@ -180,7 +180,7 @@ class Calendar extends Component {
         const cloneDay = day;
         //adds the days for this row
         days.push(
-          <Grid item>
+          <Grid key={i} item>
             <Paper className={classes.paper}>
               {formattedDate}
               {/* Checks to see if there are any appts for this day */}
@@ -192,7 +192,7 @@ class Calendar extends Component {
       }
       //pushs the individual cells into a container for the row
       rows.push(
-        <Grid container item xs={12} className={classes.main}>
+        <Grid key={day} container item xs={12} className={classes.main}>
           {days}
         </Grid>
       );

@@ -1,14 +1,8 @@
+-- This file is purely for individual development purposes
 DROP TABLE task; 
 DROP TABLE appt; 
-DROP TABLE list;
+DROP TABLE contact;
 DROP TABLE mortal;
-
-
-DROP TABLE task; 
-DROP TABLE appt; 
-DROP TABLE list;
-DROP TABLE mortal;
-
 
 CREATE TABLE mortal (
     mortal_id SERIAL PRIMARY KEY,
@@ -17,19 +11,13 @@ CREATE TABLE mortal (
     email VARCHAR(100)
 );
 
-CREATE TABLE list (
-    list_id SERIAL PRIMARY KEY,
-    name VARCHAR(25),
-    mortal_id INTEGER REFERENCES mortal(mortal_id)
-);
-
 CREATE TABLE task (
     task_id SERIAL PRIMARY KEY,
+    list_name VARCHAR(50),
     body VARCHAR(512),
     time_created TIMESTAMPTZ, 
     time_checked TIMESTAMPTZ,
-    mortal_id INTEGER REFERENCES mortal(mortal_id),
-    list_id INTEGER REFERENCES list(list_id)
+    mortal_id INTEGER REFERENCES mortal(mortal_id)
 );
 
 CREATE TABLE appt (
@@ -40,9 +28,15 @@ CREATE TABLE appt (
     mortal_id INTEGER REFERENCES mortal(mortal_id)
 );
 
+CREATE TABLE contact (
+    contact_id SERIAL PRIMARY KEY,
+    name VARCHAR(24),
+    number INTEGER,
+    address VARCHAR(100),
+    mortal_id INTEGER REFERENCES mortal(mortal_id)
+)
+
 INSERT INTO mortal (username, email)
 VALUES('DylanLee', 'email@email.net'),
         ('Jacobi', 'yahoo@yahoo.com'),
         ('Jefferson', 'mail@verizon.org');
-
-INSERT INTO list (name, mortal_id) VALUES ('work', 1), ('family', 1),('family', 2),('buisness', 3),('kids', 3);

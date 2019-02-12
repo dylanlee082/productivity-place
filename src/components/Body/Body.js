@@ -7,10 +7,10 @@ import { toggleOpen } from "../../ducks/reducer";
 import { Switch, Route } from "react-router-dom";
 
 import Sidebar from "../Sidebar";
-import TaskList from "./views/TaskList";
+import TaskList from "./views/TaskList/TaskList";
 import Calendar from "./views/Calendar/Calendar";
 import Settings from "./views/Settings";
-import Contacts from "./views/Contacts";
+import Contacts from "./views/Contact/Contacts";
 
 import CssBaseline from "@material-ui/core/CssBaseline";
 import AppBar from "@material-ui/core/AppBar";
