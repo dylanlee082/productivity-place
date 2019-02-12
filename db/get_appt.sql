@@ -1,1 +1,1 @@
-SELECT * FROM appt
+SELECT * FROM appt where mortal_id = $1

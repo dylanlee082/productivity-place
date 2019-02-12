@@ -1,11 +1,17 @@
+//Main NPM Imports
 import React, { Component } from "react";
 import axios from "axios";
+import { connect } from "react-redux";
 
+//Material-UI Core Imports
 import { withStyles } from "@material-ui/core";
 import Paper from "@material-ui/core/Paper";
+
+//Material-UI Icon Imports
 import AddBox from "@material-ui/icons/AddBox";
 import Clear from "@material-ui/icons/Clear";
 
+//Material-UI Styling
 const styles = theme => ({
   root: {
     display: "flex"
@@ -46,12 +52,13 @@ class TaskList extends Component {
     };
   }
 
+  //On Mount get the list of tasks from database based on user ID
   componentDidMount = () => {
     this.getTasks();
   };
 
   getTasks = () => {
-    axios.get("/api/task").then(res => {
+    axios.get(`/api/task/${this.props.user.id}`).then(res => {
       this.setState({ taskLists: res.data });
     });
   };
@@ -118,4 +125,6 @@ class TaskList extends Component {
   }
 }
 
-export default withStyles(styles)(TaskList);
+const mapStateToProps = state => state;
+
+export default connect(mapStateToProps)(withStyles(styles)(TaskList));

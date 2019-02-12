@@ -1,5 +1,9 @@
+//Main NPM Imports
 import React, { Component } from "react";
 import axios from "axios";
+import { connect } from "react-redux";
+
+//Material-UI Core Imports
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Dialog from "@material-ui/core/Dialog";
@@ -34,7 +38,7 @@ class ContactForm extends Component {
 
   handleSubmit = () => {
     axios
-      .post("/api/contact", this.state.contact)
+      .post("/api/contact", { ...this.state.contact, id: this.props.id })
       .then(res => {
         this.setState({
           contact: {
@@ -108,4 +112,6 @@ class ContactForm extends Component {
   }
 }
 
-export default ContactForm;
+const mapStateToProps = state => state;
+
+export default connect(mapStateToProps)(ContactForm);

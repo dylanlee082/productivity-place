@@ -1,13 +1,19 @@
-import "date-fns";
+//Main NPM Imports
 import React, { Component } from "react";
-import { withStyles } from "@material-ui/core";
 import axios from "axios";
+import { connect } from "react-redux";
+
+//Date-Fns Imports && Date Manipulation
+import "date-fns";
 import DateFnsUtils from "@date-io/date-fns";
 import {
   MuiPickersUtilsProvider,
   TimePicker,
   DatePicker
 } from "material-ui-pickers";
+
+//Material-UI Core Imports
+import { withStyles } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Dialog from "@material-ui/core/Dialog";
@@ -57,7 +63,7 @@ class CalendarForm extends Component {
 
   handleSubmit = () => {
     axios
-      .post("/api/appt", this.state.appt)
+      .post("/api/appt", { ...this.state.appt, id: this.props.user.id })
       .then(res => {
         this.setState({
           appt: { date: new Date(), name: "", location: "" },
@@ -149,4 +155,6 @@ class CalendarForm extends Component {
   }
 }
 
-export default withStyles(styles)(CalendarForm);
+const mapStateToProps = state => state;
+
+export default connect(mapStateToProps)(withStyles(styles)(CalendarForm));

@@ -1,1 +1,1 @@
-SELECT * FROM task
+SELECT * FROM task WHERE mortal_id = $1

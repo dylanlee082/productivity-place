@@ -1,8 +1,8 @@
 module.exports = {
   create: (req, res) => {
     const db = req.app.get("db");
-    const { body, list_name } = req.body;
-    db.create_task(list_name, body)
+    const { body, list_name, id } = req.body;
+    db.create_task(list_name, body, id)
       .then(() => res.sendStatus(200))
       .catch(err => {
         console.log(err);
@@ -11,7 +11,7 @@ module.exports = {
   },
   read: (req, res) => {
     const db = req.app.get("db");
-    db.get_task()
+    db.get_task(req.params.id)
       .then(task => res.status(200).json(task))
       .catch(err => console.log(err));
   },

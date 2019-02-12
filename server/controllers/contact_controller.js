@@ -1,8 +1,8 @@
 module.exports = {
   create: (req, res) => {
     const db = req.app.get("db");
-    const { name, number, address } = req.body;
-    db.create_contact(name, number, address)
+    const { name, number, address, id } = req.body;
+    db.create_contact(name, number, address, id)
       .then(() => res.sendStatus(200))
       .catch(err => {
         console.log(err);
@@ -11,7 +11,7 @@ module.exports = {
   },
   read: (req, res) => {
     const db = req.app.get("db");
-    db.get_contact()
+    db.get_contact(req.params.id)
       .then(contact => res.status(200).json(contact))
       .catch(err => console.log(err));
   },

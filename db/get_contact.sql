@@ -1,1 +1,1 @@
-SELECT * FROM contact
+SELECT * FROM contact WHERE mortal_id = $1

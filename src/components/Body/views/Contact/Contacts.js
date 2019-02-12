@@ -1,10 +1,16 @@
+//Main NPM Imports
 import React, { Component } from "react";
 import axios from "axios";
+import { connect } from "react-redux";
+
+//Material-UI Core Imports
 import { withStyles } from "@material-ui/core/styles";
 import ExpansionPanel from "@material-ui/core/ExpansionPanel";
 import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 import Typography from "@material-ui/core/Typography";
+
+//Material-UI Icon Imports
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Clear from "@material-ui/icons/Clear";
 
@@ -31,7 +37,7 @@ class Contact extends Component {
   }
 
   componentDidMount = () => {
-    axios.get("/api/contact").then(res => {
+    axios.get(`/api/contact/${this.props.user.id}`).then(res => {
       this.setState({
         contacts: res.data
       });
@@ -74,4 +80,6 @@ class Contact extends Component {
   }
 }
 
-export default withStyles(styles)(Contact);
+const mapStateToProps = state => state;
+
+export default connect(mapStateToProps)(withStyles(styles)(Contact));

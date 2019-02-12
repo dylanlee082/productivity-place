@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
+import { connect } from "react-redux";
+import { getUser } from "../../ducks/reducer";
 import "./Landing.module.css";
 
 class Landing extends Component {
@@ -16,6 +18,7 @@ class Landing extends Component {
       .post("/auth/login", this.state)
       .then(res => {
         this.props.history.push("/main");
+        this.props.getUser();
       })
       .catch(err => console.log(err));
   };
@@ -28,6 +31,7 @@ class Landing extends Component {
       })
       .then(res => {
         this.props.history.push("/");
+        this.props.getUser();
       })
       .catch(err => console.log(err));
   };
@@ -66,4 +70,9 @@ class Landing extends Component {
   }
 }
 
-export default Landing;
+const mapStateToProps = state => state;
+
+export default connect(
+  mapStateToProps,
+  { getUser }
+)(Landing);

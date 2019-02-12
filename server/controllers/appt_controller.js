@@ -1,8 +1,8 @@
 module.exports = {
   create: (req, res) => {
     const db = req.app.get("db");
-    const { date, name, location } = req.body;
-    db.create_appt(date, name, location)
+    const { date, name, location, id } = req.body;
+    db.create_appt(date, name, location, id)
       .then(() => res.sendStatus(200))
       .catch(err => {
         console.log(err);
@@ -11,7 +11,7 @@ module.exports = {
   },
   read: (req, res) => {
     const db = req.app.get("db");
-    db.get_appt()
+    db.get_appt(req.params.id)
       .then(appt => res.status(200).json(appt))
       .catch(err => console.log(err));
   },

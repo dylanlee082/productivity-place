@@ -1,5 +1,6 @@
 // Main NPM Imports
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import axios from "axios";
 import moment from "moment";
 
@@ -52,10 +53,10 @@ class Calendar extends Component {
     };
   }
 
-  //On Mount get the list of Appt's from database
+  //On Mount get the list of Appt's from database based on user ID
   componentDidMount = () => {
     axios
-      .get("/api/appt")
+      .get(`/api/appt/${this.props.user.id}`)
       .then(res => {
         this.setState({ apptList: res.data });
         this.parseAppts(res.data);
@@ -218,4 +219,6 @@ class Calendar extends Component {
   }
 }
 
-export default withStyles(styles)(Calendar);
+const mapStateToProps = state => state;
+
+export default connect(mapStateToProps)(withStyles(styles)(Calendar));

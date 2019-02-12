@@ -1,6 +1,7 @@
 //Main NPM Imports
 import React, { Component } from "react";
 import axios from "axios";
+import { connect } from "react-redux";
 
 //Material-UI Core Imports
 import Button from "@material-ui/core/Button";
@@ -36,7 +37,7 @@ class TaskListForm extends Component {
 
   handleSubmit = () => {
     axios
-      .post("/api/task", this.state.task)
+      .post("/api/task", { ...this.state.task, id: this.props.user.id })
       .then(res => {
         this.setState({
           task: { list_name: "", body: "" }
@@ -100,4 +101,6 @@ class TaskListForm extends Component {
   }
 }
 
-export default TaskListForm;
+const mapStateToProps = state => state;
+
+export default connect(mapStateToProps)(TaskListForm);
