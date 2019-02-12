@@ -1,5 +1,6 @@
 import "date-fns";
 import React, { Component } from "react";
+import { withStyles } from "@material-ui/core";
 import axios from "axios";
 import DateFnsUtils from "@date-io/date-fns";
 import {
@@ -7,8 +8,6 @@ import {
   TimePicker,
   DatePicker
 } from "material-ui-pickers";
-import { connect } from "react-redux";
-import { toggleCalendarForm } from "../../../../ducks/reducer";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Dialog from "@material-ui/core/Dialog";
@@ -17,8 +16,17 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 
-class FormDialog extends Component {
+const styles = theme => ({
+  form: {
+    fontSize: 13,
+    width: "auto",
+    color: "black"
+  }
+});
+
+class CalendarForm extends Component {
   state = {
+    open: false,
     appt: {
       date: new Date(),
       name: "",
@@ -51,28 +59,38 @@ class FormDialog extends Component {
     axios
       .post("/api/appt", this.state.appt)
       .then(res => {
-        this.props.toggleCalendarForm();
         this.setState({
           appt: { date: new Date(), name: "", location: "" },
           selectedDate: new Date()
         });
+        this.handleClose();
       })
       .catch(err => console.log(err));
   };
 
+  handleClickOpen = () => {
+    this.setState({ open: true });
+  };
+
+  handleClose = () => {
+    this.setState({ open: false });
+  };
+
   render() {
+    const { classes } = this.props;
     return (
       <div>
         <Button
           variant="outlined"
           color="primary"
-          onClick={() => this.props.toggleCalendarForm(this.props.open)}
+          onClick={this.handleClickOpen}
+          className={classes.form}
         >
-          Open form dialog
+          Create New Form
         </Button>
         <Dialog
-          open={this.props.open}
-          onClose={() => this.props.toggleCalendarForm(this.props.open)}
+          open={this.state.open}
+          onClose={this.handleClose}
           aria-labelledby="form-dialog-title"
         >
           <DialogTitle id="form-dialog-title">
@@ -118,10 +136,7 @@ class FormDialog extends Component {
             />
           </DialogContent>
           <DialogActions>
-            <Button
-              onClick={() => this.props.toggleCalendarForm(this.props.open)}
-              color="primary"
-            >
+            <Button onClick={this.handleClose} color="primary">
               Cancel
             </Button>
             <Button onClick={this.handleSubmit} color="primary">
@@ -134,13 +149,4 @@ class FormDialog extends Component {
   }
 }
 
-const mapStateToProps = state => {
-  return {
-    open: state.calendarForm
-  };
-};
-
-export default connect(
-  mapStateToProps,
-  { toggleCalendarForm }
-)(FormDialog);
+export default withStyles(styles)(CalendarForm);

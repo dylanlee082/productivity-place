@@ -3,10 +3,6 @@ import React, { Component } from "react";
 import axios from "axios";
 import moment from "moment";
 
-//Redux
-import { connect } from "react-redux";
-import { toggleCalendarForm } from "../../../../ducks/reducer";
-
 //Material-UI Imports
 import { withStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
@@ -14,9 +10,6 @@ import Paper from "@material-ui/core/Paper";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import Chip from "@material-ui/core/Chip";
-
-//Other Components
-import CalendarForm from "./CalendarForm";
 
 //Material-UI Styling
 const styles = theme => ({
@@ -144,10 +137,6 @@ class Calendar extends Component {
       .catch(err => console.log(err));
   };
 
-  handleEdit = obj => {
-    this.props.toggleCalendarForm(this.props.open);
-  };
-
   //Checks to see which days have appts on them (called in renderCells)
   isDate = currentDate => {
     const { currentArr } = this.state;
@@ -157,7 +146,6 @@ class Calendar extends Component {
         arr.push(
           <Chip
             label={this.state.currentArr[i][currentDate].name}
-            onClick={() => this.props.toggleCalendarForm(this.props.open)}
             onDelete={() =>
               this.handleDelete(currentArr[i][currentDate].appt_id)
             }
@@ -215,7 +203,6 @@ class Calendar extends Component {
 
   render() {
     const { classes } = this.props;
-    const { form, formShow } = this.state;
 
     return (
       <div className={classes.root}>
@@ -231,13 +218,4 @@ class Calendar extends Component {
   }
 }
 
-const mapStateToProps = state => {
-  return {
-    open: state.open
-  };
-};
-
-export default connect(
-  mapStateToProps,
-  { toggleCalendarForm }
-)(withStyles(styles)(Calendar));
+export default withStyles(styles)(Calendar);

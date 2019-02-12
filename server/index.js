@@ -34,5 +34,9 @@ app.get("/api/appt", apptCon.read);
 app.post("/api/appt", apptCon.create);
 app.delete("/api/appt/:id", apptCon.delete);
 
+// app.get('/api/task')
+// app.post("/api/task")
+// app.delete("/api/task")
+
 const PORT = process.env.SERVER_PORT;
 app.listen(PORT, () => console.log(`Listening on port: ${PORT}`));
