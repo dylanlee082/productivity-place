@@ -66,7 +66,7 @@ class Sidebar extends Component {
   };
 
   handleLogout = () => {
-    axios.get("/auth/logout").then(() => {
+    axios.get("/auth/logout").then(res => {
       this.props.history.push("/");
     });
   };

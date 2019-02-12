@@ -43,6 +43,7 @@ app.delete("/api/list/:name", taskCon.deleteList);
 
 app.get("/api/contact", contactCon.read);
 app.post("/api/contact", contactCon.create);
+app.delete("/api/contact/:id", contactCon.delete);
 
 const PORT = process.env.SERVER_PORT;
 app.listen(PORT, () => console.log(`Listening on port: ${PORT}`));

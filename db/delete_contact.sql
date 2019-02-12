@@ -1,0 +1,1 @@
+DELETE FROM contact WHERE contact_id = $1

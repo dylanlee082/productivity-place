@@ -6,6 +6,7 @@ import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 import Typography from "@material-ui/core/Typography";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import Clear from "@material-ui/icons/Clear";
 
 const styles = theme => ({
   root: {
@@ -14,6 +15,10 @@ const styles = theme => ({
   heading: {
     fontSize: theme.typography.pxToRem(15),
     fontWeight: theme.typography.fontWeightRegular
+  },
+  detail: {
+    display: "flex",
+    justifyContent: "space-between"
   }
 });
 
@@ -27,28 +32,43 @@ class Contact extends Component {
 
   componentDidMount = () => {
     axios.get("/api/contact").then(res => {
-      console.log(res.data);
+      this.setState({
+        contacts: res.data
+      });
     });
+  };
+
+  handleDelete = id => {
+    axios
+      .delete(`/api/contact/${id}`)
+      .then(res => {
+        console.log("Contact Deleted");
+      })
+      .catch(err => console.log(err));
   };
 
   render() {
     const { classes } = this.props;
     return (
       <div className={classes.root}>
-        <ExpansionPanel>
-          <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-            <Typography className={classes.heading}>
-              Expansion Panel 1
-            </Typography>
-          </ExpansionPanelSummary>
-          <ExpansionPanelDetails>
-            <Typography>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-              Suspendisse malesuada lacus ex, sit amet blandit leo lobortis
-              eget.
-            </Typography>
-          </ExpansionPanelDetails>
-        </ExpansionPanel>
+        {this.state.contacts.map((e, i) => {
+          return (
+            <ExpansionPanel key={i}>
+              <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+                <Typography className={classes.heading}>{e.name}</Typography>
+              </ExpansionPanelSummary>
+              <ExpansionPanelDetails className={classes.detail}>
+                <Typography>
+                  Number: {e.number}
+                  Address: {e.address}
+                </Typography>
+                <div onClick={() => this.handleDelete(e.contact_id)}>
+                  <Clear />
+                </div>
+              </ExpansionPanelDetails>
+            </ExpansionPanel>
+          );
+        })}
       </div>
     );
   }

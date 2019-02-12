@@ -2,7 +2,7 @@ const bcrypt = require("bcryptjs");
 
 module.exports = {
   register: async (req, res) => {
-    const { username, password, email } = req.body;
+    const { username, password } = req.body;
     const db = req.app.get("db");
     const result = await db.get_mortal([username]);
     const existingMortal = result[0];
@@ -13,8 +13,9 @@ module.exports = {
           "There is already an account associated with this email. Please proceed to log in."
         );
     }
-    const hash = bcrypt.hash(password, 12);
-    const registeredMortal = await db.register_mortal([username, hash, email]);
+    const hash = await bcrypt.hash(password, 12);
+    console.log(hash);
+    const registeredMortal = await db.register_mortal([username, hash]);
     const mortal = registeredMortal[0];
     req.session.user = {
       username: mortal.username,
@@ -25,7 +26,7 @@ module.exports = {
   login: async (req, res) => {
     const { username, password } = req.body;
     const db = req.app.get("db");
-    const foundMortal = await db.get_mortal([username]);
+    const foundMortal = await db.get_mortal(username);
     const mortal = foundMortal[0];
     if (!mortal) {
       return res
@@ -34,7 +35,7 @@ module.exports = {
           "User not found. Please register as a new user before logging in."
         );
     }
-    const isAuthenticated = bcrypt.compareSync(password, user.hash);
+    const isAuthenticated = bcrypt.compareSync(password, mortal.hash);
     if (!isAuthenticated) {
       return res.status(403).send("Incorrect password");
     }
@@ -46,6 +47,6 @@ module.exports = {
   },
   logout: async (req, res) => {
     req.session.destroy();
-    res.sendStatus(200);
+    res.status(200).json(req.session);
   }
 };

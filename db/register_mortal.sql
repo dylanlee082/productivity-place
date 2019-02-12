@@ -1,2 +1,3 @@
-INSERT INTO mortal (username, hash, email)
-VALUES ($1, $2, $3)
+INSERT INTO mortal (username, hash)
+VALUES ($1, $2)
+returning *;

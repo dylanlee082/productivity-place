@@ -7,7 +7,7 @@ DROP TABLE mortal;
 CREATE TABLE mortal (
     mortal_id SERIAL PRIMARY KEY,
     username VARCHAR(30),
-    hash VARCHAR(144),
+    hash VARCHAR(512),
     email VARCHAR(100)
 );
 
@@ -31,12 +31,7 @@ CREATE TABLE appt (
 CREATE TABLE contact (
     contact_id SERIAL PRIMARY KEY,
     name VARCHAR(24),
-    number INTEGER,
+    number VARCHAR(20),
     address VARCHAR(100),
     mortal_id INTEGER REFERENCES mortal(mortal_id)
 )
-
-INSERT INTO mortal (username, email)
-VALUES('DylanLee', 'email@email.net'),
-        ('Jacobi', 'yahoo@yahoo.com'),
-        ('Jefferson', 'mail@verizon.org');

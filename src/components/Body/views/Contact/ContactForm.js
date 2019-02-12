@@ -80,7 +80,7 @@ class ContactForm extends Component {
             <TextField
               onChange={e => this.handleChange(e)}
               margin="dense"
-              id="number"
+              name="number"
               label="Contact Number"
               type="text"
               fullWidth
