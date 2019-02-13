@@ -2,6 +2,7 @@
 import React, { Component } from "react";
 import axios from "axios";
 import { connect } from "react-redux";
+import { getTask } from "../../../../ducks/reducer";
 
 //Material-UI Core Imports
 import Button from "@material-ui/core/Button";
@@ -36,13 +37,15 @@ class TaskListForm extends Component {
   };
 
   handleSubmit = () => {
+    const { user, getTask } = this.props;
     axios
-      .post("/api/task", { ...this.state.task, id: this.props.user.id })
+      .post("/api/task", { ...this.state.task, id: user.id })
       .then(res => {
         this.setState({
           task: { list_name: "", body: "" }
         });
         this.handleClose();
+        getTask(user.id);
       })
       .catch(err => console.log(err));
   };
@@ -103,4 +106,7 @@ class TaskListForm extends Component {
 
 const mapStateToProps = state => state;
 
-export default connect(mapStateToProps)(TaskListForm);
+export default connect(
+  mapStateToProps,
+  { getTask }
+)(TaskListForm);

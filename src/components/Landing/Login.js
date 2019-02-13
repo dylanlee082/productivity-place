@@ -1,10 +1,8 @@
-//Main NPM Imports
 import React, { Component } from "react";
 import axios from "axios";
+import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
-import { getContact } from "../../../../ducks/reducer";
-
-//Material-UI Core Imports
+import { getUser } from "../../ducks/reducer";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Dialog from "@material-ui/core/Dialog";
@@ -13,14 +11,9 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 
-class ContactForm extends Component {
+class Login extends Component {
   state = {
-    open: false,
-    contact: {
-      name: "",
-      number: "",
-      address: ""
-    }
+    open: false
   };
 
   handleClickOpen = () => {
@@ -33,24 +26,29 @@ class ContactForm extends Component {
 
   handleChange = e => {
     this.setState({
-      contact: { ...this.state.contact, [e.target.name]: e.target.value }
+      [e.target.name]: e.target.value
     });
   };
 
-  handleSubmit = () => {
-    const { user, getContact } = this.props;
+  handleLogin = () => {
     axios
-      .post("/api/contact", { ...this.state.contact, id: user.id })
+      .post("/auth/login", this.state)
       .then(res => {
-        this.setState({
-          contact: {
-            name: "",
-            number: "",
-            address: ""
-          }
-        });
-        this.handleClose();
-        getContact(user.id);
+        this.props.getUser();
+        this.props.history.push("/main");
+      })
+      .catch(err => console.log(err));
+  };
+
+  handleRegister = () => {
+    axios
+      .post("/auth/register", {
+        username: this.state.username,
+        password: this.state.password
+      })
+      .then(res => {
+        this.props.history.push("/");
+        this.props.getUser();
       })
       .catch(err => console.log(err));
   };
@@ -63,50 +61,42 @@ class ContactForm extends Component {
           color="primary"
           onClick={this.handleClickOpen}
         >
-          Create a new Contact
+          Login/Register
         </Button>
         <Dialog
           open={this.state.open}
           onClose={this.handleClose}
           aria-labelledby="form-dialog-title"
         >
-          <DialogTitle id="form-dialog-title">Create a new Contact</DialogTitle>
+          <DialogTitle id="form-dialog-title">Register</DialogTitle>
           <DialogContent>
             <DialogContentText>
               To subscribe to this website, please enter your email address
               here. We will send updates occasionally.
             </DialogContentText>
             <TextField
-              onChange={e => this.handleChange(e)}
               margin="dense"
-              name="name"
-              label="Contact Name"
+              name="username"
+              label="username"
               type="text"
               fullWidth
+              onChange={e => this.handleChange(e)}
             />
             <TextField
-              onChange={e => this.handleChange(e)}
               margin="dense"
-              name="number"
-              label="Contact Number"
-              type="text"
+              name="password"
+              label="password"
+              type="password"
               fullWidth
-            />
-            <TextField
               onChange={e => this.handleChange(e)}
-              margin="dense"
-              name="address"
-              label="Contact Address"
-              type="text"
-              fullWidth
             />
           </DialogContent>
           <DialogActions>
-            <Button onClick={this.handleClose} color="primary">
-              Cancel
+            <Button onClick={() => this.handleLogin()} color="primary">
+              Login
             </Button>
-            <Button onClick={() => this.handleSubmit()} color="primary">
-              Submit
+            <Button onClick={() => this.handleClose} color="primary">
+              Register
             </Button>
           </DialogActions>
         </Dialog>
@@ -115,13 +105,11 @@ class ContactForm extends Component {
   }
 }
 
-const mapStateToProps = state => {
-  return {
-    user: state.user
-  };
-};
+const mapStateToProps = state => state;
 
-export default connect(
-  mapStateToProps,
-  { getContact }
-)(ContactForm);
+export default withRouter(
+  connect(
+    mapStateToProps,
+    { getUser }
+  )(Login)
+);

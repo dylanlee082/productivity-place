@@ -2,6 +2,7 @@
 import React, { Component } from "react";
 import axios from "axios";
 import { connect } from "react-redux";
+import { getContact } from "../../../../ducks/reducer";
 
 //Material-UI Core Imports
 import { withStyles } from "@material-ui/core/styles";
@@ -29,19 +30,9 @@ const styles = theme => ({
 });
 
 class Contact extends Component {
-  constructor() {
-    super();
-    this.state = {
-      contacts: []
-    };
-  }
-
   componentDidMount = () => {
-    axios.get(`/api/contact/${this.props.user.id}`).then(res => {
-      this.setState({
-        contacts: res.data
-      });
-    });
+    const { getContact, user } = this.props;
+    getContact(user.id);
   };
 
   handleDelete = id => {
@@ -57,7 +48,7 @@ class Contact extends Component {
     const { classes } = this.props;
     return (
       <div className={classes.root}>
-        {this.state.contacts.map((e, i) => {
+        {this.props.contacts.map((e, i) => {
           return (
             <ExpansionPanel key={i}>
               <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
@@ -80,6 +71,14 @@ class Contact extends Component {
   }
 }
 
-const mapStateToProps = state => state;
+const mapStateToProps = state => {
+  return {
+    contacts: state.contacts,
+    user: state.user
+  };
+};
 
-export default connect(mapStateToProps)(withStyles(styles)(Contact));
+export default connect(
+  mapStateToProps,
+  { getContact }
+)(withStyles(styles)(Contact));

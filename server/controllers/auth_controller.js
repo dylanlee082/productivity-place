@@ -2,6 +2,7 @@ const bcrypt = require("bcryptjs");
 
 module.exports = {
   user: (req, res) => {
+    console.log(req.session.user);
     res.status(200).json(req.session.user);
   },
   register: async (req, res) => {

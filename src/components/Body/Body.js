@@ -1,17 +1,19 @@
+//Main NPM Imports
 import React, { Component } from "react";
-import PropTypes from "prop-types";
-import classNames from "classnames";
-import { withStyles } from "@material-ui/core/styles";
 import { connect } from "react-redux";
-import { toggleOpen } from "../../ducks/reducer";
+import { toggleOpen, getUser } from "../../ducks/reducer";
 import { Switch, Route } from "react-router-dom";
 
+//Other Components
 import Sidebar from "../Sidebar";
 import TaskList from "./views/TaskList/TaskList";
 import Calendar from "./views/Calendar/Calendar";
 import Settings from "./views/Settings";
 import Contacts from "./views/Contact/Contacts";
 
+//Material-UI Core Imports
+import classNames from "classnames";
+import { withStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -72,62 +74,66 @@ const styles = theme => ({
 });
 
 class Body extends Component {
+  componentDidMount = () => {
+    this.props.getUser();
+  };
   render() {
     const { classes, open, toggleOpen } = this.props;
-    return (
-      <div className={classes.root}>
-        <CssBaseline />
-        <AppBar
-          position="fixed"
-          className={classNames(classes.appBar, {
-            [classes.appBarShift]: open
-          })}
-        >
-          <Toolbar disableGutters={!open}>
-            <IconButton
-              color="inherit"
-              aria-label="Open drawer"
-              onClick={() => toggleOpen(open)}
-              className={classNames(classes.menuButton, open && classes.hide)}
-            >
-              <MenuIcon />
-            </IconButton>
-            <Typography variant="h6" color="inherit" noWrap>
-              Productivity Place
-            </Typography>
-          </Toolbar>
-        </AppBar>
-        <Sidebar />
-        <main
-          className={classNames(classes.content, {
-            [classes.contentShift]: open
-          })}
-        >
-          <div className={classes.drawerHeader} />
-          <Switch>
-            <Route path="/main/tasks" component={TaskList} />
-            <Route path="/main/calendar" component={Calendar} />
-            <Route path="/main/settings" component={Settings} />
-            <Route path="/main/contacts" component={Contacts} />
-          </Switch>
-        </main>
-      </div>
-    );
+    if (!this.props.user) {
+      this.props.history.push("/");
+      return null;
+    } else {
+      return (
+        <div className={classes.root}>
+          <CssBaseline />
+          <AppBar
+            position="fixed"
+            className={classNames(classes.appBar, {
+              [classes.appBarShift]: open
+            })}
+          >
+            <Toolbar disableGutters={!open}>
+              <IconButton
+                color="inherit"
+                aria-label="Open drawer"
+                onClick={() => toggleOpen(open)}
+                className={classNames(classes.menuButton, open && classes.hide)}
+              >
+                <MenuIcon />
+              </IconButton>
+              <Typography variant="h6" color="inherit" noWrap>
+                Productivity Place
+              </Typography>
+            </Toolbar>
+          </AppBar>
+          <Sidebar />
+          <main
+            className={classNames(classes.content, {
+              [classes.contentShift]: open
+            })}
+          >
+            <div className={classes.drawerHeader} />
+            <Switch>
+              <Route path="/main/tasks" component={TaskList} />
+              <Route path="/main/calendar" component={Calendar} />
+              <Route path="/main/settings" component={Settings} />
+              <Route path="/main/contacts" component={Contacts} />
+            </Switch>
+          </main>
+        </div>
+      );
+    }
   }
 }
 
 const mapStateToProps = state => {
   return {
-    open: state.open
+    open: state.open,
+    user: state.user
   };
-};
-
-Body.propTypes = {
-  classes: PropTypes.object.isRequired,
-  theme: PropTypes.object.isRequired
 };
 
 export default connect(
   mapStateToProps,
-  { toggleOpen }
+  { toggleOpen, getUser }
 )(withStyles(styles, { withTheme: true })(Body));

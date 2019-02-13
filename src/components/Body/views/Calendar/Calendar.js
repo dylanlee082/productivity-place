@@ -1,8 +1,9 @@
 // Main NPM Imports
 import React, { Component } from "react";
-import { connect } from "react-redux";
 import axios from "axios";
 import moment from "moment";
+import { connect } from "react-redux";
+import { getAppt } from "../../../../ducks/reducer";
 
 //Material-UI Core Imports
 import { withStyles } from "@material-ui/core/styles";
@@ -46,7 +47,6 @@ class Calendar extends Component {
     this.state = {
       currentMonth: new Date(),
       currentDate: new Date(),
-      apptList: [],
       currentArr: [],
       form: "",
       formShow: false
@@ -55,19 +55,27 @@ class Calendar extends Component {
 
   //On Mount get the list of Appt's from database based on user ID
   componentDidMount = () => {
-    axios
-      .get(`/api/appt/${this.props.user.id}`)
-      .then(res => {
-        this.setState({ apptList: res.data });
-        this.parseAppts(res.data);
-      })
-      .catch(err => console.log(err));
+    const { user, getAppt } = this.props;
+    if (user.id) {
+      getAppt(user.id).then(res => {
+        if (res) {
+          this.parseAppts(res.value.data);
+        }
+      });
+    }
   };
 
   //When the month is changed reparse the appt list to get appts for that month
-  componentDidUpdate = (prevProps, PrevState) => {
-    if (this.state.currentMonth !== PrevState.currentMonth) {
-      this.parseAppts(this.state.apptList);
+  componentDidUpdate = (prevProps, prevState) => {
+    if (this.state.currentMonth !== prevState.currentMonth) {
+      this.parseAppts(this.props.appts);
+    }
+    if (prevProps.user.id !== this.props.user.id) {
+      this.props.getAppt(this.props.user.id).then(res => {
+        if (res) {
+          this.parseAppts(res.value.data);
+        }
+      });
     }
   };
 
@@ -132,10 +140,12 @@ class Calendar extends Component {
   };
 
   handleDelete = id => {
+    const { user, getAppt } = this.props;
     axios
       .delete(`/api/appt/${id}`)
       .then(() => console.log("It worked"))
       .catch(err => console.log(err));
+    getAppt(user.id);
   };
 
   //Checks to see which days have appts on them (called in renderCells)
@@ -219,6 +229,14 @@ class Calendar extends Component {
   }
 }
 
-const mapStateToProps = state => state;
+const mapStateToProps = state => {
+  return {
+    user: state.user,
+    appts: state.appts
+  };
+};
 
-export default connect(mapStateToProps)(withStyles(styles)(Calendar));
+export default connect(
+  mapStateToProps,
+  { getAppt }
+)(withStyles(styles)(Calendar));

@@ -2,6 +2,7 @@
 import React, { Component } from "react";
 import axios from "axios";
 import { connect } from "react-redux";
+import { getTask } from "../../../../ducks/reducer";
 
 //Material-UI Core Imports
 import { withStyles } from "@material-ui/core";
@@ -45,42 +46,43 @@ const styles = theme => ({
 });
 
 class TaskList extends Component {
-  constructor() {
-    super();
-    this.state = {
-      taskLists: []
-    };
-  }
-
   //On Mount get the list of tasks from database based on user ID
   componentDidMount = () => {
-    this.getTasks();
+    const { user, getTask } = this.props;
+    if (user.id) {
+      getTask(user.id);
+    }
   };
 
-  getTasks = () => {
-    axios.get(`/api/task/${this.props.user.id}`).then(res => {
-      this.setState({ taskLists: res.data });
-    });
+  //If the user refreshes the page this ensures that the user.id doesn't come back as undefined
+  componentDidUpdate = prevProps => {
+    if (prevProps.user.id !== this.props.user.id) {
+      this.props.getTask(this.props.user.id);
+    }
   };
 
   addTask = () => {};
 
   deleteTask = id => {
+    const { user, getTask } = this.props;
     axios
       .delete(`/api/task/${id}`)
       .then(() => console.log("It worked"))
       .catch(err => console.log(err));
+    getTask(user.id);
   };
 
   deleteTaskList = list_name => {
+    const { user, getTask } = this.props;
     axios
       .delete(`/api/list/${list_name}`)
       .then(() => console.log("It worked"))
       .catch(err => console.log(err));
+    getTask(user.id);
   };
 
   checkTask = list_name => {
-    let arr = this.state.taskLists.map((e, i) => {
+    let arr = this.props.tasks.map((e, i) => {
       let p = "";
       if (e.list_name === list_name) {
         p = (
@@ -95,11 +97,11 @@ class TaskList extends Component {
   };
 
   render() {
-    const { classes } = this.props;
+    const { classes, tasks } = this.props;
     let arr = [];
     return (
       <div className={classes.root}>
-        {this.state.taskLists.map((e, i) => {
+        {tasks.map((e, i) => {
           if (!arr.includes(e.list_name)) {
             arr.push(e.list_name);
             return (
@@ -125,6 +127,14 @@ class TaskList extends Component {
   }
 }
 
-const mapStateToProps = state => state;
+const mapStateToProps = state => {
+  return {
+    user: state.user,
+    tasks: state.tasks
+  };
+};
 
-export default connect(mapStateToProps)(withStyles(styles)(TaskList));
+export default connect(
+  mapStateToProps,
+  { getTask }
+)(withStyles(styles)(TaskList));
