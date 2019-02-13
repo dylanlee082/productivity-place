@@ -75,54 +75,54 @@ const styles = theme => ({
 
 class Body extends Component {
   componentDidMount = () => {
-    this.props.getUser();
+    this.props.getUser().then(res => {
+      if (!res.value.data) {
+        this.props.history.push("/");
+      }
+    });
   };
+
   render() {
     const { classes, open, toggleOpen } = this.props;
-    if (!this.props.user) {
-      this.props.history.push("/");
-      return null;
-    } else {
-      return (
-        <div className={classes.root}>
-          <CssBaseline />
-          <AppBar
-            position="fixed"
-            className={classNames(classes.appBar, {
-              [classes.appBarShift]: open
-            })}
-          >
-            <Toolbar disableGutters={!open}>
-              <IconButton
-                color="inherit"
-                aria-label="Open drawer"
-                onClick={() => toggleOpen(open)}
-                className={classNames(classes.menuButton, open && classes.hide)}
-              >
-                <MenuIcon />
-              </IconButton>
-              <Typography variant="h6" color="inherit" noWrap>
-                Productivity Place
-              </Typography>
-            </Toolbar>
-          </AppBar>
-          <Sidebar />
-          <main
-            className={classNames(classes.content, {
-              [classes.contentShift]: open
-            })}
-          >
-            <div className={classes.drawerHeader} />
-            <Switch>
-              <Route path="/main/tasks" component={TaskList} />
-              <Route path="/main/calendar" component={Calendar} />
-              <Route path="/main/settings" component={Settings} />
-              <Route path="/main/contacts" component={Contacts} />
-            </Switch>
-          </main>
-        </div>
-      );
-    }
+    return (
+      <div className={classes.root}>
+        <CssBaseline />
+        <AppBar
+          position="fixed"
+          className={classNames(classes.appBar, {
+            [classes.appBarShift]: open
+          })}
+        >
+          <Toolbar disableGutters={!open}>
+            <IconButton
+              color="inherit"
+              aria-label="Open drawer"
+              onClick={() => toggleOpen(open)}
+              className={classNames(classes.menuButton, open && classes.hide)}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Typography variant="h6" color="inherit" noWrap>
+              Productivity Place
+            </Typography>
+          </Toolbar>
+        </AppBar>
+        <Sidebar />
+        <main
+          className={classNames(classes.content, {
+            [classes.contentShift]: open
+          })}
+        >
+          <div className={classes.drawerHeader} />
+          <Switch>
+            <Route path="/main/tasks" component={TaskList} />
+            <Route path="/main/calendar" component={Calendar} />
+            <Route path="/main/settings" component={Settings} />
+            <Route path="/main/contacts" component={Contacts} />
+          </Switch>
+        </main>
+      </div>
+    );
   }
 }
 

@@ -1,3 +1,88 @@
 header {
   display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-left: 3vw;
+  height: 10vh;
+}
+
+nav {
+  display: flex;
+  margin-right: 3vw;
+}
+
+body {
+  overflow: hidden;
+  display: flex;
+  justify-content: space-between;
+  width: 100vw;
+}
+
+button {
+  border: none;
+  background: none;
+}
+
+h2 {
+  margin-left: 5vw;
+  width: 20vw;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+
+/* .img1 {
+  height: 85vh;
+  width: 60vw;
+  margin-right: 5vw;
+  animation-name: fadeIn;
+  animation-duration: 5s;
+} */
+
+.img1 {
+  height: 90vh;
+  width: 100vw;
+}
+
+.overlay {
+  position: fixed; /* Sit on top of the page content */
+  display: block; /* Hidden by default */
+  width: 100vw; /* Full width (cover the whole page) */
+  height: 90vh; /* Full height (cover the whole page) */
+  top: 10vh;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6); /* Black background with opacity */
+  z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
+}
+
+.text {
+  position: absolute;
+  width: 60vw;
+  top: 45%;
+  left: 50%;
+  font-size: 4em;
+  color: white;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+}
+
+.typedfadeout {
+  animation-name: fade-out;
+  animation-duration: 0.5s;
+  opacity: 0;
+}
+
+@keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
 }
