@@ -32,31 +32,20 @@ class Landing extends Component {
   render() {
     return (
       <div className="root">
-        <header>
+        <header className={styles.header}>
           <h1>Productivity Place</h1>
-          <nav>
-            <button>Pricing</button>
+          <nav className={styles.nav}>
+            <button className={styles.button}>Pricing</button>
             <Login />
           </nav>
         </header>
-        <body>
-          {/* <main>
-            <h2>
-              On a daily basis you waste hours of time on unimportant tasks
-            </h2>
-            <h2>Getting no closer to your goals</h2>
-            <h2>
-              You look for an answer in the calendar or the phone app or any of
-              the multitude of things society says is necessary to be organized
-            </h2>
-            <h2>What if I told you that all you needed was a text message</h2>
-          </main> */}
+        <div className={styles.body}>
           <div className={styles.overlay}>
             <span id="innerOverlay" className={styles.text} />
           </div>
           <img className={styles.img1} src={picture1} alt="main pic" />
           {/* <img className={styles.img1} src={picture2} alt="main pic" /> */}
-        </body>
+        </div>
       </div>
     );
   }

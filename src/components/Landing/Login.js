@@ -14,7 +14,8 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 
 const styles = theme => ({
   button: {
-    color: "black"
+    color: "black",
+    fontSize: "1.2em"
   }
 });
 
@@ -42,7 +43,7 @@ class Login extends Component {
       .post("/auth/login", this.state)
       .then(res => {
         this.props.getUser();
-        this.props.history.push("/main");
+        this.props.history.push("/main/task");
       })
       .catch(err => console.log(err));
   };

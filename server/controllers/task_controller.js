@@ -1,13 +1,11 @@
 module.exports = {
   create: (req, res) => {
     const db = req.app.get("db");
-    const { body, list_name, id } = req.body;
-    db.create_task(list_name, body, id)
-      .then(() => res.sendStatus(200))
-      .catch(err => {
-        console.log(err);
-        res.status(500).json("Task was not created");
-      });
+    const { listName, inputs, id } = req.body;
+    inputs.map((e, i) => {
+      db.create_task(listName, e.body, id);
+    });
+    res.sendStatus(200);
   },
   read: (req, res) => {
     const db = req.app.get("db");

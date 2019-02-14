@@ -8,8 +8,8 @@ import { Switch, Route } from "react-router-dom";
 import Sidebar from "../Sidebar";
 import TaskList from "./views/TaskList/TaskList";
 import Calendar from "./views/Calendar/Calendar";
-import Settings from "./views/Settings";
 import Contacts from "./views/Contact/Contacts";
+import Profile from "./views/Profile";
 
 //Material-UI Core Imports
 import classNames from "classnames";
@@ -115,10 +115,10 @@ class Body extends Component {
         >
           <div className={classes.drawerHeader} />
           <Switch>
-            <Route path="/main/tasks" component={TaskList} />
-            <Route path="/main/calendar" component={Calendar} />
-            <Route path="/main/settings" component={Settings} />
-            <Route path="/main/contacts" component={Contacts} />
+            <Route exact path="/main/tasks" component={TaskList} />
+            <Route exact path="/main/calendar" component={Calendar} />
+            <Route exact path="/main/profile" component={Profile} />
+            <Route exact path="/main/contacts" component={Contacts} />
           </Switch>
         </main>
       </div>

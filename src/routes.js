@@ -6,6 +6,6 @@ import Body from "./components/Body/Body";
 export default (
   <Switch>
     <Route path="/main" component={Body} />
-    <Route path="/" component={Landing} />
+    <Route exact path="/" component={Landing} />
   </Switch>
 );

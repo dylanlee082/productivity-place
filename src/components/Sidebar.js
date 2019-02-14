@@ -73,19 +73,25 @@ class Sidebar extends Component {
 
   handleCalendarClick = () => {
     this.setState({
-      calendarOpen: !this.state.calendarOpen
+      calendarOpen: !this.state.calendarOpen,
+      taskOpen: false,
+      contactOpen: false
     });
   };
 
   handleTaskClick = () => {
     this.setState({
-      taskOpen: !this.state.taskOpen
+      taskOpen: !this.state.taskOpen,
+      calendarOpen: false,
+      contactOpen: false
     });
   };
 
   handleContactClick = () => {
     this.setState({
-      contactOpen: !this.state.contactOpen
+      contactOpen: !this.state.contactOpen,
+      calendarOpen: false,
+      taskOpen: false
     });
   };
 
@@ -103,6 +109,7 @@ class Sidebar extends Component {
           }}
         >
           <div className={classes.drawerHeader}>
+            <Link to="/main/profile">Profile</Link>
             <IconButton onClick={() => toggleOpen(open)}>
               {theme.direction === "ltr" ? (
                 <ChevronLeftIcon />
@@ -197,15 +204,6 @@ class Sidebar extends Component {
                 </ListItem>
               </List>
             </Collapse>
-            {/* The link for the settings view */}
-            <Link className={classes.link} to={"/main/settings"}>
-              <ListItem button>
-                <ListItemIcon>
-                  <MailIcon />
-                </ListItemIcon>
-                <ListItemText primary="Settings" />
-              </ListItem>
-            </Link>
             {/* The link to logout of the site, back to the landing page */}
             <ListItem button onClick={() => this.handleLogout()}>
               <ListItemIcon>

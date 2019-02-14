@@ -16,10 +16,14 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 class TaskListForm extends Component {
   state = {
     open: false,
-    task: {
-      list_name: "",
-      body: ""
-    }
+    inputList: [{ body: "" }],
+    listName: ""
+  };
+
+  handleAdd = () => {
+    this.setState(prevState => ({
+      inputList: [...prevState.inputList, { body: "" }]
+    }));
   };
 
   handleClickOpen = () => {
@@ -27,22 +31,36 @@ class TaskListForm extends Component {
   };
 
   handleClose = () => {
-    this.setState({ open: false });
+    this.setState({
+      open: false,
+      inputList: [{ body: "" }]
+    });
   };
 
   handleChange = e => {
-    this.setState({
-      task: { ...this.state.task, [e.target.name]: e.target.value }
-    });
+    if (e.target.name === "body") {
+      let inputs = [...this.state.inputList];
+      inputs[+e.target.id][e.target.name] = e.target.value;
+      this.setState({ inputList: inputs });
+    } else {
+      this.setState({
+        listName: e.target.value
+      });
+    }
   };
 
   handleSubmit = () => {
     const { user, getTask } = this.props;
     axios
-      .post("/api/task", { ...this.state.task, id: user.id })
+      .post("/api/task", {
+        listName: this.state.listName,
+        inputs: this.state.inputList,
+        id: user.id
+      })
       .then(res => {
         this.setState({
-          task: { list_name: "", body: "" }
+          listName: "",
+          inputList: [{ body: "" }]
         });
         this.handleClose();
         getTask(user.id);
@@ -81,17 +99,30 @@ class TaskListForm extends Component {
               fullWidth
               onChange={e => this.handleChange(e)}
             />
-            <TextField
-              margin="dense"
-              name="body"
-              label="Starter Tasks (There must be at least one task)"
-              type="text"
-              fullWidth
-              onChange={e => this.handleChange(e)}
-            />
+            <DialogContentText>
+              Starter Tasks (There must be at least one task)
+            </DialogContentText>
+            {this.state.inputList.map((val, i) => {
+              let label = `Task #${i + 1}`;
+              return (
+                <TextField
+                  key={i}
+                  margin="dense"
+                  id={`${i}`}
+                  name="body"
+                  label={label}
+                  type="text"
+                  onChange={e => this.handleChange(e)}
+                  fullWidth
+                />
+              );
+            })}
           </DialogContent>
           <DialogActions>
-            <Button onClick={this.handleClose} color="primary">
+            <Button onClick={this.handleAdd} color="primary">
+              Add Task
+            </Button>
+            <Button onClick={() => this.handleClose()} color="primary">
               Cancel
             </Button>
             <Button onClick={this.handleSubmit} color="primary">
