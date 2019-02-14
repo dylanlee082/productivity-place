@@ -38,6 +38,13 @@ const styles = theme => ({
     width: "230px",
     height: "40px",
     flexWrap: "nowrap"
+  },
+  disabled: {
+    width: "230px",
+    height: "140px",
+    display: "flex",
+    flexDirection: "column",
+    background: "grey"
   }
 });
 
@@ -183,16 +190,21 @@ class Calendar extends Component {
     let days = [];
     let day = startDate;
     let formattedDate = "";
+    let classed = "";
 
     while (day <= endDate) {
       for (let i = 0; i < 7; i++) {
         //gets the numbers only from the date
         formattedDate = moment(day).format(dateFormat);
-        const cloneDay = day;
         //adds the days for this row
+        {
+          classed = moment(day).isSame(monthStart, "month")
+            ? "paper"
+            : "disabled";
+        }
         days.push(
           <Grid key={i} item>
-            <Paper className={classes.paper}>
+            <Paper className={classes[classed]}>
               {formattedDate}
               {/* Checks to see if there are any appts for this day */}
               {this.isDate(formattedDate)}
