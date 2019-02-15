@@ -26,7 +26,8 @@
     "redux": "^4.0.1",
     "redux-promise-middleware": "^6.0.1",
     "twilio": "^3.28.0",
-    "typed.js": "^2.0.10"
+    "typed.js": "^2.0.10",
+    "watson-developer-cloud": "^3.18.1"
   },
   "scripts": {
     "start": "react-scripts start",

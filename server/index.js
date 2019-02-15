@@ -56,3 +56,5 @@ app.delete("/api/contact/:id", contactCon.delete);
 
 const PORT = process.env.SERVER_PORT;
 app.listen(PORT, () => console.log(`Listening on port: ${PORT}`));
+
+// module.exports = { assistant, sessionId };
