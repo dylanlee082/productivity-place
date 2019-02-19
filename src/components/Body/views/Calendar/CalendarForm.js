@@ -123,7 +123,6 @@ class CalendarForm extends Component {
               />
             </MuiPickersUtilsProvider>
             <TextField
-              autoFocus
               margin="dense"
               label="Who is the appointment with?"
               type="string"
@@ -132,7 +131,6 @@ class CalendarForm extends Component {
               onChange={e => this.handleChange(e)}
             />
             <TextField
-              autoFocus
               margin="dense"
               label="Where is the appointment at?"
               type="string"

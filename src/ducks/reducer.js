@@ -5,7 +5,10 @@ let initialState = {
   user: {},
   contacts: [],
   tasks: [],
-  appts: []
+  appts: [],
+  updateApptToggle: false,
+  updateContact: false,
+  updateTask: false
 };
 
 const TOGGLE_OPEN = "TOGGLE_OPEN";
@@ -13,6 +16,9 @@ const GET_USER = "GET_USER";
 const GET_CONTACT = "GET_CONTACT";
 const GET_TASK = "GET_TASK";
 const GET_APPT = "GET_APPT";
+const UPDATE_APPT = "UPDATE_APPT";
+const UPDATE_TASK = "UPDATE_TASK";
+const UPDATE_CONTACT = "UPDATE_CONTACT";
 
 export const toggleOpen = open => {
   return {
@@ -49,8 +55,35 @@ export const getAppt = id => {
   };
 };
 
+export const updateAppt = open => {
+  return {
+    type: UPDATE_APPT,
+    payload: open
+  };
+};
+
+export const updateTask = open => {
+  return {
+    type: UPDATE_TASK,
+    payload: open
+  };
+};
+
+export const updateContact = open => {
+  return {
+    type: UPDATE_CONTACT,
+    payload: open
+  };
+};
+
 export default function reducer(state = initialState, action) {
   switch (action.type) {
+    case UPDATE_APPT:
+      return { ...state, updateApptToggle: !action.payload };
+    case UPDATE_TASK:
+      return { ...state, updateTask: !action.payload };
+    case UPDATE_CONTACT:
+      return { ...state, updateContact: !action.payload };
     case `${GET_APPT}_FULFILLED`:
       return { ...state, appts: action.payload.data };
     case `${GET_TASK}_FULFILLED`:

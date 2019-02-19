@@ -13,7 +13,6 @@ const assistant = new AssistantV2({
   iam_apikey: "hHxYf-dpr_HTgMSlzPL3SuaxOxaWxuFEsg1j8ySz_xFY",
   url: "https://gateway.watsonplatform.net/assistant/api"
 });
-// console.log(assistant);
 
 let local;
 let sessionId = function() {

@@ -13,6 +13,16 @@ module.exports = {
       .then(task => res.status(200).json(task))
       .catch(err => console.log(err));
   },
+  update: (req, res) => {
+    const db = req.app.get("db");
+    const { listName, inputs, id } = req.body;
+    db.update_task(inputs, listName, id)
+      .then(() => res.sendStatus(200))
+      .catch(err => {
+        console.log(err);
+        res.sendStatus(500);
+      });
+  },
   deleteTask: (req, res) => {
     const db = req.app.get("db");
     db.delete_task(req.params.id)

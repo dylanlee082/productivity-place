@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import axios from "axios";
 import moment from "moment";
 import { connect } from "react-redux";
-import { getAppt } from "../../../../ducks/reducer";
+import { getAppt, updateAppt } from "../../../../ducks/reducer";
 
 //Material-UI Core Imports
 import { withStyles } from "@material-ui/core/styles";
@@ -14,6 +14,9 @@ import Chip from "@material-ui/core/Chip";
 //Material-UI Icon Imports
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
+
+//Other Components
+import UpdateApptForm from "./UpdateApptForm";
 
 //Material-UI Styling
 const styles = theme => ({
@@ -54,9 +57,7 @@ class Calendar extends Component {
     this.state = {
       currentMonth: new Date(),
       currentDate: new Date(),
-      currentArr: [],
-      form: "",
-      formShow: false
+      currentArr: []
     };
   }
 
@@ -168,6 +169,9 @@ class Calendar extends Component {
             onDelete={() =>
               this.handleDelete(currentArr[i][currentDate].appt_id)
             }
+            onClick={() => {
+              this.props.updateAppt(this.props.open);
+            }}
           />
         );
       }
@@ -229,6 +233,7 @@ class Calendar extends Component {
 
     return (
       <div className={classes.root}>
+        <UpdateApptForm />
         {this.renderHeader(classes)}
         <Grid container spacing={8}>
           <Grid container item xs={12}>
@@ -244,11 +249,12 @@ class Calendar extends Component {
 const mapStateToProps = state => {
   return {
     user: state.user,
-    appts: state.appts
+    appts: state.appts,
+    open: state.updateApptToggle
   };
 };
 
 export default connect(
   mapStateToProps,
-  { getAppt }
+  { getAppt, updateAppt }
 )(withStyles(styles)(Calendar));

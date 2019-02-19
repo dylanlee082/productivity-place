@@ -42,16 +42,19 @@ app.post("/auth/login", login);
 app.get("/auth/logout", logout);
 
 app.get("/api/appt/:id", apptCon.read);
+app.put("/api/appt", apptCon.update);
 app.post("/api/appt", apptCon.create);
 app.delete("/api/appt/:id", apptCon.delete);
 
 app.get("/api/task/:id", taskCon.read);
 app.post("/api/task", taskCon.create);
+app.put("/api/task", taskCon.create);
 app.delete("/api/task/:id", taskCon.deleteTask);
 app.delete("/api/list/:name", taskCon.deleteList);
 
 app.get("/api/contact/:id", contactCon.read);
 app.post("/api/contact", contactCon.create);
+app.put("/api/contact", contactCon.update);
 app.delete("/api/contact/:id", contactCon.delete);
 
 const PORT = process.env.SERVER_PORT;
