@@ -8,45 +8,46 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
-import { updateTaskToggle, getTask } from "../../../../ducks/reducer";
+import { updateContactToggle, getContact } from "../../../../ducks/reducer";
 
 class UpdateContactForm extends Component {
   constructor() {
     super();
     this.state = {
-      task: {
-        list_name: "",
-        body: ""
+      contact: {
+        name: "",
+        number: "",
+        address: ""
       }
     };
   }
 
   componentDidUpdate = prevProps => {
-    if (this.props.task.body !== prevProps.task.body) {
-      this.setState({ task: this.props.task });
+    if (this.props.contact.number !== prevProps.contact.number) {
+      this.setState({ contact: this.props.contact });
     }
   };
 
   handleChange = e => {
     this.setState({
-      task: { ...this.state.task, [e.target.name]: e.target.value }
+      contact: { ...this.state.contact, [e.target.name]: e.target.value }
     });
   };
 
   handleSubmit = () => {
-    axios.put("/api/task", this.state.task).then(res => {
-      this.props.updateTaskToggle(this.props.open);
-      this.props.getTask(this.state.task.mortal_id);
+    axios.put("/api/contact", this.state.contact).then(res => {
+      this.props.updateContactToggle(this.props.open);
+      this.props.getContact(this.state.contact.mortal_id);
     });
   };
 
   render() {
-    console.log(this.state.task);
+    console.log(this.state.contact);
     return (
       <div>
         <Dialog
           open={this.props.open}
-          onClose={() => this.props.updateTaskToggle(this.props.open)}
+          onClose={() => this.props.updateContactToggle(this.props.open)}
           aria-labelledby="form-dialog-title"
         >
           <DialogTitle id="form-dialog-title">Subscribe</DialogTitle>
@@ -58,9 +59,27 @@ class UpdateContactForm extends Component {
             <TextField
               margin="dense"
               label="What is this task?"
-              value={this.state.task.body}
+              value={this.state.contact.name}
               type="string"
-              name="body"
+              name="name"
+              fullWidth
+              onChange={e => this.handleChange(e)}
+            />
+            <TextField
+              margin="dense"
+              label="What is this task?"
+              value={this.state.contact.number}
+              type="string"
+              name="number"
+              fullWidth
+              onChange={e => this.handleChange(e)}
+            />
+            <TextField
+              margin="dense"
+              label="What is this task?"
+              value={this.state.contact.address}
+              type="string"
+              name="address"
               fullWidth
               onChange={e => this.handleChange(e)}
             />
@@ -68,7 +87,7 @@ class UpdateContactForm extends Component {
           <DialogActions>
             <Button
               onClick={() => {
-                this.props.updateTaskToggle(this.props.open);
+                this.props.updateContactToggle(this.props.open);
               }}
               color="primary"
             >
@@ -86,13 +105,13 @@ class UpdateContactForm extends Component {
 
 const mapStateToProps = state => {
   return {
-    open: state.updateTaskToggle,
-    taskList: state.taskList,
-    task: state.task
+    open: state.updateContactToggle,
+    contactList: state.contactList,
+    contact: state.contact
   };
 };
 
 export default connect(
   mapStateToProps,
-  { updateTaskToggle, getTask }
+  { updateContactToggle, getContact }
 )(UpdateContactForm);

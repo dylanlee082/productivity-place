@@ -2,7 +2,12 @@
 import React, { Component } from "react";
 import axios from "axios";
 import { connect } from "react-redux";
-import { getContact } from "../../../../ducks/reducer";
+import {
+  updateContactToggle,
+  getContact,
+  updateContact
+} from "../../../../ducks/reducer";
+import UpdateContactForm from "./UpdateContactForm";
 
 //Material-UI Core Imports
 import { withStyles } from "@material-ui/core/styles";
@@ -49,6 +54,7 @@ class Contact extends Component {
     const { classes } = this.props;
     return (
       <div className={classes.root}>
+        <UpdateContactForm />
         {this.props.contactList.map((e, i) => {
           return (
             <ExpansionPanel key={i}>
@@ -63,7 +69,12 @@ class Contact extends Component {
                 <div onClick={() => this.handleDelete(e.contact_id)}>
                   <Clear />
                 </div>
-                {/* <Edit onClick={() => this.}/> */}
+                <Edit
+                  onClick={() => {
+                    this.props.updateContactToggle(this.props.open);
+                    this.props.updateContact(e);
+                  }}
+                />
               </ExpansionPanelDetails>
             </ExpansionPanel>
           );
@@ -76,11 +87,12 @@ class Contact extends Component {
 const mapStateToProps = state => {
   return {
     contactList: state.contactList,
-    user: state.user
+    user: state.user,
+    open: state.updateContactToggle
   };
 };
 
 export default connect(
   mapStateToProps,
-  { getContact }
+  { getContact, updateContactToggle, updateContact }
 )(withStyles(styles)(Contact));

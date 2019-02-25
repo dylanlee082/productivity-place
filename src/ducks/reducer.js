@@ -125,7 +125,7 @@ export default function reducer(state = initialState, action) {
     case UPDATE_CONTACT:
       return { ...state, contact: action.payload };
     case UPDATE_CONTACT_TOGGLE:
-      return { ...state, updateContact: !action.payload };
+      return { ...state, updateContactToggle: !action.payload };
     case `${GET_APPT}_FULFILLED`:
       return { ...state, apptList: action.payload.data };
     case `${GET_TASK}_FULFILLED`:
