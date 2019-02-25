@@ -15,11 +15,11 @@ const assistant = new AssistantV2({
 });
 
 let local;
-let sessionId = function() {
+let sessionId = function(req) {
   console.log(local);
   return new Promise(async (resolve, reject) => {
-    if (local) {
-      return resolve(local);
+    if (req.session.local) {
+      return resolve(req.session.local);
     }
 
     assistant.createSession(
@@ -32,9 +32,8 @@ let sessionId = function() {
           reject(err);
         } else {
           console.log(JSON.stringify(response.session_id, null, 2));
-          // resolve(JSON.stringify(response.session_id, null, 2));
+          req.session.local = response.session_id;
           resolve(response.session_id);
-          local = response.session_id;
         }
       }
     );
@@ -42,15 +41,15 @@ let sessionId = function() {
 };
 
 module.exports = {
-  understand: async (req, res) => {
-    console.log("assistant", assistant);
+  understand: async (req, resp) => {
     const command = req.body.Body.toLowerCase();
+    console.log(req.body);
     console.log(command);
     const twiml = new MessagingResponse();
     assistant.message(
       {
         assistant_id: "eecb602e-d2c0-45f7-999e-b965e1e11404",
-        session_id: await sessionId(),
+        session_id: await sessionId(req),
         input: {
           message_type: "text",
           text: command
@@ -62,9 +61,33 @@ module.exports = {
         } else {
           console.log(JSON.stringify(response, null, 2));
           console.log(response.output.generic[0].text);
-          twiml.message(response.output.generic[0].text);
-          res.writeHead(200, { "Content-Type": "text/xml" });
-          res.end(twiml.toString());
+          if (response.output.intents[0].intent === "get_tasks") {
+            const db = req.app.get("db");
+            db.get_task(1).then(res => {
+              const singular = res.map((e, i) => {
+                return e.body;
+              });
+              twiml.message(response.output.generic[0].text + " " + singular);
+              resp.writeHead(200, { "Content-Type": "text/xml" });
+              resp.end(twiml.toString());
+            });
+          } else if (response.output.intents[0].intent === "get_contacts") {
+            const db = req.app.get("db");
+            db.get_contact(1).then(res => {
+              const singular = res.map((e, i) => {
+                return e.name;
+              });
+              twiml.message(response.output.generic[0].text + " " + singular);
+              resp.writeHead(200, { "Content-Type": "text/xml" });
+              resp.end(twiml.toString());
+            });
+          } else {
+            twiml.message(response.output.generic[0].text);
+            resp.writeHead(200, { "Content-Type": "text/xml" });
+            resp.end(twiml.toString());
+          }
+          // resp.writeHead(200, { "Content-Type": "text/xml" });
+          // resp.end(twiml.toString());
         }
       }
     );
