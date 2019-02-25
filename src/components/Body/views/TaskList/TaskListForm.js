@@ -71,12 +71,8 @@ class TaskListForm extends Component {
   render() {
     return (
       <div>
-        <Button
-          variant="outlined"
-          color="primary"
-          onClick={this.handleClickOpen}
-        >
-          Create new Task List
+        <Button variant="outlined" onClick={this.handleClickOpen}>
+          Create new task list
         </Button>
         <Dialog
           open={this.state.open}
@@ -84,12 +80,14 @@ class TaskListForm extends Component {
           aria-labelledby="form-dialog-title"
         >
           <DialogTitle id="form-dialog-title">
-            Create a new Task List
+            Create a new task list
           </DialogTitle>
           <DialogContent>
             <DialogContentText>
-              To subscribe to this website, please enter your email address
-              here. We will send updates occasionally.
+              This form will create a new task list. Please input a name and
+              however many starter tasks you would like. You can create as many
+              as you would like, but there must be at least one for the list to
+              remain visible.
             </DialogContentText>
             <TextField
               margin="dense"

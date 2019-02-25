@@ -13,7 +13,6 @@ import {
 } from "material-ui-pickers";
 
 //Material-UI Core Imports
-import { withStyles } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Dialog from "@material-ui/core/Dialog";
@@ -21,14 +20,6 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
-
-const styles = theme => ({
-  form: {
-    fontSize: 13,
-    width: "auto",
-    color: "black"
-  }
-});
 
 class CalendarForm extends Component {
   state = {
@@ -83,16 +74,10 @@ class CalendarForm extends Component {
   };
 
   render() {
-    const { classes } = this.props;
     return (
       <div>
-        <Button
-          variant="outlined"
-          color="primary"
-          onClick={this.handleClickOpen}
-          className={classes.form}
-        >
-          Create New Form
+        <Button variant="outlined" onClick={this.handleClickOpen}>
+          Create a new calendar event
         </Button>
         <Dialog
           open={this.state.open}
@@ -100,12 +85,13 @@ class CalendarForm extends Component {
           aria-labelledby="form-dialog-title"
         >
           <DialogTitle id="form-dialog-title">
-            Create a new appointment
+            Create a new calendar event
           </DialogTitle>
           <DialogContent>
             <DialogContentText>
-              To subscribe to this website, please enter your email address
-              here. We will send updates occasionally.
+              This form is for creating new appointments/meetings/events for
+              your daily life. You can have multiple events on the same day, but
+              you will need to submit a new form for each one.
             </DialogContentText>
             {/* Built using the advanced Material-UI Pickers */}
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -155,4 +141,4 @@ class CalendarForm extends Component {
 
 const mapStateToProps = state => state;
 
-export default connect(mapStateToProps)(withStyles(styles)(CalendarForm));
+export default connect(mapStateToProps)(CalendarForm);

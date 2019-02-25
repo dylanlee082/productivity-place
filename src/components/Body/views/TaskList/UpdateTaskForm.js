@@ -41,7 +41,6 @@ class UpdateTaskForm extends Component {
   };
 
   render() {
-    console.log(this.state.task);
     return (
       <div>
         <Dialog

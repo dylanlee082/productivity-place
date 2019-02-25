@@ -73,11 +73,12 @@ class Login extends Component {
           onClose={this.handleClose}
           aria-labelledby="form-dialog-title"
         >
-          <DialogTitle id="form-dialog-title">Register</DialogTitle>
+          <DialogTitle id="form-dialog-title">Login/Register</DialogTitle>
           <DialogContent>
             <DialogContentText>
-              To subscribe to this website, please enter your email address
-              here. We will send updates occasionally.
+              If you already have an account just enter your info and login, if
+              it is your first time here with us and would like to create an
+              account simply fill out the information to register!
             </DialogContentText>
             <TextField
               margin="dense"

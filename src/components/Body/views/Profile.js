@@ -88,7 +88,7 @@ class Profile extends Component {
       return [];
     }
     return country[2].split("|").map(regionPair => {
-      let [regionName, regionShortCode = null] = regionPair.split("~");
+      let regionName = regionPair.split("~");
       return regionName;
     });
   };
@@ -123,7 +123,6 @@ class Profile extends Component {
           <div className={classes.input}>
             <h2>Full Name</h2>
             <TextField
-              required
               id="outlined-required"
               label="Required"
               defaultValue="Hello World"
@@ -135,7 +134,6 @@ class Profile extends Component {
           <div className={classes.input}>
             <h2>Title</h2>
             <TextField
-              required
               id="outlined-required"
               label="Required"
               defaultValue="Hello World"
@@ -147,7 +145,6 @@ class Profile extends Component {
           <div className={classes.input}>
             <h2>Email</h2>
             <TextField
-              required
               id="outlined-required"
               label="Required"
               defaultValue="Hello World"
@@ -231,10 +228,10 @@ class Profile extends Component {
               </FormControl>
             </div>
             <div className={classes.state}>
-              <h2>State</h2>
+              <h2>State/Region</h2>
               <FormControl className={classes.formControl}>
                 <Select
-                  value={this.state.state}
+                  value={this.state.region}
                   onChange={this.handleChange}
                   displayEmpty
                   name="state"

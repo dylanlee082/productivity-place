@@ -58,11 +58,7 @@ class ContactForm extends Component {
   render() {
     return (
       <div>
-        <Button
-          variant="outlined"
-          color="primary"
-          onClick={this.handleClickOpen}
-        >
+        <Button variant="outlined" onClick={this.handleClickOpen}>
           Create a new Contact
         </Button>
         <Dialog
@@ -73,8 +69,7 @@ class ContactForm extends Component {
           <DialogTitle id="form-dialog-title">Create a new Contact</DialogTitle>
           <DialogContent>
             <DialogContentText>
-              To subscribe to this website, please enter your email address
-              here. We will send updates occasionally.
+              This form is for creating new contacts in your contact book.
             </DialogContentText>
             <TextField
               onChange={e => this.handleChange(e)}

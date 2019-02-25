@@ -5,7 +5,6 @@ import { connect } from "react-redux";
 import { getUser } from "../../ducks/reducer";
 import styles from "./Landing.module.css";
 import picture1 from "../../imgs/alarm-clock-calendar-close-up-908298.jpg";
-import picture2 from "../../imgs/background-cellphone-close-up-1376863 (1).jpg";
 
 class Landing extends Component {
   componentDidMount = () => {

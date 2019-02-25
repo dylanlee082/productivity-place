@@ -189,7 +189,7 @@ class Calendar extends Component {
   };
 
   renderCells = classes => {
-    const { currentMonth, selectedDate } = this.state;
+    const { currentMonth } = this.state;
     //These first two give you the start and end date of that specific month
     const monthStart = moment(currentMonth).startOf("month");
     const monthEnd = moment(currentMonth).endOf("month");
@@ -210,11 +210,9 @@ class Calendar extends Component {
         //gets the numbers only from the date
         formattedDate = moment(day).format(dateFormat);
         //adds the days for this row
-        {
-          classed = moment(day).isSame(monthStart, "month")
-            ? "paper"
-            : "disabled";
-        }
+        classed = moment(day).isSame(monthStart, "month")
+          ? "paper"
+          : "disabled";
         days.push(
           <Grid key={i} item>
             <Paper className={classes[classed]}>

@@ -18,7 +18,6 @@ import Divider from "@material-ui/core/Divider";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import IconButton from "@material-ui/core/IconButton";
 import Collapse from "@material-ui/core/Collapse";
 
 //Material-UI Icon Imports
@@ -111,14 +110,14 @@ class Sidebar extends Component {
   };
 
   render() {
-    const { classes, theme } = this.props;
+    const { classes } = this.props;
     return (
       <div className={classes.root}>
         <Drawer
           className={classes.drawer}
           variant="persistent"
           anchor="left"
-          open="true"
+          open={true}
           classes={{
             paper: classes.drawerPaper
           }}

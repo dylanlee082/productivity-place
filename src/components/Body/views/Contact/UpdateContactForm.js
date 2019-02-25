@@ -42,7 +42,6 @@ class UpdateContactForm extends Component {
   };
 
   render() {
-    console.log(this.state.contact);
     return (
       <div>
         <Dialog

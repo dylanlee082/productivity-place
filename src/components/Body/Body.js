@@ -1,7 +1,7 @@
 //Main NPM Imports
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { toggleOpen, getUser } from "../../ducks/reducer";
+import { getUser } from "../../ducks/reducer";
 import { Switch, Route } from "react-router-dom";
 
 //Other Components
@@ -54,7 +54,7 @@ class Body extends Component {
   };
 
   render() {
-    const { classes, open, toggleOpen } = this.props;
+    const { classes, open } = this.props;
     return (
       <div className={classes.root}>
         <CssBaseline />
@@ -89,5 +89,5 @@ const mapStateToProps = state => {
 
 export default connect(
   mapStateToProps,
-  { toggleOpen, getUser }
+  { getUser }
 )(withStyles(styles, { withTheme: true })(Body));
