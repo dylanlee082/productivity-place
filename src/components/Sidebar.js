@@ -27,8 +27,6 @@ import MailIcon from "@material-ui/icons/Mail";
 import StarBorder from "@material-ui/icons/StarBorder";
 import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
-import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
-import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 
 const drawerWidth = 240;
 
@@ -41,20 +39,24 @@ const styles = theme => ({
     flexShrink: 0
   },
   drawerPaper: {
-    width: drawerWidth
+    width: drawerWidth,
+    background: theme.palette.primary.main
   },
   drawerHeader: {
     display: "flex",
     alignItems: "center",
-    padding: "0 8px",
     ...theme.mixins.toolbar,
-    justifyContent: "flex-end"
+    justifyContent: "flex-start",
+    marginLeft: "3vw"
   },
   link: {
     textDecoration: "none"
   },
   nested: {
     paddingLeft: theme.spacing.unit * 4
+  },
+  primary: {
+    color: theme.palette.secondary.main
   }
 });
 
@@ -62,7 +64,8 @@ class Sidebar extends Component {
   state = {
     calendarOpen: false,
     taskOpen: false,
-    contactOpen: false
+    contactOpen: false,
+    profileOpen: false
   };
 
   handleLogout = () => {
@@ -75,7 +78,17 @@ class Sidebar extends Component {
     this.setState({
       calendarOpen: !this.state.calendarOpen,
       taskOpen: false,
-      contactOpen: false
+      contactOpen: false,
+      profileOpen: false
+    });
+  };
+
+  handleProfileClick = () => {
+    this.setState({
+      profileOpen: !this.state.profileOpen,
+      taskOpen: false,
+      contactOpen: false,
+      calendarOpen: false
     });
   };
 
@@ -83,7 +96,8 @@ class Sidebar extends Component {
     this.setState({
       taskOpen: !this.state.taskOpen,
       calendarOpen: false,
-      contactOpen: false
+      contactOpen: false,
+      profileOpen: false
     });
   };
 
@@ -91,35 +105,42 @@ class Sidebar extends Component {
     this.setState({
       contactOpen: !this.state.contactOpen,
       calendarOpen: false,
-      taskOpen: false
+      taskOpen: false,
+      profileOpen: false
     });
   };
 
   render() {
-    const { classes, theme, open, toggleOpen } = this.props;
+    const { classes, theme } = this.props;
     return (
       <div className={classes.root}>
         <Drawer
           className={classes.drawer}
           variant="persistent"
           anchor="left"
-          open={open}
+          open="true"
           classes={{
             paper: classes.drawerPaper
           }}
         >
-          <div className={classes.drawerHeader}>
-            <Link to="/main/profile">Profile</Link>
-            <IconButton onClick={() => toggleOpen(open)}>
-              {theme.direction === "ltr" ? (
-                <ChevronLeftIcon />
-              ) : (
-                <ChevronRightIcon />
-              )}
-            </IconButton>
-          </div>
+          <div className={classes.drawerHeader} />
           <Divider />
           <List>
+            <Link
+              to={"/main/profile"}
+              className={classes.link}
+              onClick={() => this.handleProfileClick()}
+            >
+              <ListItem button>
+                <ListItemIcon>
+                  <InboxIcon color="secondary" />
+                </ListItemIcon>
+                <ListItemText
+                  classes={{ primary: classes.primary }}
+                  primary="Profile"
+                />
+              </ListItem>
+            </Link>
             {/* The link for the task view */}
             <Link
               className={classes.link}
@@ -128,10 +149,17 @@ class Sidebar extends Component {
             >
               <ListItem button>
                 <ListItemIcon>
-                  <InboxIcon />
+                  <InboxIcon color="secondary" />
                 </ListItemIcon>
-                <ListItemText primary="Tasks" />
-                {this.state.taskOpen ? <ExpandLess /> : <ExpandMore />}
+                <ListItemText
+                  classes={{ primary: classes.primary }}
+                  primary="Tasks"
+                />
+                {this.state.taskOpen ? (
+                  <ExpandLess color="secondary" />
+                ) : (
+                  <ExpandMore color="secondary" />
+                )}
               </ListItem>
             </Link>
             {/* The secondary links for task */}
@@ -139,7 +167,7 @@ class Sidebar extends Component {
               <List component="div" disablePadding>
                 <ListItem button className={classes.nested}>
                   <ListItemIcon>
-                    <StarBorder />
+                    <StarBorder color="secondary" />
                   </ListItemIcon>
                   <TaskListForm />
                 </ListItem>
@@ -153,10 +181,17 @@ class Sidebar extends Component {
             >
               <ListItem button>
                 <ListItemIcon>
-                  <MailIcon />
+                  <MailIcon color="secondary" />
                 </ListItemIcon>
-                <ListItemText primary="Calendar" />
-                {this.state.calendarOpen ? <ExpandLess /> : <ExpandMore />}
+                <ListItemText
+                  classes={{ primary: classes.primary }}
+                  primary="Calendar"
+                />
+                {this.state.calendarOpen ? (
+                  <ExpandLess color="secondary" />
+                ) : (
+                  <ExpandMore color="secondary" />
+                )}
               </ListItem>
             </Link>
             {/* The secondary links for the calendar view */}
@@ -165,16 +200,19 @@ class Sidebar extends Component {
                 <ListItem button className={classes.nested}>
                   {/* Appt form creator */}
                   <ListItemIcon>
-                    <StarBorder />
+                    <StarBorder color="secondary" />
                   </ListItemIcon>
                   <CalendarForm />
                 </ListItem>
                 {/* Switch the view of the calendar to include a day view */}
                 <ListItem button className={classes.nested}>
                   <ListItemIcon>
-                    <StarBorder />
+                    <StarBorder color="secondary" />
                   </ListItemIcon>
-                  <ListItemText primary="Day View" />
+                  <ListItemText
+                    classes={{ primary: classes.primary }}
+                    primary="Day View"
+                  />
                 </ListItem>
               </List>
             </Collapse>
@@ -186,10 +224,17 @@ class Sidebar extends Component {
             >
               <ListItem button>
                 <ListItemIcon>
-                  <InboxIcon />
+                  <InboxIcon color="secondary" />
                 </ListItemIcon>
-                <ListItemText primary="Contacts" />
-                {this.state.contactOpen ? <ExpandLess /> : <ExpandMore />}
+                <ListItemText
+                  classes={{ primary: classes.primary }}
+                  primary="Contacts"
+                />
+                {this.state.contactOpen ? (
+                  <ExpandLess color="secondary" />
+                ) : (
+                  <ExpandMore color="secondary" />
+                )}
               </ListItem>
             </Link>
             {/* The secondary links for the contact view */}
@@ -198,7 +243,7 @@ class Sidebar extends Component {
                 <ListItem button className={classes.nested}>
                   {/* Contact form creator */}
                   <ListItemIcon>
-                    <StarBorder />
+                    <StarBorder color="secondary" />
                   </ListItemIcon>
                   <ContactForm />
                 </ListItem>
@@ -207,9 +252,12 @@ class Sidebar extends Component {
             {/* The link to logout of the site, back to the landing page */}
             <ListItem button onClick={() => this.handleLogout()}>
               <ListItemIcon>
-                <InboxIcon />
+                <InboxIcon color="secondary" />
               </ListItemIcon>
-              <ListItemText primary="Logout" />
+              <ListItemText
+                classes={{ primary: classes.primary }}
+                primary="Logout"
+              />
             </ListItem>
           </List>
         </Drawer>

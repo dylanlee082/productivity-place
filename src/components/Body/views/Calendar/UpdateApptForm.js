@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import axios from "axios";
 import { connect } from "react-redux";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
@@ -7,7 +8,7 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
-import { updateAppt } from "../../../../ducks/reducer";
+import { updateApptToggle, getAppt } from "../../../../ducks/reducer";
 
 //Date-Fns Imports && Date Manipulation
 import "date-fns";
@@ -19,21 +20,21 @@ import {
 } from "material-ui-pickers";
 
 class UpdateApptForm extends Component {
-  constructor(props) {
+  constructor() {
     super();
     this.state = {
       appt: {
-        date: new Date(),
+        appt_time: new Date(),
         name: "",
         location: ""
       }
     };
   }
 
-  componentDidMount = () => {};
-
-  shouldComponentUpdate = nextProps => {
-    return nextProps !== this.props;
+  componentDidUpdate = prevProps => {
+    if (this.props.appt.name !== prevProps.appt.name) {
+      this.setState({ appt: this.props.appt });
+    }
   };
 
   handleDateChange = date => {
@@ -46,13 +47,19 @@ class UpdateApptForm extends Component {
     });
   };
 
+  handleSubmit = () => {
+    axios.put("/api/appt", this.state.appt).then(res => {
+      this.props.updateApptToggle(this.props.open);
+      this.props.getAppt(this.state.appt.mortal_id);
+    });
+  };
+
   render() {
-    console.log(this.state.appt);
     return (
       <div>
         <Dialog
           open={this.props.open}
-          onClose={() => this.props.updateAppt(this.props.open)}
+          onClose={() => this.props.updateApptToggle(this.props.open)}
           aria-labelledby="form-dialog-title"
         >
           <DialogTitle id="form-dialog-title">Subscribe</DialogTitle>
@@ -66,13 +73,13 @@ class UpdateApptForm extends Component {
               <DatePicker
                 margin="normal"
                 label="Date picker"
-                value={this.state.appt.date}
+                value={this.state.appt.appt_time}
                 onChange={this.handleDateChange}
               />
               <TimePicker
                 margin="normal"
                 label="Time Picker"
-                value={this.state.appt.date}
+                value={this.state.appt.appt_time}
                 onChange={this.handleDateChange}
               />
             </MuiPickersUtilsProvider>
@@ -97,16 +104,16 @@ class UpdateApptForm extends Component {
           </DialogContent>
           <DialogActions>
             <Button
-              onClick={() => this.props.updateAppt(this.props.open)}
+              onClick={() => {
+                this.props.updateApptToggle(this.props.open);
+                console.log("hit");
+              }}
               color="primary"
             >
               Cancel
             </Button>
-            <Button
-              onClick={() => this.props.updateAppt(this.props.open)}
-              color="primary"
-            >
-              Subscribe
+            <Button onClick={() => this.handleSubmit()} color="primary">
+              Submit
             </Button>
           </DialogActions>
         </Dialog>
@@ -118,11 +125,12 @@ class UpdateApptForm extends Component {
 const mapStateToProps = state => {
   return {
     open: state.updateApptToggle,
-    appts: state.appts
+    apptList: state.apptList,
+    appt: state.appt
   };
 };
 
 export default connect(
   mapStateToProps,
-  { updateAppt }
+  { updateApptToggle, getAppt }
 )(UpdateApptForm);

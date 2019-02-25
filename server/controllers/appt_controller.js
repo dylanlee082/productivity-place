@@ -17,8 +17,8 @@ module.exports = {
   },
   update: (req, res) => {
     const db = req.app.get("db");
-    const { date, name, location, id } = req.body;
-    db.update_appt(date, name, location, id)
+    const { appt_time, name, location, appt_id } = req.body;
+    db.update_appt(appt_time, name, location, appt_id)
       .then(() => res.sendStatus(200))
       .catch(err => {
         console.log(err);

@@ -14,6 +14,7 @@ import Typography from "@material-ui/core/Typography";
 //Material-UI Icon Imports
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Clear from "@material-ui/icons/Clear";
+import Edit from "@material-ui/icons/Edit";
 
 const styles = theme => ({
   root: {
@@ -48,7 +49,7 @@ class Contact extends Component {
     const { classes } = this.props;
     return (
       <div className={classes.root}>
-        {this.props.contacts.map((e, i) => {
+        {this.props.contactList.map((e, i) => {
           return (
             <ExpansionPanel key={i}>
               <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
@@ -62,6 +63,7 @@ class Contact extends Component {
                 <div onClick={() => this.handleDelete(e.contact_id)}>
                   <Clear />
                 </div>
+                {/* <Edit onClick={() => this.}/> */}
               </ExpansionPanelDetails>
             </ExpansionPanel>
           );
@@ -73,7 +75,7 @@ class Contact extends Component {
 
 const mapStateToProps = state => {
   return {
-    contacts: state.contacts,
+    contactList: state.contactList,
     user: state.user
   };
 };

@@ -12,41 +12,23 @@ import Contacts from "./views/Contact/Contacts";
 import Profile from "./views/Profile";
 
 //Material-UI Core Imports
-import classNames from "classnames";
 import { withStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
-import IconButton from "@material-ui/core/IconButton";
-import MenuIcon from "@material-ui/icons/Menu";
 
 const drawerWidth = 240;
 
 const styles = theme => ({
   root: {
-    display: "flex"
+    display: "flex",
+    background: theme.palette.secondary.main,
+    height: "100vh",
+    zIndex: "-5"
   },
   appBar: {
-    transition: theme.transitions.create(["margin", "width"], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen
-    })
-  },
-  appBarShift: {
-    width: `calc(100% - ${drawerWidth}px)`,
-    marginLeft: drawerWidth,
-    transition: theme.transitions.create(["margin", "width"], {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen
-    })
-  },
-  menuButton: {
-    marginLeft: 12,
-    marginRight: 20
-  },
-  hide: {
-    display: "none"
+    width: `calc(100% - ${drawerWidth}px)`
   },
   drawerHeader: {
     display: "flex",
@@ -58,17 +40,6 @@ const styles = theme => ({
   content: {
     flexGrow: 1,
     padding: theme.spacing.unit * 3,
-    transition: theme.transitions.create("margin", {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen
-    }),
-    marginLeft: -drawerWidth
-  },
-  contentShift: {
-    transition: theme.transitions.create("margin", {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen
-    }),
     marginLeft: 0
   }
 });
@@ -87,32 +58,15 @@ class Body extends Component {
     return (
       <div className={classes.root}>
         <CssBaseline />
-        <AppBar
-          position="fixed"
-          className={classNames(classes.appBar, {
-            [classes.appBarShift]: open
-          })}
-        >
+        <AppBar position="fixed" className={classes.appBar}>
           <Toolbar disableGutters={!open}>
-            <IconButton
-              color="inherit"
-              aria-label="Open drawer"
-              onClick={() => toggleOpen(open)}
-              className={classNames(classes.menuButton, open && classes.hide)}
-            >
-              <MenuIcon />
-            </IconButton>
-            <Typography variant="h6" color="inherit" noWrap>
+            <Typography variant="h6" color="secondary" noWrap>
               Productivity Place
             </Typography>
           </Toolbar>
         </AppBar>
         <Sidebar />
-        <main
-          className={classNames(classes.content, {
-            [classes.contentShift]: open
-          })}
-        >
+        <main className={classes.content}>
           <div className={classes.drawerHeader} />
           <Switch>
             <Route exact path="/main/tasks" component={TaskList} />

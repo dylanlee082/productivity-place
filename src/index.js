@@ -6,14 +6,18 @@ import App from "./App";
 import { BrowserRouter as Router } from "react-router-dom";
 import { Provider } from "react-redux";
 import store from "./ducks/store";
+import MuiThemeProvider from "@material-ui/core/styles/MuiThemeProvider";
+import theme from "./theme";
 // import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(
-  <Provider store={store}>
-    <Router>
-      <App />
-    </Router>
-  </Provider>,
+  <MuiThemeProvider theme={theme}>
+    <Provider store={store}>
+      <Router>
+        <App />
+      </Router>
+    </Provider>
+  </MuiThemeProvider>,
   document.getElementById("root")
 );
 

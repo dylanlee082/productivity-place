@@ -48,7 +48,7 @@ app.delete("/api/appt/:id", apptCon.delete);
 
 app.get("/api/task/:id", taskCon.read);
 app.post("/api/task", taskCon.create);
-app.put("/api/task", taskCon.create);
+app.put("/api/task", taskCon.update);
 app.delete("/api/task/:id", taskCon.deleteTask);
 app.delete("/api/list/:name", taskCon.deleteList);
 

@@ -3,7 +3,11 @@ import React, { Component } from "react";
 import axios from "axios";
 import moment from "moment";
 import { connect } from "react-redux";
-import { getAppt, updateAppt } from "../../../../ducks/reducer";
+import {
+  getAppt,
+  updateAppt,
+  updateApptToggle
+} from "../../../../ducks/reducer";
 
 //Material-UI Core Imports
 import { withStyles } from "@material-ui/core/styles";
@@ -84,6 +88,9 @@ class Calendar extends Component {
           this.parseAppts(res.value.data);
         }
       });
+    }
+    if (prevProps.apptList !== this.props.apptList) {
+      this.parseAppts(this.props.apptList);
     }
   };
 
@@ -170,7 +177,9 @@ class Calendar extends Component {
               this.handleDelete(currentArr[i][currentDate].appt_id)
             }
             onClick={() => {
-              this.props.updateAppt(this.props.open);
+              console.log(currentArr[i][currentDate]);
+              this.props.updateApptToggle(this.props.open);
+              this.props.updateAppt(currentArr[i][currentDate]);
             }}
           />
         );
@@ -249,12 +258,13 @@ class Calendar extends Component {
 const mapStateToProps = state => {
   return {
     user: state.user,
-    appts: state.appts,
-    open: state.updateApptToggle
+    appt: state.appt,
+    open: state.updateApptToggle,
+    apptList: state.apptList
   };
 };
 
 export default connect(
   mapStateToProps,
-  { getAppt, updateAppt }
+  { getAppt, updateAppt, updateApptToggle }
 )(withStyles(styles)(Calendar));

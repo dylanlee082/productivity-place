@@ -43,7 +43,7 @@ class Login extends Component {
       .post("/auth/login", this.state)
       .then(res => {
         this.props.getUser();
-        this.props.history.push("/main/task");
+        this.props.history.push("/main/tasks");
       })
       .catch(err => console.log(err));
   };

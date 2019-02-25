@@ -15,8 +15,8 @@ module.exports = {
   },
   update: (req, res) => {
     const db = req.app.get("db");
-    const { listName, inputs, id } = req.body;
-    db.update_task(inputs, listName, id)
+    const { list_name, body, task_id } = req.body;
+    db.update_task(body, list_name, task_id)
       .then(() => res.sendStatus(200))
       .catch(err => {
         console.log(err);

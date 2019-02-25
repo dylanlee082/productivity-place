@@ -2,7 +2,11 @@
 import React, { Component } from "react";
 import axios from "axios";
 import { connect } from "react-redux";
-import { getTask } from "../../../../ducks/reducer";
+import {
+  getTask,
+  updateTaskToggle,
+  updateTask
+} from "../../../../ducks/reducer";
 
 //Material-UI Core Imports
 import { withStyles } from "@material-ui/core";
@@ -11,6 +15,9 @@ import Paper from "@material-ui/core/Paper";
 //Material-UI Icon Imports
 import AddBox from "@material-ui/icons/AddBox";
 import Clear from "@material-ui/icons/Clear";
+import Edit from "@material-ui/icons/Edit";
+
+import UpdateTaskForm from "./UpdateTaskForm";
 
 //Material-UI Styling
 const styles = theme => ({
@@ -82,12 +89,19 @@ class TaskList extends Component {
   };
 
   checkTask = list_name => {
-    let arr = this.props.tasks.map((e, i) => {
+    let arr = this.props.taskList.map((e, i) => {
       let p = "";
       if (e.list_name === list_name) {
         p = (
           <div className={this.props.classes.innerItem} key={e.body}>
-            <p>{e.body}</p> <Clear onClick={() => this.deleteTask(e.task_id)} />{" "}
+            <p>{e.body}</p>
+            <Clear onClick={() => this.deleteTask(e.task_id)} />
+            <Edit
+              onClick={() => {
+                this.props.updateTaskToggle(this.props.open);
+                this.props.updateTask(e);
+              }}
+            />
           </div>
         );
       }
@@ -97,11 +111,13 @@ class TaskList extends Component {
   };
 
   render() {
-    const { classes, tasks } = this.props;
+    const { classes, taskList } = this.props;
     let arr = [];
+
     return (
       <div className={classes.root}>
-        {tasks.map((e, i) => {
+        <UpdateTaskForm />
+        {taskList.map((e, i) => {
           if (!arr.includes(e.list_name)) {
             arr.push(e.list_name);
             return (
@@ -130,11 +146,12 @@ class TaskList extends Component {
 const mapStateToProps = state => {
   return {
     user: state.user,
-    tasks: state.tasks
+    taskList: state.taskList,
+    open: state.updateTaskToggle
   };
 };
 
 export default connect(
   mapStateToProps,
-  { getTask }
+  { getTask, updateTaskToggle, updateTask }
 )(withStyles(styles)(TaskList));
