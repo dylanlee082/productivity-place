@@ -52,6 +52,17 @@ class Contact extends Component {
 
   render() {
     const { classes } = this.props;
+    this.props.contactList.sort(function(a, b) {
+      var nameA = a.name.toUpperCase();
+      var nameB = b.name.toUpperCase();
+      if (nameA < nameB) {
+        return -1;
+      }
+      if (nameA > nameB) {
+        return 1;
+      }
+      return 0;
+    });
     return (
       <div className={classes.root}>
         <UpdateContactForm />

@@ -57,30 +57,82 @@ module.exports = {
         } else {
           // console.log(JSON.stringify(response, null, 2));
           // console.log(response.output.generic[0].text);
-          if (response.output.intents[0].intent === "get_tasks") {
-            const db = req.app.get("db");
-            db.get_task(req.session.user.id).then(res => {
-              const singular = res.map((e, i) => {
-                return e.body;
+          let intent = response.output.intents[0].intent;
+          const db = req.app.get("db");
+          switch (intent) {
+            case "update_me": {
+              // db.get_alll(req.session.user.id).then(res => {
+              //   const singular = res.map((e, i) => {
+              //     console.log(e);
+              //     return e;
+              //   });
+              //   twiml.message(response.output.generic[0].text + " " + singular);
+              //   resp.writeHead(200, { "Content-Type": "text/xml" });
+              //   resp.end(twiml.toString());
+              // });
+              // break;
+              const list = [];
+              db.get_task(req.session.user.id)
+                .then(res => {
+                  res.map(e => {
+                    list.push(e);
+                  });
+                })
+                .then(() => {
+                  db.get_appt(req.session.user.id)
+                    .then(res => {
+                      res.map(e => {
+                        list.push(e);
+                      });
+                    })
+                    .then(() => {
+                      db.get_contact(req.session.user.id)
+                        .then(res => {
+                          res.map(e => {
+                            list.push(e);
+                          });
+                        })
+                        .then(() => {
+                          console.log(list);
+                          twiml.message(
+                            response.output.generic[0].text +
+                              " " +
+                              list.map(e => e.mortal_id)
+                          );
+                          resp.writeHead(200, { "Content-Type": "text/xml" });
+                          resp.end(twiml.toString());
+                        });
+                    });
+                });
+              break;
+            }
+            case "get_tasks": {
+              db.get_task(req.session.user.id).then(res => {
+                const singular = res.map((e, i) => {
+                  return e.body;
+                });
+                twiml.message(response.output.generic[0].text + " " + singular);
+                resp.writeHead(200, { "Content-Type": "text/xml" });
+                resp.end(twiml.toString());
               });
-              twiml.message(response.output.generic[0].text + " " + singular);
+              break;
+            }
+            case "get_contacts": {
+              db.get_contact(req.session.user.id).then(res => {
+                const singular = res.map((e, i) => {
+                  return e.name;
+                });
+                twiml.message(response.output.generic[0].text + " " + singular);
+                resp.writeHead(200, { "Content-Type": "text/xml" });
+                resp.end(twiml.toString());
+              });
+              break;
+            }
+            default: {
+              twiml.message(response.output.generic[0].text);
               resp.writeHead(200, { "Content-Type": "text/xml" });
               resp.end(twiml.toString());
-            });
-          } else if (response.output.intents[0].intent === "get_contacts") {
-            const db = req.app.get("db");
-            db.get_contact(req.session.user.id).then(res => {
-              const singular = res.map((e, i) => {
-                return e.name;
-              });
-              twiml.message(response.output.generic[0].text + " " + singular);
-              resp.writeHead(200, { "Content-Type": "text/xml" });
-              resp.end(twiml.toString());
-            });
-          } else {
-            twiml.message(response.output.generic[0].text);
-            resp.writeHead(200, { "Content-Type": "text/xml" });
-            resp.end(twiml.toString());
+            }
           }
         }
       }
