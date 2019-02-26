@@ -3,6 +3,8 @@ const express = require("express");
 const { json, urlencoded } = require("body-parser");
 const massive = require("massive");
 const session = require("express-session");
+const twilio = require("twilio");
+const MessagingResponse = twilio.twiml.MessagingResponse;
 
 const { understand } = require("./controllers/sms/sms_controller");
 const {
@@ -34,7 +36,30 @@ massive(process.env.CONNECTION_STRING).then(db => {
   app.set("db", db);
 });
 
-app.post("/sms", understand);
+const userCheck = (req, resp, next) => {
+  const db = req.app.get("db");
+  db.get_number(req.body.From)
+    .then(res => {
+      if (res[0] && res[0].number === req.body.From) {
+        req.session.user = {
+          id: res[0].mortal_id,
+          username: res[0].username,
+          number: res[0].number
+        };
+        return next();
+      } else {
+        const twiml = new MessagingResponse();
+        twiml.message(
+          "I'm sorry you do not have an account please go online and create one."
+        );
+        resp.writeHead(200, { "Content-Type": "text/xml" });
+        resp.end(twiml.toString());
+      }
+    })
+    .catch(err => console.log(err));
+};
+
+app.post("/sms", userCheck, understand);
 
 app.get("/auth/user", user);
 app.post("/auth/register", register);
@@ -59,5 +84,3 @@ app.delete("/api/contact/:id", contactCon.delete);
 
 const PORT = process.env.SERVER_PORT;
 app.listen(PORT, () => console.log(`Listening on port: ${PORT}`));
-
-// module.exports = { assistant, sessionId };

@@ -6,7 +6,7 @@ module.exports = {
     res.status(200).json(req.session.user);
   },
   register: async (req, res) => {
-    const { username, password } = req.body;
+    const { username, password, number } = req.body;
     const db = req.app.get("db");
     const result = await db.get_mortal([username]);
     const existingMortal = result[0];
@@ -19,11 +19,12 @@ module.exports = {
     }
     const hash = await bcrypt.hash(password, 12);
     console.log(hash);
-    const registeredMortal = await db.register_mortal([username, hash]);
+    const registeredMortal = await db.register_mortal([username, hash, number]);
     const mortal = registeredMortal[0];
     req.session.user = {
       username: mortal.username,
-      id: mortal.mortal_id
+      id: mortal.mortal_id,
+      number: mortal.number
     };
     return res.status(200).json(req.session.user);
   },

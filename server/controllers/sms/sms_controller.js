@@ -1,11 +1,9 @@
 require("dotenv").config;
 const twilio = require("twilio");
 const MessagingResponse = twilio.twiml.MessagingResponse;
-const accountSid = process.env.ACCOUNT_SID;
-const authToken = process.env.AUTH_TOKEN;
-const client = twilio(accountSid, authToken);
-// const { assistant } = require("../../index");
-// const { sessionId } = require("../../index");
+// const accountSid = process.env.ACCOUNT_SID;
+// const authToken = process.env.AUTH_TOKEN;
+// const client = twilio(accountSid, authToken);
 
 const AssistantV2 = require("watson-developer-cloud/assistant/v2");
 const assistant = new AssistantV2({
@@ -14,9 +12,7 @@ const assistant = new AssistantV2({
   url: "https://gateway.watsonplatform.net/assistant/api"
 });
 
-let local;
 let sessionId = function(req) {
-  console.log(local);
   return new Promise(async (resolve, reject) => {
     if (req.session.local) {
       return resolve(req.session.local);
@@ -31,7 +27,7 @@ let sessionId = function(req) {
           console.error(err);
           reject(err);
         } else {
-          console.log(JSON.stringify(response.session_id, null, 2));
+          // console.log(JSON.stringify(response.session_id, null, 2));
           req.session.local = response.session_id;
           resolve(response.session_id);
         }
@@ -43,8 +39,8 @@ let sessionId = function(req) {
 module.exports = {
   understand: async (req, resp) => {
     const command = req.body.Body.toLowerCase();
-    console.log(req.body);
-    console.log(command);
+    // console.log(req.body);
+    // console.log(command);
     const twiml = new MessagingResponse();
     assistant.message(
       {
@@ -59,11 +55,11 @@ module.exports = {
         if (err) {
           console.log("error:", err);
         } else {
-          console.log(JSON.stringify(response, null, 2));
-          console.log(response.output.generic[0].text);
+          // console.log(JSON.stringify(response, null, 2));
+          // console.log(response.output.generic[0].text);
           if (response.output.intents[0].intent === "get_tasks") {
             const db = req.app.get("db");
-            db.get_task(1).then(res => {
+            db.get_task(req.session.user.id).then(res => {
               const singular = res.map((e, i) => {
                 return e.body;
               });
@@ -73,7 +69,7 @@ module.exports = {
             });
           } else if (response.output.intents[0].intent === "get_contacts") {
             const db = req.app.get("db");
-            db.get_contact(1).then(res => {
+            db.get_contact(req.session.user.id).then(res => {
               const singular = res.map((e, i) => {
                 return e.name;
               });
@@ -86,8 +82,6 @@ module.exports = {
             resp.writeHead(200, { "Content-Type": "text/xml" });
             resp.end(twiml.toString());
           }
-          // resp.writeHead(200, { "Content-Type": "text/xml" });
-          // resp.end(twiml.toString());
         }
       }
     );

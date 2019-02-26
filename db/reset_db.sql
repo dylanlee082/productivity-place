@@ -8,7 +8,8 @@ CREATE TABLE mortal (
     mortal_id SERIAL PRIMARY KEY,
     username VARCHAR(30),
     hash VARCHAR(512),
-    email VARCHAR(100)
+    email VARCHAR(100),
+    number VARCHAR(20)
 );
 
 CREATE TABLE task (

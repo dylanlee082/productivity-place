@@ -50,13 +50,11 @@ class Login extends Component {
 
   handleRegister = () => {
     axios
-      .post("/auth/register", {
-        username: this.state.username,
-        password: this.state.password
-      })
+      .post("/auth/register", this.state)
       .then(res => {
         this.props.history.push("/");
         this.props.getUser();
+        this.handleClose();
       })
       .catch(err => console.log(err));
   };
@@ -96,12 +94,20 @@ class Login extends Component {
               fullWidth
               onChange={e => this.handleChange(e)}
             />
+            <TextField
+              margin="dense"
+              name="number"
+              label="number"
+              type="text"
+              fullWidth
+              onChange={e => this.handleChange(e)}
+            />
           </DialogContent>
           <DialogActions>
             <Button onClick={() => this.handleLogin()} color="primary">
               Login
             </Button>
-            <Button onClick={() => this.handleClose} color="primary">
+            <Button onClick={() => this.handleRegister()} color="primary">
               Register
             </Button>
           </DialogActions>
