@@ -7,9 +7,14 @@ DROP TABLE mortal;
 CREATE TABLE mortal (
     mortal_id SERIAL PRIMARY KEY,
     username VARCHAR(30),
+    name VARCHAR(50),
+    funFact VARCHAR(200),
     hash VARCHAR(512),
     email VARCHAR(100),
-    number VARCHAR(20)
+    number VARCHAR(20),
+    taskToggle BOOLEAN,
+    calendarToggle BOOLEAN,
+    contactToggle BOOLEAN
 );
 
 CREATE TABLE task (
@@ -18,7 +23,7 @@ CREATE TABLE task (
     body VARCHAR(512),
     time_created TIMESTAMPTZ, 
     time_checked TIMESTAMPTZ,
-    mortal_id INTEGER REFERENCES mortal(mortal_id)
+    mortal_id INTEGER REFERENCES mortal(mortal_id) ON DELETE CASCADE
 );
 
 CREATE TABLE appt (
@@ -26,7 +31,7 @@ CREATE TABLE appt (
     appt_time TIMESTAMPTZ,
     name VARCHAR(24),
     location VARCHAR(100),
-    mortal_id INTEGER REFERENCES mortal(mortal_id)
+    mortal_id INTEGER REFERENCES mortal(mortal_id) ON DELETE CASCADE
 );
 
 CREATE TABLE contact (
@@ -34,5 +39,5 @@ CREATE TABLE contact (
     name VARCHAR(24),
     number VARCHAR(20),
     address VARCHAR(100),
-    mortal_id INTEGER REFERENCES mortal(mortal_id)
+    mortal_id INTEGER REFERENCES mortal(mortal_id) ON DELETE CASCADE
 )

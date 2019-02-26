@@ -7,12 +7,7 @@ const twilio = require("twilio");
 const MessagingResponse = twilio.twiml.MessagingResponse;
 
 const { understand } = require("./controllers/sms/sms_controller");
-const {
-  register,
-  login,
-  logout,
-  user
-} = require("./controllers/auth_controller");
+const authCon = require("./controllers/auth_controller");
 const apptCon = require("./controllers/appt_controller");
 const taskCon = require("./controllers/task_controller");
 const contactCon = require("./controllers/contact_controller");
@@ -61,10 +56,11 @@ const userCheck = (req, resp, next) => {
 
 app.post("/sms", userCheck, understand);
 
-app.get("/auth/user", user);
-app.post("/auth/register", register);
-app.post("/auth/login", login);
-app.get("/auth/logout", logout);
+app.get("/auth/user", authCon.user);
+app.post("/auth/register", authCon.register);
+app.post("/auth/login", authCon.login);
+app.get("/auth/logout", authCon.logout);
+app.delete("/auth/delete/:id", authCon.deleteUser);
 
 app.get("/api/appt/:id", apptCon.read);
 app.put("/api/appt", apptCon.update);

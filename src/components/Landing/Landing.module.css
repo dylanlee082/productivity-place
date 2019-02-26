@@ -52,6 +52,21 @@
   transform: translate(-50%, -50%);
   -ms-transform: translate(-50%, -50%);
 }
+
+.finalPage {
+  position: absolute;
+  width: 60vw;
+  top: 45%;
+  left: 50%;
+  font-size: 0.5em;
+  color: white;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  animation-name: fade-in;
+  animation-duration: 2s;
+  opacity: 1;
+}
+
 .typedfadeout {
   animation-name: fade-out;
   animation-duration: 0.5s;
@@ -63,5 +78,14 @@
   }
   to {
     opacity: 0;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }

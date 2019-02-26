@@ -2,6 +2,7 @@
 import React, { Component } from "react";
 import axios from "axios";
 import { connect } from "react-redux";
+import { getAppt } from "../../../../ducks/reducer";
 
 //Date-Fns Imports && Date Manipulation
 import "date-fns";
@@ -61,6 +62,7 @@ class CalendarForm extends Component {
           selectedDate: new Date()
         });
         this.handleClose();
+        this.props.getAppt(this.props.user.id);
       })
       .catch(err => console.log(err));
   };
@@ -139,6 +141,13 @@ class CalendarForm extends Component {
   }
 }
 
-const mapStateToProps = state => state;
+const mapStateToProps = state => {
+  return {
+    user: state.user
+  };
+};
 
-export default connect(mapStateToProps)(CalendarForm);
+export default connect(
+  mapStateToProps,
+  { getAppt }
+)(CalendarForm);

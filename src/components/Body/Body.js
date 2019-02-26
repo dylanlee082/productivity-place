@@ -9,7 +9,7 @@ import Sidebar from "../Sidebar";
 import TaskList from "./views/TaskList/TaskList";
 import Calendar from "./views/Calendar/Calendar";
 import Contacts from "./views/Contact/Contacts";
-import Profile from "./views/Profile";
+import Profile from "./views/Profile/Profile";
 
 //Material-UI Core Imports
 import { withStyles } from "@material-ui/core/styles";

@@ -2,11 +2,17 @@ import React, { Component } from "react";
 import Typed from "typed.js";
 import Login from "./Login";
 import { connect } from "react-redux";
-import { getUser } from "../../ducks/reducer";
+import { getUser, loginFormToggle } from "../../ducks/reducer";
 import styles from "./Landing.module.css";
 import picture1 from "../../imgs/alarm-clock-calendar-close-up-908298.jpg";
 
 class Landing extends Component {
+  constructor() {
+    super();
+    this.state = {
+      page: ""
+    };
+  }
   componentDidMount = () => {
     this.typing();
   };
@@ -20,11 +26,31 @@ class Landing extends Component {
       ],
       typeSpeed: 50,
       startDelay: 500,
-      loop: true,
-      loopCount: Infinity,
       fadeOut: true,
       fadeOutClass: styles.typedfadeout,
-      fadeOutDelay: 1000
+      fadeOutDelay: 1000,
+      onComplete: self => {
+        setTimeout(() => this.typed.destroy(), 1500);
+      },
+      onDestroy: self => {
+        this.setState({
+          page: (
+            <div className={styles.finalPage}>
+              <h1>Welcome to the Productivity Place</h1>
+              <p>
+                Here you will be able to make the most of your time in your
+                daily life and be more effective in the tasks you have before
+                you!
+              </p>
+              <button
+                onClick={() => this.props.loginFormToggle(this.props.open)}
+              >
+                Click here to sign up now!
+              </button>
+            </div>
+          )
+        });
+      }
     });
   };
 
@@ -40,7 +66,9 @@ class Landing extends Component {
         </header>
         <div className={styles.body}>
           <div className={styles.overlay}>
-            <span id="innerOverlay" className={styles.text} />
+            <span id="innerOverlay" className={styles.text}>
+              {this.state.page}
+            </span>
           </div>
           <img className={styles.img1} src={picture1} alt="main pic" />
           {/* <img className={styles.img1} src={picture2} alt="main pic" /> */}
@@ -50,9 +78,13 @@ class Landing extends Component {
   }
 }
 
-const mapStateToProps = state => state;
+const mapStateToProps = state => {
+  return {
+    open: state.loginForm
+  };
+};
 
 export default connect(
   mapStateToProps,
-  { getUser }
+  { getUser, loginFormToggle }
 )(Landing);

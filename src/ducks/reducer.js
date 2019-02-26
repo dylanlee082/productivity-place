@@ -1,6 +1,7 @@
 import axios from "axios";
 
 let initialState = {
+  loginForm: false,
   open: true,
   user: {},
   appt: {},
@@ -25,10 +26,18 @@ const UPDATE_TASK = "UPDATE_TASK";
 const UPDATE_TASK_TOGGLE = "UPDATE_TASK_TOGGLE";
 const UPDATE_CONTACT = "UPDATE_CONTACT";
 const UPDATE_CONTACT_TOGGLE = "UPDATE_CONTACT_TOGGLE";
+const LOGIN_FORM_TOGGLE = "LOGIN_FORM_TOGGLE";
 
 export const toggleOpen = open => {
   return {
     type: TOGGLE_OPEN,
+    payload: open
+  };
+};
+
+export const loginFormToggle = open => {
+  return {
+    type: LOGIN_FORM_TOGGLE,
     payload: open
   };
 };
@@ -105,6 +114,11 @@ export const updateContact = contact => {
 
 export default function reducer(state = initialState, action) {
   switch (action.type) {
+    case LOGIN_FORM_TOGGLE:
+      return {
+        ...state,
+        loginForm: !action.payload
+      };
     case UPDATE_APPT:
       return {
         ...state,

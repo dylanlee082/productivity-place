@@ -6,7 +6,7 @@ module.exports = {
     res.status(200).json(req.session.user);
   },
   register: async (req, res) => {
-    const { username, password, number } = req.body;
+    const { username, password, number, email } = req.body;
     const db = req.app.get("db");
     const result = await db.get_mortal([username]);
     const existingMortal = result[0];
@@ -19,7 +19,12 @@ module.exports = {
     }
     const hash = await bcrypt.hash(password, 12);
     console.log(hash);
-    const registeredMortal = await db.register_mortal([username, hash, number]);
+    const registeredMortal = await db.register_mortal([
+      username,
+      hash,
+      number,
+      email
+    ]);
     const mortal = registeredMortal[0];
     req.session.user = {
       username: mortal.username,
@@ -53,5 +58,14 @@ module.exports = {
   logout: async (req, res) => {
     req.session.destroy();
     res.status(200).json(req.session);
+  },
+  deleteUser: (req, resp) => {
+    const db = req.app.get("db");
+    db.delete_user(req.params.id)
+      .then(res => {
+        req.session.destroy();
+        resp.sendStatus(200);
+      })
+      .catch(err => console.log(err));
   }
 };
