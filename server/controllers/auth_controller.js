@@ -3,6 +3,7 @@ const bcrypt = require("bcryptjs");
 module.exports = {
   user: (req, res) => {
     console.log(req.session.user);
+    console.log("hit");
     res.status(200).json(req.session.user);
   },
   register: async (req, res) => {
@@ -51,7 +52,8 @@ module.exports = {
     }
     req.session.user = {
       id: mortal.mortal_id,
-      username: mortal.username
+      username: mortal.username,
+      number: mortal.number
     };
     return res.status(200).json(req.session.user);
   },

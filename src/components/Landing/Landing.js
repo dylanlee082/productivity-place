@@ -14,7 +14,13 @@ class Landing extends Component {
     };
   }
   componentDidMount = () => {
+    this.mounted = true;
     this.typing();
+  };
+
+  componentWillUnmount = () => {
+    this.mounted = false;
+    clearTimeout(this.timer);
   };
 
   typing = () => {
@@ -30,7 +36,10 @@ class Landing extends Component {
       fadeOutClass: styles.typedfadeout,
       fadeOutDelay: 1000,
       onComplete: self => {
-        setTimeout(() => this.typed.destroy(), 1500);
+        this.timer = setTimeout(
+          () => (this.mounted && this.typed.destroy()) || null,
+          1500
+        );
       },
       onDestroy: self => {
         this.setState({

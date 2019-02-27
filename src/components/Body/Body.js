@@ -1,7 +1,7 @@
 //Main NPM Imports
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { getUser } from "../../ducks/reducer";
+import { getUser, getSettings } from "../../ducks/reducer";
 import { Switch, Route } from "react-router-dom";
 
 //Other Components
@@ -50,6 +50,7 @@ class Body extends Component {
       if (!res.value.data) {
         this.props.history.push("/");
       }
+      this.props.getSettings(this.props.user.id);
     });
   };
 
@@ -89,5 +90,5 @@ const mapStateToProps = state => {
 
 export default connect(
   mapStateToProps,
-  { getUser }
+  { getUser, getSettings }
 )(withStyles(styles, { withTheme: true })(Body));

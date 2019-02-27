@@ -1,5 +1,5 @@
 //Main NPM imports
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import axios from "axios";
 import { withRouter, Link } from "react-router-dom";
 import { connect } from "react-redux";
@@ -110,7 +110,7 @@ class Sidebar extends Component {
   };
 
   render() {
-    const { classes } = this.props;
+    const { classes, settings } = this.props;
     return (
       <div className={classes.root}>
         <Drawer
@@ -141,113 +141,134 @@ class Sidebar extends Component {
               </ListItem>
             </Link>
             {/* The link for the task view */}
-            <Link
-              className={classes.link}
-              to={"/main/tasks"}
-              onClick={() => this.handleTaskClick()}
-            >
-              <ListItem button>
-                <ListItemIcon>
-                  <InboxIcon color="secondary" />
-                </ListItemIcon>
-                <ListItemText
-                  classes={{ primary: classes.primary }}
-                  primary="Tasks"
-                />
-                {this.state.taskOpen ? (
-                  <ExpandLess color="secondary" />
-                ) : (
-                  <ExpandMore color="secondary" />
-                )}
-              </ListItem>
-            </Link>
-            {/* The secondary links for task */}
-            <Collapse in={this.state.taskOpen} timeout="auto" unmountOnExit>
-              <List component="div" disablePadding>
-                <ListItem button className={classes.nested}>
-                  <ListItemIcon>
-                    <StarBorder color="secondary" />
-                  </ListItemIcon>
-                  <TaskListForm />
-                </ListItem>
-              </List>
-            </Collapse>
+            {settings.tasktoggle ? (
+              <Fragment>
+                <Link
+                  className={classes.link}
+                  to={"/main/tasks"}
+                  onClick={() => this.handleTaskClick()}
+                >
+                  <ListItem button>
+                    <ListItemIcon>
+                      <InboxIcon color="secondary" />
+                    </ListItemIcon>
+                    <ListItemText
+                      classes={{ primary: classes.primary }}
+                      primary="Tasks"
+                    />
+                    {this.state.taskOpen ? (
+                      <ExpandLess color="secondary" />
+                    ) : (
+                      <ExpandMore color="secondary" />
+                    )}
+                  </ListItem>
+                </Link>
+                {/* The secondary links for task */}
+                <Collapse in={this.state.taskOpen} timeout="auto" unmountOnExit>
+                  <List component="div" disablePadding>
+                    <ListItem button className={classes.nested}>
+                      <ListItemIcon>
+                        <StarBorder color="secondary" />
+                      </ListItemIcon>
+                      <TaskListForm />
+                    </ListItem>
+                  </List>
+                </Collapse>
+              </Fragment>
+            ) : null}
             {/* The link for the calendar view */}
-            <Link
-              className={classes.link}
-              to={"/main/calendar"}
-              onClick={() => this.handleCalendarClick()}
-            >
-              <ListItem button>
-                <ListItemIcon>
-                  <MailIcon color="secondary" />
-                </ListItemIcon>
-                <ListItemText
-                  classes={{ primary: classes.primary }}
-                  primary="Calendar"
-                />
-                {this.state.calendarOpen ? (
-                  <ExpandLess color="secondary" />
-                ) : (
-                  <ExpandMore color="secondary" />
-                )}
-              </ListItem>
-            </Link>
-            {/* The secondary links for the calendar view */}
-            <Collapse in={this.state.calendarOpen} timeout="auto" unmountOnExit>
-              <List component="div" disablePadding>
-                <ListItem button className={classes.nested}>
-                  {/* Appt form creator */}
-                  <ListItemIcon>
-                    <StarBorder color="secondary" />
-                  </ListItemIcon>
-                  <CalendarForm />
-                </ListItem>
-                {/* Switch the view of the calendar to include a day view */}
-                <ListItem button className={classes.nested}>
-                  <ListItemIcon>
-                    <StarBorder color="secondary" />
-                  </ListItemIcon>
-                  <ListItemText
-                    classes={{ primary: classes.primary }}
-                    primary="Day View"
-                  />
-                </ListItem>
-              </List>
-            </Collapse>
+            {settings.calendartoggle ? (
+              <Fragment>
+                <Link
+                  className={classes.link}
+                  to={"/main/calendar"}
+                  onClick={() => this.handleCalendarClick()}
+                >
+                  <ListItem button>
+                    <ListItemIcon>
+                      <MailIcon color="secondary" />
+                    </ListItemIcon>
+                    <ListItemText
+                      classes={{ primary: classes.primary }}
+                      primary="Calendar"
+                    />
+                    {this.state.calendarOpen ? (
+                      <ExpandLess color="secondary" />
+                    ) : (
+                      <ExpandMore color="secondary" />
+                    )}
+                  </ListItem>
+                </Link>
+                {/* The secondary links for the calendar view */}
+                <Collapse
+                  in={this.state.calendarOpen}
+                  timeout="auto"
+                  unmountOnExit
+                >
+                  <List component="div" disablePadding>
+                    <ListItem button className={classes.nested}>
+                      {/* Appt form creator */}
+                      <ListItemIcon>
+                        <StarBorder color="secondary" />
+                      </ListItemIcon>
+                      <CalendarForm />
+                    </ListItem>
+                    {/* Switch the view of the calendar to include a day view */}
+                    <ListItem button className={classes.nested}>
+                      <ListItemIcon>
+                        <StarBorder color="secondary" />
+                      </ListItemIcon>
+                      <ListItemText
+                        classes={{ primary: classes.primary }}
+                        primary="Day View"
+                      />
+                    </ListItem>
+                  </List>
+                </Collapse>
+              </Fragment>
+            ) : null}
             {/* The link for the contacts view */}
-            <Link
-              className={classes.link}
-              to={"/main/contacts"}
-              onClick={() => this.handleContactClick()}
-            >
-              <ListItem button>
-                <ListItemIcon>
-                  <InboxIcon color="secondary" />
-                </ListItemIcon>
-                <ListItemText
-                  classes={{ primary: classes.primary }}
-                  primary="Contacts"
-                />
-                {this.state.contactOpen ? (
-                  <ExpandLess color="secondary" />
-                ) : (
-                  <ExpandMore color="secondary" />
-                )}
-              </ListItem>
-            </Link>
-            {/* The secondary links for the contact view */}
-            <Collapse in={this.state.contactOpen} timeout="auto" unmountOnExit>
-              <List component="div" disablePadding>
-                <ListItem button className={classes.nested}>
-                  {/* Contact form creator */}
-                  <ListItemIcon>
-                    <StarBorder color="secondary" />
-                  </ListItemIcon>
-                  <ContactForm />
-                </ListItem>
-              </List>
-            </Collapse>
+            {settings.contacttoggle ? (
+              <Fragment>
+                <Link
+                  className={classes.link}
+                  to={"/main/contacts"}
+                  onClick={() => this.handleContactClick()}
+                >
+                  <ListItem button>
+                    <ListItemIcon>
+                      <InboxIcon color="secondary" />
+                    </ListItemIcon>
+                    <ListItemText
+                      classes={{ primary: classes.primary }}
+                      primary="Contacts"
+                    />
+                    {this.state.contactOpen ? (
+                      <ExpandLess color="secondary" />
+                    ) : (
+                      <ExpandMore color="secondary" />
+                    )}
+                  </ListItem>
+                </Link>
+                {/* The secondary links for the contact view */}
+                <Collapse
+                  in={this.state.contactOpen}
+                  timeout="auto"
+                  unmountOnExit
+                >
+                  <List component="div" disablePadding>
+                    <ListItem button className={classes.nested}>
+                      {/* Contact form creator */}
+                      <ListItemIcon>
+                        <StarBorder color="secondary" />
+                      </ListItemIcon>
+                      <ContactForm />
+                    </ListItem>
+                  </List>
+                </Collapse>{" "}
+              </Fragment>
+            ) : null}
+
             {/* The link to logout of the site, back to the landing page */}
             <ListItem button onClick={() => this.handleLogout()}>
               <ListItemIcon>
@@ -267,7 +288,9 @@ class Sidebar extends Component {
 
 const mapStateToProps = state => {
   return {
-    open: state.open
+    open: state.open,
+    user: state.user,
+    settings: state.settings
   };
 };
 

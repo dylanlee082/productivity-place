@@ -11,6 +11,7 @@ const authCon = require("./controllers/auth_controller");
 const apptCon = require("./controllers/appt_controller");
 const taskCon = require("./controllers/task_controller");
 const contactCon = require("./controllers/contact_controller");
+const settingCon = require("./controllers/settings_controller");
 
 const app = express();
 app.use(urlencoded({ extended: false }));
@@ -55,6 +56,9 @@ const userCheck = (req, resp, next) => {
 };
 
 app.post("/sms", userCheck, understand);
+
+app.get("/api/settings/:id", settingCon.getSettings);
+app.put("/api/settings", settingCon.updateSettings);
 
 app.get("/auth/user", authCon.user);
 app.post("/auth/register", authCon.register);

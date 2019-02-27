@@ -1,6 +1,10 @@
 import React, { Component } from "react";
+import axios from "axios";
+import { connect } from "react-redux";
+import { getSettings } from "../../../../ducks/reducer";
 import { withStyles } from "@material-ui/core";
 import Checkbox from "@material-ui/core/Checkbox";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Paper from "@material-ui/core/Paper";
 
 const styles = theme => ({
@@ -15,16 +19,33 @@ const styles = theme => ({
 });
 
 class Settings extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
-      taskPage: true,
-      calendarPage: true,
-      contactPage: true
+      tasktoggle: true,
+      calendartoggle: true,
+      contacttoggle: true
     };
   }
-  handleCheckChange = name => event => {
-    this.setState({ [name]: event.target.checked });
+
+  componentDidMount = () => {
+    this.setState({
+      tasktoggle: this.props.settings.tasktoggle,
+      calendartoggle: this.props.settings.calendartoggle,
+      contacttoggle: this.props.settings.contacttoggle
+    });
+  };
+
+  handleCheckChange = e => {
+    console.log(e.target.checked);
+    this.setState({ [e.target.value]: e.target.checked });
+  };
+
+  handleSubmit = () => {
+    console.log(this.state);
+    axios
+      .put("/api/settings", { ...this.state, id: this.props.user.id })
+      .then(res => this.props.getSettings(this.props.user.id));
   };
 
   render() {
@@ -32,32 +53,55 @@ class Settings extends Component {
     return (
       <Paper className={classes.settings}>
         <div className={classes.formSelector}>
-          <h3>Task Page</h3>
-          <Checkbox
-            checked={this.state.taskPage}
-            onChange={this.handleCheckChange("taskPage")}
-            value="checkedA"
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={this.state.tasktoggle}
+                onChange={e => this.handleCheckChange(e)}
+                value="tasktoggle"
+              />
+            }
+            label="Task Page"
           />
         </div>
         <div className={classes.formSelector}>
-          <h3>Calendar Page</h3>
-          <Checkbox
-            checked={this.state.calendarPage}
-            onChange={this.handleCheckChange("calendarPage")}
-            value="checkedA"
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={this.state.calendartoggle}
+                onChange={e => this.handleCheckChange(e)}
+                value="calendartoggle"
+              />
+            }
+            label="Calendar Page"
           />
         </div>
         <div className={classes.formSelector}>
-          <h3>Contact Page</h3>
-          <Checkbox
-            checked={this.state.contactPage}
-            onChange={this.handleCheckChange("contactPage")}
-            value="checkedA"
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={this.state.contacttoggle}
+                onChange={e => this.handleCheckChange(e)}
+                value="contacttoggle"
+              />
+            }
+            label="Contact Page"
           />
         </div>
+        <button onClick={() => this.handleSubmit()}>Update Settings</button>
       </Paper>
     );
   }
 }
 
-export default withStyles(styles)(Settings);
+const mapStateToProps = state => {
+  return {
+    user: state.user,
+    settings: state.settings
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  { getSettings }
+)(withStyles(styles)(Settings));

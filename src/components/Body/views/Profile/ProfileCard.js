@@ -41,7 +41,6 @@ class ProfileCard extends Component {
 
   render() {
     const { classes, user } = this.props;
-    console.log(user);
     return (
       <Paper className={classes.profile}>
         <h1>Your Profile</h1>

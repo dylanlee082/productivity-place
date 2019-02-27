@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { getSettings } from "../../../../ducks/reducer";
 import { withStyles } from "@material-ui/core";
 import Paper from "@material-ui/core/Paper";
 
@@ -38,6 +39,10 @@ class Profile extends Component {
     this.state = {};
   }
 
+  componentDidMount = () => {
+    this.props.getSettings(this.props.user.id);
+  };
+
   handleChange = e => {
     this.setState({
       [e.target.name]: e.target.value
@@ -58,7 +63,7 @@ class Profile extends Component {
         <PersonalInfo />
         <div className={classes.right}>
           <Settings />
-          <Paper className={classes.goals}>Your goals</Paper>
+          <Paper className={classes.goals}>Coming Soon analytics</Paper>
         </div>
       </div>
     );
@@ -71,4 +76,7 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps)(withStyles(styles)(Profile));
+export default connect(
+  mapStateToProps,
+  { getSettings }
+)(withStyles(styles)(Profile));

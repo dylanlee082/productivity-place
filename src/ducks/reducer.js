@@ -2,6 +2,7 @@ import axios from "axios";
 
 let initialState = {
   loginForm: false,
+  settings: {},
   open: true,
   user: {},
   appt: {},
@@ -27,6 +28,14 @@ const UPDATE_TASK_TOGGLE = "UPDATE_TASK_TOGGLE";
 const UPDATE_CONTACT = "UPDATE_CONTACT";
 const UPDATE_CONTACT_TOGGLE = "UPDATE_CONTACT_TOGGLE";
 const LOGIN_FORM_TOGGLE = "LOGIN_FORM_TOGGLE";
+const GET_SETTINGS = "GET_SETTINGS";
+
+export const getSettings = id => {
+  return {
+    type: GET_SETTINGS,
+    payload: axios.get(`/api/settings/${id}`)
+  };
+};
 
 export const toggleOpen = open => {
   return {
@@ -140,6 +149,8 @@ export default function reducer(state = initialState, action) {
       return { ...state, contact: action.payload };
     case UPDATE_CONTACT_TOGGLE:
       return { ...state, updateContactToggle: !action.payload };
+    case `${GET_SETTINGS}_FULFILLED`:
+      return { ...state, settings: action.payload.data };
     case `${GET_APPT}_FULFILLED`:
       return { ...state, apptList: action.payload.data };
     case `${GET_TASK}_FULFILLED`:
