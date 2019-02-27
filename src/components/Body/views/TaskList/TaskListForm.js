@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import { getTask } from "../../../../ducks/reducer";
 
 //Material-UI Core Imports
+import theme from "../../../../theme";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Dialog from "@material-ui/core/Dialog";
@@ -71,7 +72,11 @@ class TaskListForm extends Component {
   render() {
     return (
       <div>
-        <Button variant="outlined" onClick={this.handleClickOpen}>
+        <Button
+          style={{ color: theme.palette.secondary.main }}
+          variant="outlined"
+          onClick={this.handleClickOpen}
+        >
           Create new task list
         </Button>
         <Dialog

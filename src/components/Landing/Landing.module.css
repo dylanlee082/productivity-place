@@ -6,6 +6,15 @@
   height: 10vh;
 }
 
+.mainBtn {
+  background: orange;
+  padding: 1vw;
+  border-radius: 25px;
+  border: none;
+  color: white;
+  font-size: 0.7em;
+}
+
 .nav {
   display: flex;
   margin-right: 3vw;

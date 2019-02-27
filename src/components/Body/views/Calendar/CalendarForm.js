@@ -14,6 +14,7 @@ import {
 } from "material-ui-pickers";
 
 //Material-UI Core Imports
+import theme from "../../../../theme";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Dialog from "@material-ui/core/Dialog";
@@ -78,7 +79,11 @@ class CalendarForm extends Component {
   render() {
     return (
       <div>
-        <Button variant="outlined" onClick={this.handleClickOpen}>
+        <Button
+          style={{ color: theme.palette.secondary.main }}
+          variant="outlined"
+          onClick={this.handleClickOpen}
+        >
           Create a new calendar event
         </Button>
         <Dialog

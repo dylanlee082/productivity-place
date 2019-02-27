@@ -44,6 +44,7 @@ class Landing extends Component {
               </p>
               <button
                 onClick={() => this.props.loginFormToggle(this.props.open)}
+                className={styles.mainBtn}
               >
                 Click here to sign up now!
               </button>

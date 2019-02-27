@@ -2,6 +2,13 @@ import { createMuiTheme } from "@material-ui/core/styles";
 import { grey, brown } from "@material-ui/core/colors";
 
 const theme = createMuiTheme({
+  overrides: {
+    MuiButton: {
+      text: {
+        textTransform: "none"
+      }
+    }
+  },
   typography: {
     useNextVariants: true
   },
