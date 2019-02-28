@@ -16,19 +16,24 @@ import Paper from "@material-ui/core/Paper";
 import AddBox from "@material-ui/icons/AddBox";
 import Clear from "@material-ui/icons/Clear";
 import Edit from "@material-ui/icons/Edit";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemText from "@material-ui/core/ListItemText";
+import Divider from "@material-ui/core/Divider";
+import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 
 import UpdateTaskForm from "./UpdateTaskForm";
 
 //Material-UI Styling
 const styles = theme => ({
   root: {
-    display: "flex"
+    display: "flex",
+    flexWrap: "wrap"
   },
   background: {
-    background: "lightgrey",
-    width: 300,
     display: "flex",
-    flexDirection: "column"
+    flexDirection: "column",
+    width: "20vw"
   },
   items: {
     display: "flex",
@@ -43,12 +48,25 @@ const styles = theme => ({
     marginRight: 10
   },
   task: {
-    margin: 10
+    margin: 10,
+    display: "flex",
+    flexDirection: "column",
+    background: "grey"
   },
   innerItem: {
     display: "flex",
     justifyContent: "center",
     alignItems: "center"
+  },
+  innerPaper: {
+    background: "white",
+    width: "17.5vw"
+  },
+  root2: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "space-evenly"
   }
 });
 
@@ -88,55 +106,69 @@ class TaskList extends Component {
     getTask(user.id);
   };
 
-  checkTask = list_name => {
-    let arr = this.props.taskList.map((e, i) => {
-      let p = "";
-      if (e.list_name === list_name) {
-        p = (
-          <div className={this.props.classes.innerItem} key={e.body}>
-            <p>{e.body}</p>
-            <Clear onClick={() => this.deleteTask(e.task_id)} />
-            <Edit
-              onClick={() => {
-                this.props.updateTaskToggle(this.props.open);
-                this.props.updateTask(e);
-              }}
-            />
-          </div>
-        );
+  determineListNames = taskList => {
+    const check = [];
+    const arr = [];
+    // eslint-disable-next-line
+    taskList.map(e => {
+      if (!check.includes(e.list_name)) {
+        check.push(e.list_name);
+        arr.push({ name: e.list_name, values: [] });
       }
-      return p;
+      for (let i = 0; i < arr.length; i++) {
+        if (e.list_name === arr[i].name) {
+          arr[i].values.push({ id: e.task_id, body: e.body });
+        }
+      }
     });
     return arr;
   };
 
   render() {
     const { classes, taskList } = this.props;
-    let arr = [];
-
+    let names = this.determineListNames(taskList);
     return (
       <div className={classes.root}>
         <UpdateTaskForm />
-        {taskList.map((e, i) => {
-          if (!arr.includes(e.list_name)) {
-            arr.push(e.list_name);
-            return (
-              <Paper key={i} className={classes.background}>
-                <div className={classes.items}>
-                  <h1 className={classes.leftSide}>{e.list_name}</h1>
-                  <div className={classes.rightSide}>
-                    <AddBox onClick={() => this.addTask()} />
-                    <Clear onClick={() => this.deleteTaskList(e.list_name)} />
-                  </div>
+        {names.map((e, i) => {
+          return (
+            <div className={classes.background} key={i}>
+              <div className={classes.items}>
+                <h1 className={classes.leftSide}>{e.name}</h1>
+                <div className={classes.rightSide}>
+                  <AddBox onClick={() => this.addTask()} />
+                  <Clear onClick={() => this.deleteTaskList(e.name)} />
                 </div>
-                <Paper className={classes.task}>
-                  {this.checkTask(e.list_name)}
-                </Paper>
+              </div>
+              <Divider />
+              <Paper className={classes.task}>
+                <List dense className={classes.root2}>
+                  {e.values.map((value, i) => {
+                    return (
+                      <Paper key={i} className={classes.innerPaper}>
+                        <ListItem button>
+                          <ListItemText primary={value.body} />
+                          <ListItemSecondaryAction>
+                            <Clear onClick={() => this.deleteTask(value.id)} />
+                            <Edit
+                              onClick={() => {
+                                this.props.updateTaskToggle(this.props.open);
+                                this.props.updateTask({
+                                  list_name: e.name,
+                                  body: value.body,
+                                  task_id: value.id
+                                });
+                              }}
+                            />
+                          </ListItemSecondaryAction>
+                        </ListItem>
+                      </Paper>
+                    );
+                  })}
+                </List>
               </Paper>
-            );
-          } else {
-            return null;
-          }
+            </div>
+          );
         })}
       </div>
     );

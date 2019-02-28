@@ -36,7 +36,7 @@ class UpdateTaskForm extends Component {
   handleSubmit = () => {
     axios.put("/api/task", this.state.task).then(res => {
       this.props.updateTaskToggle(this.props.open);
-      this.props.getTask(this.state.task.mortal_id);
+      this.props.getTask(this.props.user.id);
     });
   };
 
@@ -87,7 +87,8 @@ const mapStateToProps = state => {
   return {
     open: state.updateTaskToggle,
     taskList: state.taskList,
-    task: state.task
+    task: state.task,
+    user: state.user
   };
 };
 

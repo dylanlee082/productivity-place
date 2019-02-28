@@ -40,7 +40,15 @@ class Profile extends Component {
   }
 
   componentDidMount = () => {
-    this.props.getSettings(this.props.user.id);
+    if (this.props.user.id) {
+      this.props.getSettings(this.props.user.id);
+    }
+  };
+
+  componentDidUpdate = prevProps => {
+    if (this.props.user.id !== prevProps.user.id) {
+      this.props.getSettings(this.props.user.id);
+    }
   };
 
   handleChange = e => {

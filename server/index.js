@@ -59,6 +59,8 @@ app.post("/sms", userCheck, understand);
 
 app.get("/api/settings/:id", settingCon.getSettings);
 app.put("/api/settings", settingCon.updateSettings);
+app.put("/api/avatar", settingCon.updateAvatar);
+app.put("/api/personal", settingCon.updatePersonal);
 
 app.get("/auth/user", authCon.user);
 app.post("/auth/register", authCon.register);

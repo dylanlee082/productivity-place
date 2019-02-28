@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import { withStyles } from "@material-ui/core";
 import { CountryRegionData } from "react-country-region-selector";
 import Paper from "@material-ui/core/Paper";
@@ -8,6 +9,8 @@ import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormHelperText from "@material-ui/core/FormHelperText";
 import Divider from "@material-ui/core/Divider";
+import axios from "axios";
+import { getSettings } from "../../../../ducks/reducer";
 
 const styles = theme => ({
   info: {
@@ -48,9 +51,63 @@ class PersonalInfo extends Component {
     super();
     this.state = {
       country: "",
-      region: ""
+      region: "",
+      fullname: "",
+      email: "",
+      number: "",
+      fact: "",
+      birthday: "",
+      day: 0,
+      month: 0,
+      year: 0
     };
   }
+
+  componentDidMount = () => {
+    if (this.props.settings.birthday) {
+      const birth = {
+        year: this.props.settings.birthday.substring(0, 4),
+        month: this.props.settings.birthday.substring(5, 7),
+        day: this.props.settings.birthday.substring(8, 10)
+      };
+      console.log(birth);
+      this.setState({
+        fullname: this.props.settings.name,
+        email: this.props.settings.email,
+        number: this.props.settings.number,
+        fact: this.props.settings.funfact,
+        country: this.props.settings.country,
+        region: this.props.settings.region,
+        birthday: this.props.settings.birthday,
+        day: birth.day,
+        month: birth.month,
+        year: birth.year
+      });
+    }
+  };
+
+  componentDidUpdate = prevProps => {
+    if (this.props.settings !== prevProps.settings) {
+      const birth = {
+        year: this.props.settings.birthday.substring(0, 4),
+        month: this.props.settings.birthday.substring(5, 7),
+        day: this.props.settings.birthday.substring(8, 10)
+      };
+      console.log(birth);
+      this.setState({
+        fullname: this.props.settings.name,
+        email: this.props.settings.email,
+        number: this.props.settings.number,
+        fact: this.props.settings.funfact,
+        country: this.props.settings.country,
+        region: this.props.settings.region,
+        birthday: this.props.settings.birthday,
+        day: birth.day,
+        month: birth.month,
+        year: birth.year
+      });
+    }
+  };
 
   getRegions = country => {
     if (!country) {
@@ -62,8 +119,43 @@ class PersonalInfo extends Component {
     });
   };
 
+  handleChange = e => {
+    this.setState({ [e.target.name]: e.target.value });
+  };
+
+  handleSubmit = () => {
+    axios.put("/api/personal", this.state).then(res => {
+      console.log("hit");
+      this.props.getSettings(this.props.user.id);
+    });
+  };
+
   render() {
     const { classes } = this.props;
+    const dayOptions = [];
+    for (let i = 1; i <= 31; i++) {
+      dayOptions.push(
+        <MenuItem key={i} value={String(i).padStart(2, "0")}>
+          {String(i).padStart(2, "0")}
+        </MenuItem>
+      );
+    }
+    const monthOptions = [];
+    for (let i = 1; i <= 12; i++) {
+      monthOptions.push(
+        <MenuItem key={i} value={String(i).padStart(2, "0")}>
+          {String(i).padStart(2, "0")}
+        </MenuItem>
+      );
+    }
+    const yearOptions = [];
+    for (let i = 1920; i < 2025; i++) {
+      yearOptions.push(
+        <MenuItem key={i} value={i}>
+          {i}
+        </MenuItem>
+      );
+    }
     return (
       <Paper className={classes.info}>
         <h1>Edit Your Personal Information</h1>
@@ -71,97 +163,95 @@ class PersonalInfo extends Component {
         <div className={classes.input}>
           <h2>Full Name</h2>
           <TextField
-            id="outlined-required"
-            label="Required"
-            defaultValue="Hello World"
+            id="outlined"
+            name="fullname"
+            value={this.state.fullname}
             className={classes.textField}
             margin="normal"
             variant="outlined"
+            onChange={e => this.handleChange(e)}
           />
         </div>
         <div className={classes.input}>
           <h2>Email</h2>
           <TextField
-            id="outlined-required"
-            label="Required"
-            defaultValue="Hello World"
+            id="outlined"
+            name="email"
+            value={this.state.email}
             className={classes.textField}
             margin="normal"
             variant="outlined"
+            onChange={e => this.handleChange(e)}
           />
         </div>
         <div className={classes.input}>
-          <h2>Title</h2>
+          <h2>Phone Number</h2>
           <TextField
-            id="outlined-required"
-            label="Required"
-            defaultValue="Hello World"
+            id="outlined"
+            name="number"
+            value={this.state.number}
             className={classes.textField}
             margin="normal"
             variant="outlined"
+            onChange={e => this.handleChange(e)}
           />
         </div>
         <div className={classes.input}>
           <h2>A fact about you</h2>
           <TextField
-            id="outlined-required"
-            label="Required"
-            defaultValue="Hello World"
+            id="outlined"
+            name="fact"
+            value={this.state.fact}
             className={classes.textField}
             margin="normal"
             variant="outlined"
+            onChange={e => this.handleChange(e)}
           />
         </div>
         <Divider variant="middle" />
         <h2>Birthday</h2>
         <FormControl className={classes.formControl}>
           <Select
-            value=""
-            onChange={this.handleChange}
+            value={this.state.day}
+            onChange={e => this.handleChange(e)}
             displayEmpty
-            name="age"
+            name="day"
             className={classes.selectEmpty}
           >
             <MenuItem value="">
               <em>None</em>
             </MenuItem>
-            <MenuItem value={10}>Ten</MenuItem>
-            <MenuItem value={20}>Twenty</MenuItem>
-            <MenuItem value={30}>Thirty</MenuItem>
+            {dayOptions.map(e => e)}
           </Select>
           <FormHelperText>Day</FormHelperText>
         </FormControl>
         <FormControl className={classes.formControl}>
           <Select
-            value=""
-            onChange={this.handleChange}
+            value={this.state.month}
+            onChange={e => this.handleChange(e)}
             displayEmpty
-            name="age"
+            name="month"
             className={classes.selectEmpty}
           >
             <MenuItem value="">
               <em>None</em>
             </MenuItem>
-            <MenuItem value={10}>Ten</MenuItem>
-            <MenuItem value={20}>Twenty</MenuItem>
-            <MenuItem value={30}>Thirty</MenuItem>
+            {monthOptions.map(e => e)}
           </Select>
           <FormHelperText>Month</FormHelperText>
         </FormControl>
         <FormControl className={classes.formControl}>
           <Select
-            value=""
-            onChange={this.handleChange}
+            value={this.state.year}
+            onChange={e => this.handleChange(e)}
             displayEmpty
-            name="age"
+            name="year"
             className={classes.selectEmpty}
           >
             <MenuItem value="">
               <em>None</em>
             </MenuItem>
-            <MenuItem value={10}>Ten</MenuItem>
-            <MenuItem value={20}>Twenty</MenuItem>
-            <MenuItem value={30}>Thirty</MenuItem>
+            {yearOptions.map(e => e)}
           </Select>
           <FormHelperText>Year</FormHelperText>
         </FormControl>
@@ -207,53 +297,20 @@ class PersonalInfo extends Component {
           </div>
         </div>
         <Divider variant="middle" />
-        <div className={classes.location}>
-          <div className={classes.country}>
-            <h2>Postal Code</h2>
-            <FormControl className={classes.formControl}>
-              <Select
-                value=""
-                onChange={this.handleChange}
-                displayEmpty
-                name="age"
-                className={classes.selectEmpty}
-              >
-                <MenuItem value="">
-                  <em>None</em>
-                </MenuItem>
-                <MenuItem value={10}>Ten</MenuItem>
-                <MenuItem value={20}>Twenty</MenuItem>
-                <MenuItem value={30}>Thirty</MenuItem>
-              </Select>
-              <FormHelperText>Year</FormHelperText>
-            </FormControl>
-          </div>
-          <div className={classes.state}>
-            <h2>Phone Number</h2>
-            <FormControl className={classes.formControl}>
-              <Select
-                value=""
-                onChange={this.handleChange}
-                displayEmpty
-                name="age"
-                className={classes.selectEmpty}
-              >
-                <MenuItem value="">
-                  <em>None</em>
-                </MenuItem>
-                <MenuItem value={10}>Ten</MenuItem>
-                <MenuItem value={20}>Twenty</MenuItem>
-                <MenuItem value={30}>Thirty</MenuItem>
-              </Select>
-              <FormHelperText>Year</FormHelperText>
-            </FormControl>
-          </div>
-        </div>
-        <Divider variant="middle" />
-        <button>Update Information</button>
+        <button onClick={() => this.handleSubmit()}>Update Information</button>
       </Paper>
     );
   }
 }
 
-export default withStyles(styles)(PersonalInfo);
+const mapStateToProps = state => {
+  return {
+    settings: state.settings,
+    user: state.user
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  { getSettings }
+)(withStyles(styles)(PersonalInfo));

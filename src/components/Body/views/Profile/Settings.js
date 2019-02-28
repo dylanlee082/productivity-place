@@ -29,20 +29,30 @@ class Settings extends Component {
   }
 
   componentDidMount = () => {
-    this.setState({
-      tasktoggle: this.props.settings.tasktoggle,
-      calendartoggle: this.props.settings.calendartoggle,
-      contacttoggle: this.props.settings.contacttoggle
-    });
+    if (this.props.settings.name) {
+      this.setState({
+        tasktoggle: this.props.settings.tasktoggle,
+        calendartoggle: this.props.settings.calendartoggle,
+        contacttoggle: this.props.settings.contacttoggle
+      });
+    }
+  };
+
+  componentDidUpdate = prevProps => {
+    if (this.props.settings !== prevProps.settings) {
+      this.setState({
+        tasktoggle: this.props.settings.tasktoggle,
+        calendartoggle: this.props.settings.calendartoggle,
+        contacttoggle: this.props.settings.contacttoggle
+      });
+    }
   };
 
   handleCheckChange = e => {
-    console.log(e.target.checked);
     this.setState({ [e.target.value]: e.target.checked });
   };
 
   handleSubmit = () => {
-    console.log(this.state);
     axios
       .put("/api/settings", { ...this.state, id: this.props.user.id })
       .then(res => this.props.getSettings(this.props.user.id));

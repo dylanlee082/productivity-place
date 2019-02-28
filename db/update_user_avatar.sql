@@ -1,0 +1,1 @@
+UPDATE mortal SET profile_img = $1 WHERE mortal_id = $2

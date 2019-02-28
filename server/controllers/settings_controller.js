@@ -6,13 +6,42 @@ module.exports = {
       .catch(err => console.log(err));
   },
   updateSettings: (req, res) => {
-    console.log(req.body);
     const db = req.app.get("db");
     const { tasktoggle, calendartoggle, contacttoggle, id } = req.body;
-    db.update_user_settings(tasktoggle, calendartoggle, contacttoggle, id).then(
-      () => res.sendStatus(200)
-    );
+    db.update_user_settings(tasktoggle, calendartoggle, contacttoggle, id)
+      .then(() => res.sendStatus(200))
+      .catch(err => console.log(err));
   },
-  updatePersonal: (req, res) => {},
-  updateAvatar: (req, res) => {}
+  updatePersonal: (req, res) => {
+    const db = req.app.get("db");
+    const {
+      fullname,
+      email,
+      number,
+      fact,
+      birthday,
+      country,
+      region
+    } = req.body;
+    db.update_user_personal(
+      fullname,
+      email,
+      number,
+      fact,
+      birthday,
+      country,
+      region
+    )
+      .then(() => res.sendStatus(200))
+      .catch(err => console.log(err));
+  },
+  updateAvatar: (req, res) => {
+    const db = req.app.get("db");
+    const { img, id } = req.body;
+    db.update_user_avatar(img, id)
+      .then(() => {
+        res.sendStatus(200);
+      })
+      .catch(err => console.log(err));
+  }
 };

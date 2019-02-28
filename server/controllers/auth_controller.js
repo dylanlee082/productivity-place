@@ -32,6 +32,7 @@ module.exports = {
       id: mortal.mortal_id,
       number: mortal.number
     };
+    db.default_settings(mortal.mortal_id);
     return res.status(200).json(req.session.user);
   },
   login: async (req, res) => {
