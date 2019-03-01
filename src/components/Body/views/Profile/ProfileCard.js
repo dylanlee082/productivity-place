@@ -10,17 +10,23 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogActions from "@material-ui/core/DialogActions";
+import Divider from "@material-ui/core/Divider";
 // import { DropzoneDialog } from "material-ui-dropzone";
 import Avatar from "@material-ui/core/Avatar";
 import { getUser } from "../../../../ducks/reducer";
 
 const styles = theme => ({
   profile: {
-    background: "red",
     height: "55vh",
     width: "18vw",
     display: "flex",
-    flexDirection: "column"
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "space-evenly"
+  },
+  avatar: {
+    width: 100,
+    height: 100
   }
 });
 
@@ -92,7 +98,7 @@ class ProfileCard extends Component {
   // };
 
   render() {
-    const { classes, user } = this.props;
+    const { classes, user, settings } = this.props;
     return (
       <Paper className={classes.profile}>
         <h1>Your Profile</h1>
@@ -101,8 +107,9 @@ class ProfileCard extends Component {
           src={this.state.img}
           className={classes.avatar}
         />
-        <h2>{user.username}</h2>
-        <h2>A fact about you?</h2>
+        <h2>{settings.name}</h2>
+        <Divider />
+        <h2>{settings.funfact}</h2>
         <input
           type="text"
           value={this.state.img}

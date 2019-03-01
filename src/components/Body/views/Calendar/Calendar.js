@@ -158,17 +158,19 @@ class Calendar extends Component {
     const { user, getAppt } = this.props;
     axios
       .delete(`/api/appt/${id}`)
-      .then(() => console.log("It worked"))
+      .then(() => getAppt(user.id))
       .catch(err => console.log(err));
-    getAppt(user.id);
   };
 
   //Checks to see which days have appts on them (called in renderCells)
-  isDate = currentDate => {
+  isDate = (currentDate, day, monthStart) => {
     const { currentArr } = this.state;
     let arr = [];
     for (let i = 0; i < currentArr.length; i++) {
-      if (currentArr[i].hasOwnProperty(currentDate)) {
+      if (
+        moment(day).isSame(monthStart, "month") &&
+        currentArr[i].hasOwnProperty(currentDate)
+      ) {
         arr.push(
           <Chip
             key={i}
@@ -218,7 +220,7 @@ class Calendar extends Component {
             <Paper className={classes[classed]}>
               {formattedDate}
               {/* Checks to see if there are any appts for this day */}
-              {this.isDate(formattedDate)}
+              {this.isDate(formattedDate, day, monthStart)}
             </Paper>
           </Grid>
         );

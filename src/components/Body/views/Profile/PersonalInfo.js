@@ -1,7 +1,12 @@
+// Main NPM Imports
 import React, { Component } from "react";
+import axios from "axios";
 import { connect } from "react-redux";
-import { withStyles } from "@material-ui/core";
 import { CountryRegionData } from "react-country-region-selector";
+import { getSettings } from "../../../../ducks/reducer";
+
+// Material-UI Core Imports
+import { withStyles } from "@material-ui/core";
 import Paper from "@material-ui/core/Paper";
 import TextField from "@material-ui/core/TextField";
 import FormControl from "@material-ui/core/FormControl";
@@ -9,13 +14,14 @@ import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormHelperText from "@material-ui/core/FormHelperText";
 import Divider from "@material-ui/core/Divider";
-import axios from "axios";
-import { getSettings } from "../../../../ducks/reducer";
 
 const styles = theme => ({
   info: {
     height: "85vh",
-    width: "33vw"
+    width: "33vw",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-evenly"
   },
   textField: {
     height: "4vh",
@@ -26,23 +32,26 @@ const styles = theme => ({
     display: "flex",
     alignItems: "center",
     marginRight: "2vw",
-    justifyContent: "flex-end"
+    justifyContent: "flex-end",
+    fontSize: ".8em"
   },
   location: {
     display: "flex",
     justifyContent: "space-evenly"
   },
-  country: {
+  locationSelector: {
     display: "flex",
     alignItems: "center",
     justifyContent: "space-evenly",
     width: "15vw"
   },
-  state: {
+  birthday: {
     display: "flex",
-    alignItems: "center",
-    justifyContent: "space-evenly",
-    width: "15vw"
+    flexDirection: "column"
+  },
+  birthdaySelectors: {
+    display: "flex",
+    justifyContent: "center"
   }
 });
 
@@ -50,7 +59,8 @@ class PersonalInfo extends Component {
   constructor() {
     super();
     this.state = {
-      country: "",
+      country: "none",
+      countryValue: "none",
       region: "",
       fullname: "",
       email: "",
@@ -70,13 +80,13 @@ class PersonalInfo extends Component {
         month: this.props.settings.birthday.substring(5, 7),
         day: this.props.settings.birthday.substring(8, 10)
       };
-      console.log(birth);
       this.setState({
         fullname: this.props.settings.name,
         email: this.props.settings.email,
         number: this.props.settings.number,
         fact: this.props.settings.funfact,
         country: this.props.settings.country,
+        countryValue: this.props.settings.country[0],
         region: this.props.settings.region,
         birthday: this.props.settings.birthday,
         day: birth.day,
@@ -93,13 +103,13 @@ class PersonalInfo extends Component {
         month: this.props.settings.birthday.substring(5, 7),
         day: this.props.settings.birthday.substring(8, 10)
       };
-      console.log(birth);
       this.setState({
         fullname: this.props.settings.name,
         email: this.props.settings.email,
         number: this.props.settings.number,
         fact: this.props.settings.funfact,
         country: this.props.settings.country,
+        countryValue: this.props.settings.country[0],
         region: this.props.settings.region,
         birthday: this.props.settings.birthday,
         day: birth.day,
@@ -120,19 +130,34 @@ class PersonalInfo extends Component {
   };
 
   handleChange = e => {
-    this.setState({ [e.target.name]: e.target.value });
+    if (e.target.name === "country") {
+      console.log(e.target.value);
+      this.setState({
+        country: e.target.value,
+        countryValue: e.target.value[0]
+      });
+    } else {
+      this.setState({ [e.target.name]: e.target.value });
+    }
   };
 
   handleSubmit = () => {
-    axios.put("/api/personal", this.state).then(res => {
-      console.log("hit");
-      this.props.getSettings(this.props.user.id);
-    });
+    let newBirth =
+      this.state.year + "-" + this.state.month + "-" + this.state.day;
+    this.setState({ birthday: newBirth }, () =>
+      axios.put("/api/personal", this.state).then(res => {
+        this.props.getSettings(this.props.user.id);
+      })
+    );
   };
 
   render() {
     const { classes } = this.props;
+
+    //Loops for the menu item options for the birthday selectors
     const dayOptions = [];
+    const monthOptions = [];
+    const yearOptions = [];
     for (let i = 1; i <= 31; i++) {
       dayOptions.push(
         <MenuItem key={i} value={String(i).padStart(2, "0")}>
@@ -140,7 +165,6 @@ class PersonalInfo extends Component {
         </MenuItem>
       );
     }
-    const monthOptions = [];
     for (let i = 1; i <= 12; i++) {
       monthOptions.push(
         <MenuItem key={i} value={String(i).padStart(2, "0")}>
@@ -148,7 +172,6 @@ class PersonalInfo extends Component {
         </MenuItem>
       );
     }
-    const yearOptions = [];
     for (let i = 1920; i < 2025; i++) {
       yearOptions.push(
         <MenuItem key={i} value={i}>
@@ -156,10 +179,12 @@ class PersonalInfo extends Component {
         </MenuItem>
       );
     }
+
     return (
       <Paper className={classes.info}>
         <h1>Edit Your Personal Information</h1>
         <Divider variant="middle" />
+        {/* Input fields for the main personal information */}
         <div className={classes.input}>
           <h2>Full Name</h2>
           <TextField
@@ -172,6 +197,7 @@ class PersonalInfo extends Component {
             onChange={e => this.handleChange(e)}
           />
         </div>
+
         <div className={classes.input}>
           <h2>Email</h2>
           <TextField
@@ -184,6 +210,7 @@ class PersonalInfo extends Component {
             onChange={e => this.handleChange(e)}
           />
         </div>
+
         <div className={classes.input}>
           <h2>Phone Number</h2>
           <TextField
@@ -196,6 +223,7 @@ class PersonalInfo extends Component {
             onChange={e => this.handleChange(e)}
           />
         </div>
+
         <div className={classes.input}>
           <h2>A fact about you</h2>
           <TextField
@@ -208,95 +236,111 @@ class PersonalInfo extends Component {
             onChange={e => this.handleChange(e)}
           />
         </div>
+
         <Divider variant="middle" />
-        <h2>Birthday</h2>
-        <FormControl className={classes.formControl}>
-          <Select
-            value={this.state.day}
-            onChange={e => this.handleChange(e)}
-            displayEmpty
-            name="day"
-            className={classes.selectEmpty}
-          >
-            <MenuItem value="">
-              <em>None</em>
-            </MenuItem>
-            {dayOptions.map(e => e)}
-          </Select>
-          <FormHelperText>Day</FormHelperText>
-        </FormControl>
-        <FormControl className={classes.formControl}>
-          <Select
-            value={this.state.month}
-            onChange={e => this.handleChange(e)}
-            displayEmpty
-            name="month"
-            className={classes.selectEmpty}
-          >
-            <MenuItem value="">
-              <em>None</em>
-            </MenuItem>
-            {monthOptions.map(e => e)}
-          </Select>
-          <FormHelperText>Month</FormHelperText>
-        </FormControl>
-        <FormControl className={classes.formControl}>
-          <Select
-            value={this.state.year}
-            onChange={e => this.handleChange(e)}
-            displayEmpty
-            name="year"
-            className={classes.selectEmpty}
-          >
-            <MenuItem value="">
-              <em>None</em>
-            </MenuItem>
-            {yearOptions.map(e => e)}
-          </Select>
-          <FormHelperText>Year</FormHelperText>
-        </FormControl>
-        <Divider variant="middle" />
-        <div className={classes.location}>
-          <div className={classes.country}>
-            <h2>Country</h2>
+
+        {/* The birthday selector */}
+        <div className={classes.birthday}>
+          <h2>Birthday</h2>
+          <div className={classes.birthdaySelectors}>
+            {/* Month */}
             <FormControl className={classes.formControl}>
               <Select
-                value={this.state.country}
-                onChange={this.handleChange}
+                value={this.state.month}
+                onChange={e => this.handleChange(e)}
                 displayEmpty
-                name="country"
+                name="month"
                 className={classes.selectEmpty}
               >
-                {CountryRegionData.map((option, index) => (
-                  <MenuItem key={option[0]} value={option}>
-                    {option[0]}
-                  </MenuItem>
-                ))}
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+                {monthOptions.map(e => e)}
               </Select>
-              <FormHelperText>Year</FormHelperText>
+              <FormHelperText>Month</FormHelperText>
             </FormControl>
-          </div>
-          <div className={classes.state}>
-            <h2>State/Region</h2>
+
+            {/* Day */}
             <FormControl className={classes.formControl}>
               <Select
-                value={this.state.region}
-                onChange={this.handleChange}
+                value={this.state.day}
+                onChange={e => this.handleChange(e)}
                 displayEmpty
-                name="state"
+                name="day"
                 className={classes.selectEmpty}
               >
-                {this.getRegions(this.state.country).map((option, index) => (
-                  <MenuItem key={option} value={option}>
-                    {option}
-                  </MenuItem>
-                ))}
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+                {dayOptions.map(e => e)}
+              </Select>
+              <FormHelperText>Day</FormHelperText>
+            </FormControl>
+
+            {/* Year */}
+            <FormControl className={classes.formControl}>
+              <Select
+                value={this.state.year}
+                onChange={e => this.handleChange(e)}
+                displayEmpty
+                name="year"
+                className={classes.selectEmpty}
+              >
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+                {yearOptions.map(e => e)}
               </Select>
               <FormHelperText>Year</FormHelperText>
             </FormControl>
           </div>
         </div>
+
         <Divider variant="middle" />
+
+        {/* Country and region Selectors */}
+        <div className={classes.location}>
+          <div className={classes.locationSelector}>
+            <h2>Country</h2>
+            <FormControl className={classes.formControl}>
+              <Select
+                value={this.state.countryValue}
+                onChange={e => this.handleChange(e)}
+                name="country"
+                className={classes.selectEmpty}
+                autoWidth
+              >
+                {CountryRegionData.map((option, index) => (
+                  <MenuItem key={option} value={option}>
+                    {option[0]}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </div>
+
+          <div className={classes.locationSelector}>
+            <h2>State/Region</h2>
+            <FormControl className={classes.formControl}>
+              <Select
+                value={this.state.region}
+                onChange={e => this.handleChange(e)}
+                name="region"
+                className={classes.selectEmpty}
+                autoWidth
+              >
+                {this.getRegions(this.state.country).map((option, index) => (
+                  <MenuItem key={option} value={option[0]}>
+                    {option[0]}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </div>
+        </div>
+
+        <Divider variant="middle" />
+        {/* Overall Sumbit button */}
         <button onClick={() => this.handleSubmit()}>Update Information</button>
       </Paper>
     );

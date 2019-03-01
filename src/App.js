@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import "./App.css";
+import "./reset.css";
 import routes from "./routes";
 import Breakpoint from "react-socks";
 import Mobile from "./components/Mobile/Mobile";

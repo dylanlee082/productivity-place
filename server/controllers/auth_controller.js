@@ -18,6 +18,7 @@ module.exports = {
           "There is already an account associated with this email. Please proceed to log in."
         );
     }
+    console.log(password);
     const hash = await bcrypt.hash(password, 12);
     console.log(hash);
     const registeredMortal = await db.register_mortal([
