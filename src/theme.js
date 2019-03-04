@@ -10,7 +10,8 @@ const theme = createMuiTheme({
     }
   },
   typography: {
-    useNextVariants: true
+    useNextVariants: true,
+    fontFamily: "Open Sans"
   },
   palette: {
     primary: {

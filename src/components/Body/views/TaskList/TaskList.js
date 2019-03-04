@@ -28,7 +28,8 @@ import UpdateTaskForm from "./UpdateTaskForm";
 const styles = theme => ({
   root: {
     display: "flex",
-    flexWrap: "wrap"
+    flexWrap: "wrap",
+    fontFamily: theme.typography.fontFamily
   },
   background: {
     display: "flex",
