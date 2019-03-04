@@ -14,6 +14,7 @@ const contactCon = require("./controllers/contact_controller");
 const settingCon = require("./controllers/settings_controller");
 
 const app = express();
+app.use(express.static(`${__dirname}/../build`));
 app.use(urlencoded({ extended: false }));
 app.use(json());
 app.use(
