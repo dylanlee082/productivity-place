@@ -84,5 +84,11 @@ app.post("/api/contact", contactCon.create);
 app.put("/api/contact", contactCon.update);
 app.delete("/api/contact/:id", contactCon.delete);
 
+const path = require("path"); // Usually moved to the start of file
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../build/index.html"));
+});
+
 const PORT = process.env.SERVER_PORT;
 app.listen(PORT, () => console.log(`Listening on port: ${PORT}`));
