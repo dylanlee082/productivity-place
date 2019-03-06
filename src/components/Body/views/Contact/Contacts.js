@@ -38,7 +38,17 @@ const styles = theme => ({
 class Contact extends Component {
   componentDidMount = () => {
     const { getContact, user } = this.props;
-    getContact(user.id);
+    if (user.id) {
+      getContact(user.id);
+    }
+  };
+
+  componentDidUpdate = prevProps => {
+    if (prevProps.user.id !== this.props.user.id) {
+      console.log("hit");
+      console.log(this.props.user.id);
+      this.props.getContact(this.props.user.id);
+    }
   };
 
   handleDelete = id => {
@@ -52,6 +62,7 @@ class Contact extends Component {
 
   render() {
     const { classes } = this.props;
+    console.log(this.props.user);
     this.props.contactList.sort(function(a, b) {
       var nameA = a.name.toUpperCase();
       var nameB = b.name.toUpperCase();
@@ -66,6 +77,7 @@ class Contact extends Component {
     return (
       <div className={classes.root}>
         <UpdateContactForm />
+
         {this.props.contactList.map((e, i) => {
           return (
             <ExpansionPanel key={i}>

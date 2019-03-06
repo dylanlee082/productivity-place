@@ -13,7 +13,6 @@ import Profile from "./views/Profile/Profile";
 
 //Material-UI Core Imports
 import { withStyles } from "@material-ui/core/styles";
-import CssBaseline from "@material-ui/core/CssBaseline";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
@@ -25,6 +24,7 @@ const styles = theme => ({
     display: "flex",
     background: theme.palette.secondary.main,
     height: "100vh",
+    width: "100%",
     zIndex: "-5"
   },
   appBar: {
@@ -58,7 +58,6 @@ class Body extends Component {
     const { classes, open } = this.props;
     return (
       <div className={classes.root}>
-        <CssBaseline />
         <AppBar position="fixed" className={classes.appBar}>
           <Toolbar disableGutters={!open}>
             <Typography variant="h6" color="secondary" noWrap>

@@ -6,6 +6,11 @@
   height: 10vh;
 }
 
+.logo {
+  display: flex;
+  font-size: 1.8em;
+}
+
 .mainBtn {
   background: orange;
   padding: 1vw;
@@ -51,6 +56,7 @@
   z-index: 2; /* Specify a stack order in case youre using a different order for other elements */
 }
 
+/* Compare the .text and .finalPage, it seems like there could be some redundancy in the code */
 .text {
   position: absolute;
   width: 60vw;
@@ -64,7 +70,7 @@
 
 .finalPage {
   position: absolute;
-  width: 60vw;
+  width: 70vw;
   top: 45%;
   left: 50%;
   font-size: 0.5em;
@@ -74,6 +80,13 @@
   animation-name: fade-in;
   animation-duration: 2s;
   opacity: 1;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.register {
+  background: white;
+  color: black;
 }
 
 .typedfadeout {

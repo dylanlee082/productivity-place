@@ -59,6 +59,7 @@ export const getUser = () => {
 };
 
 export const getContact = id => {
+  console.log("hait");
   return {
     type: GET_CONTACT,
     payload: axios.get(`/api/contact/${id}`)

@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import { getUser, loginFormToggle } from "../../ducks/reducer";
 import styles from "./Landing.module.css";
 import picture1 from "../../imgs/alarm-clock-calendar-close-up-908298.jpg";
+import LibraryBooks from "@material-ui/icons/LibraryBooks";
 
 class Landing extends Component {
   constructor() {
@@ -45,18 +46,28 @@ class Landing extends Component {
         this.setState({
           page: (
             <div className={styles.finalPage}>
-              <h1>Welcome to the Productivity Place</h1>
-              <p>
-                Here you will be able to make the most of your time in your
-                daily life and be more effective in the tasks you have before
-                you!
-              </p>
-              <button
-                onClick={() => this.props.loginFormToggle(this.props.open)}
-                className={styles.mainBtn}
-              >
-                Click here to sign up now!
-              </button>
+              <div className={styles.left}>
+                <h1>Welcome to the Productivity Place</h1>
+                <p>
+                  Here you will be able to make the most of your time in your
+                  daily life and be more effective in the tasks you have before
+                  you!
+                </p>
+                <button
+                  onClick={() => this.props.loginFormToggle(this.props.open)}
+                  className={styles.mainBtn}
+                >
+                  Click here to sign up now!
+                </button>
+              </div>
+              <div className={styles.right}>
+                <div className={styles.register}>
+                  <h1>Username</h1>
+                  <input />
+                  <h1>Password</h1>
+                  <input />
+                </div>
+              </div>
             </div>
           )
         });
@@ -68,9 +79,11 @@ class Landing extends Component {
     return (
       <div className="root">
         <header className={styles.header}>
-          <h1>Productivity Place</h1>
+          <div className={styles.logo}>
+            <h1>Productivity Place</h1>
+            <LibraryBooks />
+          </div>
           <nav className={styles.nav}>
-            <button className={styles.button}>Pricing</button>
             <Login />
           </nav>
         </header>
@@ -81,7 +94,6 @@ class Landing extends Component {
             </span>
           </div>
           <img className={styles.img1} src={picture1} alt="main pic" />
-          {/* <img className={styles.img1} src={picture2} alt="main pic" /> */}
         </div>
       </div>
     );

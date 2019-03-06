@@ -24,34 +24,70 @@ import UpdateApptForm from "./UpdateApptForm";
 
 //Material-UI Styling
 const styles = theme => ({
-  root: {
-    flexGrow: 1
-  },
   paper: {
-    width: "230px",
-    height: "140px",
+    width: "12vw",
+    height: "14.5vh",
     display: "flex",
     flexDirection: "column"
+  },
+  smallPaper: {
+    width: "12vw",
+    height: "12vh",
+    display: "flex",
+    flexDirection: "column"
+  },
+  disabled: {
+    width: "12vw",
+    height: "14.5vh",
+    display: "flex",
+    flexDirection: "column",
+    background: "grey"
+  },
+  smallDisabled: {
+    width: "12vw",
+    height: "12vh",
+    display: "flex",
+    flexDirection: "column",
+    background: "grey"
   },
   header: {
     display: "flex",
     justifyContent: "space-around",
-    alignItems: "center"
+    alignItems: "center",
+    marginBottom: "2.5vh",
+    marginTop: "1vh"
+  },
+  headerMonth: {
+    fontSize: "1.5em"
   },
   main: {
-    flexWrap: "nowrap"
+    display: "flex",
+    flexWrap: "nowrap",
+    maxWidth: "100vw",
+    maxHeight: "100vh"
   },
   days: {
-    width: "230px",
-    height: "40px",
-    flexWrap: "nowrap"
+    width: "12vw",
+    height: "4vh",
+    flexWrap: "nowrap",
+    lineHeight: "4vh"
   },
-  disabled: {
-    width: "230px",
-    height: "140px",
+  cellDate: {
+    textAlign: "right",
+    paddingRight: "1vw",
+    paddingTop: "1vh"
+  },
+  apptChip: {
+    border: "1px solid black",
+    background: theme.palette.secondary.main,
     display: "flex",
-    flexDirection: "column",
-    background: "grey"
+    justifyContent: "space-between",
+    width: "11vw"
+  },
+  outerChip: {
+    display: "flex",
+    justifyContent: "center",
+    width: "12vw"
   }
 });
 
@@ -80,7 +116,7 @@ class Calendar extends Component {
   //When the month is changed reparse the appt list to get appts for that month
   componentDidUpdate = (prevProps, prevState) => {
     if (this.state.currentMonth !== prevState.currentMonth) {
-      this.parseAppts(this.props.appts);
+      this.parseAppts(this.props.apptList);
     }
     if (prevProps.user.id !== this.props.user.id) {
       this.props.getAppt(this.props.user.id).then(res => {
@@ -130,7 +166,9 @@ class Calendar extends Component {
     return (
       <Grid container item xs={12} className={classes.header}>
         <ChevronLeftIcon onClick={() => this.prevMonth()} />
-        <h1>{moment(this.state.currentMonth).format(dateFormat)}</h1>
+        <h1 className={classes.headerMonth}>
+          {moment(this.state.currentMonth).format(dateFormat)}
+        </h1>
         <ChevronRightIcon onClick={() => this.nextMonth()} />
       </Grid>
     );
@@ -163,7 +201,7 @@ class Calendar extends Component {
   };
 
   //Checks to see which days have appts on them (called in renderCells)
-  isDate = (currentDate, day, monthStart) => {
+  isDate = (currentDate, day, monthStart, classes) => {
     const { currentArr } = this.state;
     let arr = [];
     for (let i = 0; i < currentArr.length; i++) {
@@ -172,18 +210,19 @@ class Calendar extends Component {
         currentArr[i].hasOwnProperty(currentDate)
       ) {
         arr.push(
-          <Chip
-            key={i}
-            label={this.state.currentArr[i][currentDate].name}
-            onDelete={() =>
-              this.handleDelete(currentArr[i][currentDate].appt_id)
-            }
-            onClick={() => {
-              console.log(currentArr[i][currentDate]);
-              this.props.updateApptToggle(this.props.open);
-              this.props.updateAppt(currentArr[i][currentDate]);
-            }}
-          />
+          <div key={i} className={classes.outerChip}>
+            <Chip
+              label={this.state.currentArr[i][currentDate].name}
+              onDelete={() =>
+                this.handleDelete(currentArr[i][currentDate].appt_id)
+              }
+              onClick={() => {
+                this.props.updateApptToggle(this.props.open);
+                this.props.updateAppt(currentArr[i][currentDate]);
+              }}
+              className={classes.apptChip}
+            />
+          </div>
         );
       }
     }
@@ -198,7 +237,6 @@ class Calendar extends Component {
     //These second two give you the start and end date of the weeks, this allows for the overlay on the calendar between months
     const startDate = moment(monthStart).startOf("week");
     const endDate = moment(monthEnd).endOf("week");
-
     const dateFormat = "D";
     const rows = [];
 
@@ -206,21 +244,33 @@ class Calendar extends Component {
     let day = startDate;
     let formattedDate = "";
     let classed = "";
-
+    let regular = "";
+    let disabled = "";
+    let formatStart = +moment(startDate).format(dateFormat);
+    let formatEnd = +moment(endDate).format(dateFormat);
+    //The next time this complex for loop will need to be updated in before March 2025, otherwise this works for all months until then
+    if (
+      (formatEnd > 5 && formatEnd < 10 && formatStart !== 31) ||
+      (formatEnd === 5 && (formatStart === 26 || formatStart === 25))
+    ) {
+      regular = "smallPaper";
+      disabled = "smallDisabled";
+    } else {
+      regular = "paper";
+      disabled = "disabled";
+    }
     while (day <= endDate) {
       for (let i = 0; i < 7; i++) {
         //gets the numbers only from the date
         formattedDate = moment(day).format(dateFormat);
         //adds the days for this row
-        classed = moment(day).isSame(monthStart, "month")
-          ? "paper"
-          : "disabled";
+        classed = moment(day).isSame(monthStart, "month") ? regular : disabled;
         days.push(
           <Grid key={i} item>
             <Paper className={classes[classed]}>
-              {formattedDate}
+              <p className={classes.cellDate}>{formattedDate}</p>
               {/* Checks to see if there are any appts for this day */}
-              {this.isDate(formattedDate, day, monthStart)}
+              {this.isDate(formattedDate, day, monthStart, classes)}
             </Paper>
           </Grid>
         );
@@ -239,9 +289,8 @@ class Calendar extends Component {
 
   render() {
     const { classes } = this.props;
-
     return (
-      <div className={classes.root}>
+      <div>
         <UpdateApptForm />
         {this.renderHeader(classes)}
         <Grid container spacing={8}>

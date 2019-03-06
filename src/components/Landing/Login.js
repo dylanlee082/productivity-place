@@ -27,7 +27,7 @@ class Login extends Component {
   constructor() {
     super();
     this.state = {
-      mode: "Register"
+      mode: "Login"
     };
   }
 
@@ -75,7 +75,7 @@ class Login extends Component {
           onClick={() => loginFormToggle(open)}
           className={classes.button}
         >
-          Register/Login
+          Login/Register
         </Button>
         <Dialog
           open={open}
