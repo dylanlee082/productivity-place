@@ -84,7 +84,7 @@ class TaskListForm extends Component {
           onClose={this.handleClose}
           aria-labelledby="form-dialog-title"
         >
-          <DialogTitle id="form-dialog-title">
+          <DialogTitle id="form-dialog-title" disableTypography={true}>
             Create a new task list
           </DialogTitle>
           <DialogContent>

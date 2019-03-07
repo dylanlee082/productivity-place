@@ -6,6 +6,7 @@ import axios from "axios";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import { getUser, loginFormToggle } from "../../ducks/reducers/generalReducer";
+import NumberFormat from "react-number-format";
 
 //Material-UI Core Imports
 import { withStyles } from "@material-ui/core";
@@ -57,8 +58,10 @@ class Login extends Component {
 
   //Register
   handleRegister = () => {
+    let regexp = /[0-9+]+/g;
+    let num = this.state.number.match(regexp).join("");
     axios
-      .post("/auth/register", this.state)
+      .post("/auth/register", { ...this.state, number: num })
       .then(res => {
         this.props.history.push("/main/tasks");
         this.props.getUser();
@@ -93,7 +96,9 @@ class Login extends Component {
           onClose={() => loginFormToggle(loginForm)}
           aria-labelledby="form-dialog-title"
         >
-          <DialogTitle id="form-dialog-title">{this.state.mode}</DialogTitle>
+          <DialogTitle id="form-dialog-title" disableTypography={true}>
+            {this.state.mode}
+          </DialogTitle>
           {this.state.mode === "Register" ? (
             <Fragment>
               {/* Register Side */}
@@ -119,7 +124,9 @@ class Login extends Component {
                   fullWidth
                   onChange={e => this.handleChange(e)}
                 />
-                <TextField
+                <NumberFormat
+                  customInput={TextField}
+                  format="+1 (###) ###-####"
                   margin="dense"
                   name="number"
                   label="Phone Number"

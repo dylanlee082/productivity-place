@@ -151,8 +151,8 @@ class ProfileCard extends Component {
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
         >
-          <DialogTitle id="alert-dialog-title">
-            {"Delete your account?"}
+          <DialogTitle disableTypography={true} id="alert-dialog-title">
+            Delete your account?
           </DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-description">

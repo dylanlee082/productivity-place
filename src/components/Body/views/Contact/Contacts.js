@@ -9,7 +9,7 @@ import {
   getContact,
   updateContact
 } from "../../../../ducks/reducers/contactReducer";
-import UpdateContactForm from "./UpdateContactForm";
+import NumberFormat from "react-number-format";
 
 //Material-UI Core Imports
 import { withStyles } from "@material-ui/core/styles";
@@ -23,6 +23,9 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Clear from "@material-ui/icons/Clear";
 import Edit from "@material-ui/icons/Edit";
 
+//Other Components
+import UpdateContactForm from "./UpdateContactForm";
+
 //Material-UI Styling
 const styles = theme => ({
   root: {
@@ -35,6 +38,16 @@ const styles = theme => ({
   detail: {
     display: "flex",
     justifyContent: "space-between"
+  },
+  right: {
+    display: "flex"
+  },
+  left: {
+    display: "flex",
+    flexDirection: "column"
+  },
+  address: {
+    textAlign: "left"
   }
 });
 
@@ -88,19 +101,30 @@ class Contact extends Component {
                 <Typography className={classes.heading}>{e.name}</Typography>
               </ExpansionPanelSummary>
               <ExpansionPanelDetails className={classes.detail}>
-                <Typography>
-                  Number: {e.number}
-                  Address: {e.address}
-                </Typography>
-                <div onClick={() => this.handleDelete(e.contact_id)}>
-                  <Clear />
+                <div className={classes.left}>
+                  <Typography>
+                    Number:{" "}
+                    <NumberFormat
+                      value={e.number}
+                      displayType={"text"}
+                      format="+# (###) ###-####"
+                    />
+                  </Typography>
+                  <Typography className={classes.address}>
+                    Address: {e.address}
+                  </Typography>
                 </div>
-                <Edit
-                  onClick={() => {
-                    this.props.updateContactToggle(this.props.open);
-                    this.props.updateContact(e);
-                  }}
-                />
+                <div className={classes.right}>
+                  <div onClick={() => this.handleDelete(e.contact_id)}>
+                    <Clear />
+                  </div>
+                  <Edit
+                    onClick={() => {
+                      this.props.updateContactToggle(this.props.open);
+                      this.props.updateContact(e);
+                    }}
+                  />
+                </div>
               </ExpansionPanelDetails>
             </ExpansionPanel>
           );

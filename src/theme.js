@@ -7,6 +7,17 @@ const theme = createMuiTheme({
       text: {
         textTransform: "none"
       }
+    },
+    MuiDialogTitle: {
+      root: {
+        textAlign: "left",
+        fontSize: "1.3em"
+      }
+    },
+    MuiDialogContentText: {
+      root: {
+        textAlign: "left"
+      }
     }
   },
   typography: {

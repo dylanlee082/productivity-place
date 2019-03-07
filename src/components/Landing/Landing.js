@@ -6,6 +6,7 @@ import axios from "axios";
 import { connect } from "react-redux";
 import { getUser } from "../../ducks/reducers/generalReducer";
 import Typed from "typed.js";
+import NumberFormat from "react-number-format";
 
 //Material-UI Core Imports
 import { withStyles } from "@material-ui/core";
@@ -50,8 +51,10 @@ class Landing extends Component {
 
   //Register
   handleRegister = () => {
+    let regexp = /[0-9+]+/g;
+    let num = this.state.number.match(regexp).join("");
     axios
-      .post("/auth/register", this.state)
+      .post("/auth/register", { ...this.state, number: num })
       .then(res => {
         this.props.history.push("/main/tasks");
         this.props.getUser();
@@ -115,7 +118,8 @@ class Landing extends Component {
                     variant="outlined"
                     onChange={e => this.handleChange(e)}
                   />
-                  <TextField
+                  <NumberFormat
+                    customInput={TextField}
                     label="Phone"
                     className={classes.textField}
                     type="text"
@@ -123,6 +127,7 @@ class Landing extends Component {
                     margin="normal"
                     variant="outlined"
                     onChange={e => this.handleChange(e)}
+                    format="+1 (###) ###-####"
                   />
                   <TextField
                     label="Email"

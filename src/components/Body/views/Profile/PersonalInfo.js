@@ -6,6 +6,7 @@ import axios from "axios";
 import { connect } from "react-redux";
 import { CountryRegionData } from "react-country-region-selector";
 import { getSettings } from "../../../../ducks/reducers/generalReducer";
+import NumberFormat from "react-number-format";
 
 // Material-UI Core Imports
 import { withStyles } from "@material-ui/core";
@@ -145,15 +146,20 @@ class PersonalInfo extends Component {
   };
 
   handleSubmit = () => {
+    let regexp = /[0-9+]+/g;
+    let num = this.state.number.match(regexp).join("");
     let newBirth =
       this.state.year + "-" + this.state.month + "-" + this.state.day;
-    this.setState({ birthday: newBirth }, () =>
-      axios
-        .put("/api/personal", { ...this.state, id: this.props.user.id })
-        .then(res => {
-          this.props.getSettings(this.props.user.id);
-        })
-    );
+    axios
+      .put("/api/personal", {
+        ...this.state,
+        number: num,
+        birthday: newBirth,
+        id: this.props.user.id
+      })
+      .then(res => {
+        this.props.getSettings(this.props.user.id);
+      });
   };
 
   render() {
@@ -217,7 +223,9 @@ class PersonalInfo extends Component {
 
         <div className={classes.input}>
           <h2>Phone Number</h2>
-          <TextField
+          <NumberFormat
+            customInput={TextField}
+            format="+# (###) ###-####"
             id="outlined"
             name="number"
             value={this.state.number}

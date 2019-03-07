@@ -5,6 +5,7 @@ import React, { Component } from "react";
 import axios from "axios";
 import { connect } from "react-redux";
 import { getContact } from "../../../../ducks/reducers/contactReducer";
+import NumberFormat from "react-number-format";
 
 //Material-UI Core Imports
 import theme from "../../../../theme";
@@ -42,8 +43,10 @@ class ContactForm extends Component {
 
   handleSubmit = () => {
     const { user, getContact } = this.props;
+    let regexp = /[0-9+]+/g;
+    let num = this.state.contact.number.match(regexp).join("");
     axios
-      .post("/api/contact", { ...this.state.contact, id: user.id })
+      .post("/api/contact", { ...this.state.contact, id: user.id, number: num })
       .then(res => {
         this.setState({
           contact: {
@@ -73,7 +76,9 @@ class ContactForm extends Component {
           onClose={this.handleClose}
           aria-labelledby="form-dialog-title"
         >
-          <DialogTitle id="form-dialog-title">Create a new Contact</DialogTitle>
+          <DialogTitle id="form-dialog-title" disableTypography={true}>
+            Create a new Contact
+          </DialogTitle>
           <DialogContent>
             <DialogContentText>
               This form is for creating new contacts in your contact book.
@@ -86,7 +91,9 @@ class ContactForm extends Component {
               type="text"
               fullWidth
             />
-            <TextField
+            <NumberFormat
+              customInput={TextField}
+              format="+1 (###) ###-####"
               onChange={e => this.handleChange(e)}
               margin="dense"
               name="number"

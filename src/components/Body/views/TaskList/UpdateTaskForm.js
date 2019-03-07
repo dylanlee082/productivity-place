@@ -56,7 +56,9 @@ class UpdateTaskForm extends Component {
           onClose={() => this.props.updateTaskToggle(this.props.open)}
           aria-labelledby="form-dialog-title"
         >
-          <DialogTitle id="form-dialog-title">Edit Task</DialogTitle>
+          <DialogTitle id="form-dialog-title" disableTypography={true}>
+            Edit Task
+          </DialogTitle>
           <DialogContent>
             <DialogContentText>
               To update your task edit it below and press submit.

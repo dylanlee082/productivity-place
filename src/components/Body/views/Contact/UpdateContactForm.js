@@ -8,6 +8,7 @@ import {
   updateContactToggle,
   getContact
 } from "../../../../ducks/reducers/contactReducer";
+import NumberFormat from "react-number-format";
 
 //Material-UI Core Imports
 import Button from "@material-ui/core/Button";
@@ -43,10 +44,14 @@ class UpdateContactForm extends Component {
   };
 
   handleSubmit = () => {
-    axios.put("/api/contact", this.state.contact).then(res => {
-      this.props.updateContactToggle(this.props.open);
-      this.props.getContact(this.state.contact.mortal_id);
-    });
+    let regexp = /[0-9+]+/g;
+    let num = this.state.contact.number.match(regexp).join("");
+    axios
+      .put("/api/contact", { ...this.state.contact, number: num })
+      .then(res => {
+        this.props.updateContactToggle(this.props.open);
+        this.props.getContact(this.state.contact.mortal_id);
+      });
   };
 
   render() {
@@ -57,35 +62,38 @@ class UpdateContactForm extends Component {
           onClose={() => this.props.updateContactToggle(this.props.open)}
           aria-labelledby="form-dialog-title"
         >
-          <DialogTitle id="form-dialog-title">Subscribe</DialogTitle>
+          <DialogTitle id="form-dialog-title" disableTypography={true}>
+            Update Contact
+          </DialogTitle>
           <DialogContent>
             <DialogContentText>
-              To subscribe to this website, please enter your email address
-              here. We will send updates occasionally.
+              Fill in the blanks to update the contact you have selected.
             </DialogContentText>
             <TextField
               margin="dense"
-              label="What is this task?"
+              label="Name"
               value={this.state.contact.name}
-              type="string"
+              type="text"
               name="name"
               fullWidth
               onChange={e => this.handleChange(e)}
             />
-            <TextField
+            <NumberFormat
+              customInput={TextField}
+              format="+# (###) ###-####"
               margin="dense"
-              label="What is this task?"
+              label="Phone Number"
               value={this.state.contact.number}
-              type="string"
+              type="text"
               name="number"
               fullWidth
               onChange={e => this.handleChange(e)}
             />
             <TextField
               margin="dense"
-              label="What is this task?"
+              label="Address"
               value={this.state.contact.address}
-              type="string"
+              type="text"
               name="address"
               fullWidth
               onChange={e => this.handleChange(e)}

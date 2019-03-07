@@ -67,7 +67,9 @@ class MobileRegister extends Component {
           onClose={() => loginFormToggle(open)}
           aria-labelledby="form-dialog-title"
         >
-          <DialogTitle id="form-dialog-title">Register</DialogTitle>
+          <DialogTitle id="form-dialog-title" disableTypography={true}>
+            Register
+          </DialogTitle>
           <DialogContent>
             <DialogContentText>
               Please fill out the information below to create an account. It is

@@ -70,7 +70,9 @@ class UpdateApptForm extends Component {
           onClose={() => this.props.updateApptToggle(this.props.open)}
           aria-labelledby="form-dialog-title"
         >
-          <DialogTitle id="form-dialog-title">Update Appointment</DialogTitle>
+          <DialogTitle id="form-dialog-title" disableTypography={true}>
+            Update Appointment
+          </DialogTitle>
           <DialogContent>
             <DialogContentText>
               Alter the fields you wish to change on your appointment and press
