@@ -56,11 +56,10 @@ class UpdateTaskForm extends Component {
           onClose={() => this.props.updateTaskToggle(this.props.open)}
           aria-labelledby="form-dialog-title"
         >
-          <DialogTitle id="form-dialog-title">Subscribe</DialogTitle>
+          <DialogTitle id="form-dialog-title">Edit Task</DialogTitle>
           <DialogContent>
             <DialogContentText>
-              To subscribe to this website, please enter your email address
-              here. We will send updates occasionally.
+              To update your task edit it below and press submit.
             </DialogContentText>
             <TextField
               margin="dense"
@@ -93,10 +92,10 @@ class UpdateTaskForm extends Component {
 
 const mapStateToProps = state => {
   return {
-    open: state.updateTaskToggle,
-    taskList: state.taskList,
-    task: state.task,
-    user: state.user
+    open: state.taskReducer.updateTaskToggle,
+    taskList: state.taskReducer.taskList,
+    task: state.taskReducer.task,
+    user: state.generalReducer.user
   };
 };
 

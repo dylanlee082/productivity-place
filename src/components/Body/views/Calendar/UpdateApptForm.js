@@ -132,9 +132,9 @@ class UpdateApptForm extends Component {
 
 const mapStateToProps = state => {
   return {
-    open: state.updateApptToggle,
-    apptList: state.apptList,
-    appt: state.appt
+    open: state.apptReducer.updateApptToggle,
+    apptList: state.apptReducer.apptList,
+    appt: state.apptReducer.appt
   };
 };
 

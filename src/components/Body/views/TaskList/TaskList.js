@@ -178,9 +178,9 @@ class TaskList extends Component {
 
 const mapStateToProps = state => {
   return {
-    user: state.user,
-    taskList: state.taskList,
-    open: state.updateTaskToggle
+    user: state.generalReducer.user,
+    taskList: state.taskReducer.taskList,
+    open: state.taskReducer.updateTaskToggle
   };
 };
 

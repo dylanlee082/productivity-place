@@ -5,8 +5,8 @@ import apptReducer from "./reducers/apptReducer";
 import taskReducer from "./reducers/taskReducer";
 
 export default combineReducers({
-  generalReducer,
-  contactReducer,
-  apptReducer,
-  taskReducer
+  generalReducer: generalReducer,
+  contactReducer: contactReducer,
+  apptReducer: apptReducer,
+  taskReducer: taskReducer
 });

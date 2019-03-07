@@ -353,8 +353,8 @@ class PersonalInfo extends Component {
 
 const mapStateToProps = state => {
   return {
-    settings: state.settings,
-    user: state.user
+    settings: state.generalReducer.settings,
+    user: state.generalReducer.user
   };
 };
 

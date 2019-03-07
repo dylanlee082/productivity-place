@@ -112,9 +112,9 @@ class UpdateContactForm extends Component {
 
 const mapStateToProps = state => {
   return {
-    open: state.updateContactToggle,
-    contactList: state.contactList,
-    contact: state.contact
+    open: state.contactReducer.updateContactToggle,
+    contactList: state.contactReducer.contactList,
+    contact: state.contactReducer.contact
   };
 };
 

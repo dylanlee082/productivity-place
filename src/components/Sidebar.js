@@ -292,9 +292,9 @@ class Sidebar extends Component {
 
 const mapStateToProps = state => {
   return {
-    open: state.open,
-    user: state.user,
-    settings: state.settings
+    open: state.generalReducer.open,
+    user: state.generalReducer.user,
+    settings: state.generalReducer.settings
   };
 };
 

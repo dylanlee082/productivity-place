@@ -112,8 +112,8 @@ class Settings extends Component {
 
 const mapStateToProps = state => {
   return {
-    user: state.user,
-    settings: state.settings
+    user: state.generalReducer.user,
+    settings: state.generalReducer.settings
   };
 };
 

@@ -112,9 +112,9 @@ class Contact extends Component {
 
 const mapStateToProps = state => {
   return {
-    contactList: state.contactList,
-    user: state.user,
-    open: state.updateContactToggle
+    contactList: state.contactReducer.contactList,
+    user: state.generalReducer.user,
+    open: state.contactReducer.updateContactToggle
   };
 };
 

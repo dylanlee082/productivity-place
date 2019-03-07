@@ -1,16 +1,25 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+## The Productivity Place
 
-In the project directory, you can run:
+The Productivity Place is a web application designed to remove the clutter from every day organization. The app is designed to be simple and intuitive to work with allowing the user to focus on being productive and effective rather than being confused by too many features.
 
-### `npm start`
+## Technologies Used
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### Frontend
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
+- React (frontend framework)
+- Material-UI (styled component library)
+- Redux (state management)
+
+### Backend
+
+- Node.js
+- Express (backend framework)
+- PostgreSQL (SQL Database)
+- BcryptJS (Authentication)
+- Twilio (SMS messaging)
+- IBM Watson (AI for SMS messaging)
 
 ### `npm test`
 

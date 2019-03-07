@@ -50,7 +50,7 @@ class Login extends Component {
       .then(res => {
         this.props.getUser();
         this.props.history.push("/main/tasks");
-        this.props.loginFormToggle(this.props.open);
+        this.props.loginFormToggle(this.props.loginForm);
       })
       .catch(err => console.log(err));
   };
@@ -62,7 +62,7 @@ class Login extends Component {
       .then(res => {
         this.props.history.push("/main/tasks");
         this.props.getUser();
-        this.props.loginFormToggle(this.props.open);
+        this.props.loginFormToggle(this.props.loginForm);
       })
       .catch(err => console.log(err));
   };
@@ -77,20 +77,20 @@ class Login extends Component {
   };
 
   render() {
-    const { classes, open, loginFormToggle } = this.props;
+    const { classes, loginForm, loginFormToggle } = this.props;
     return (
       <div>
         {/* Button that is displayed for the component */}
         <Button
-          onClick={() => loginFormToggle(open)}
+          onClick={() => loginFormToggle(loginForm)}
           className={classes.button}
         >
           Login/Register
         </Button>
         {/* Modal that pops up on click */}
         <Dialog
-          open={open}
-          onClose={() => loginFormToggle(open)}
+          open={loginForm}
+          onClose={() => loginFormToggle(loginForm)}
           aria-labelledby="form-dialog-title"
         >
           <DialogTitle id="form-dialog-title">{this.state.mode}</DialogTitle>
@@ -190,7 +190,7 @@ class Login extends Component {
 
 const mapStateToProps = state => {
   return {
-    open: state.loginForm
+    loginForm: state.generalReducer.loginForm
   };
 };
 

@@ -308,10 +308,10 @@ class Calendar extends Component {
 
 const mapStateToProps = state => {
   return {
-    user: state.user,
-    appt: state.appt,
-    open: state.updateApptToggle,
-    apptList: state.apptList
+    user: state.generalReducer.user,
+    appt: state.apptReducer.appt,
+    open: state.apptReducer.updateApptToggle,
+    apptList: state.apptReducer.apptList
   };
 };
 

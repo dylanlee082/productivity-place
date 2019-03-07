@@ -138,7 +138,11 @@ class TaskListForm extends Component {
   }
 }
 
-const mapStateToProps = state => state;
+const mapStateToProps = state => {
+  return {
+    user: state.generalReducer.user
+  };
+};
 
 export default connect(
   mapStateToProps,

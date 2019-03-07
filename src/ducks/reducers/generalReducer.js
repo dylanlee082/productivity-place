@@ -1,7 +1,7 @@
 import axios from "axios";
 
 let initialState = {
-  loginForm: "",
+  loginForm: false,
   settings: {},
   user: {},
   open: true

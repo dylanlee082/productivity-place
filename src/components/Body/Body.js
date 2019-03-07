@@ -85,8 +85,8 @@ class Body extends Component {
 
 const mapStateToProps = state => {
   return {
-    open: state.open,
-    user: state.user
+    open: state.generalReducer.open,
+    user: state.generalReducer.user
   };
 };
 

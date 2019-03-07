@@ -32,7 +32,7 @@ export const updateTaskToggle = open => {
 };
 
 export default function reducer(state = initialState, action) {
-  switch (action.types) {
+  switch (action.type) {
     case `${GET_TASK}_FULFILLED`:
       return { ...state, taskList: action.payload.data };
     case UPDATE_TASK:
