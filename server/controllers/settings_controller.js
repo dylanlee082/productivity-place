@@ -21,7 +21,8 @@ module.exports = {
       fact,
       birthday,
       country,
-      region
+      region,
+      id
     } = req.body;
     db.update_user_personal(
       fullname,
@@ -30,7 +31,8 @@ module.exports = {
       fact,
       birthday,
       country,
-      region
+      region,
+      id
     )
       .then(() => res.sendStatus(200))
       .catch(err => console.log(err));

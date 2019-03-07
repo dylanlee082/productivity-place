@@ -6,7 +6,7 @@ import {
   getTask,
   updateTaskToggle,
   updateTask
-} from "../../../../ducks/reducer";
+} from "../../../../ducks/reducers/taskReducer";
 
 //Material-UI Core Imports
 import { withStyles } from "@material-ui/core";

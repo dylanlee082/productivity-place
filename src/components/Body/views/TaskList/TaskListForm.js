@@ -2,7 +2,7 @@
 import React, { Component } from "react";
 import axios from "axios";
 import { connect } from "react-redux";
-import { getTask } from "../../../../ducks/reducer";
+import { getTask } from "../../../../ducks/reducers/taskReducer";
 
 //Material-UI Core Imports
 import theme from "../../../../theme";

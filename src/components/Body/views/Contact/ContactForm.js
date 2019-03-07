@@ -1,8 +1,10 @@
+//This is the form for creating a new contact
+
 //Main NPM Imports
 import React, { Component } from "react";
 import axios from "axios";
 import { connect } from "react-redux";
-import { getContact } from "../../../../ducks/reducer";
+import { getContact } from "../../../../ducks/reducers/contactReducer";
 
 //Material-UI Core Imports
 import theme from "../../../../theme";

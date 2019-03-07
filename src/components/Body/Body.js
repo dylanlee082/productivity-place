@@ -1,7 +1,9 @@
+//This pieces togther the entire main portion of the app. The main routes, sidebar and appbar are all included in this component
+
 //Main NPM Imports
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { getUser, getSettings } from "../../ducks/reducer";
+import { getUser, getSettings } from "../../ducks/reducers/generalReducer";
 import { Switch, Route } from "react-router-dom";
 
 //Other Components
@@ -19,6 +21,7 @@ import Typography from "@material-ui/core/Typography";
 
 const drawerWidth = 240;
 
+//Material-UI Styling
 const styles = theme => ({
   root: {
     display: "flex",

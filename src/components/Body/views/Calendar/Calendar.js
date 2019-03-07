@@ -1,3 +1,5 @@
+//This is the main calendar page
+
 // Main NPM Imports
 import React, { Component } from "react";
 import axios from "axios";
@@ -7,7 +9,7 @@ import {
   getAppt,
   updateAppt,
   updateApptToggle
-} from "../../../../ducks/reducer";
+} from "../../../../ducks/reducers/apptReducer";
 
 //Material-UI Core Imports
 import { withStyles } from "@material-ui/core/styles";

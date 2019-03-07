@@ -1,7 +1,14 @@
+//In the profile page this is the leftmost profile section
+
+//Main NPM Imports
 import React, { Component } from "react";
 import axios from "axios";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
+import { getUser } from "../../../../ducks/reducers/generalReducer";
+// import { DropzoneDialog } from "material-ui-dropzone";
+
+//Material-UI Core Imports
 import { withStyles } from "@material-ui/core";
 import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
@@ -11,10 +18,9 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogActions from "@material-ui/core/DialogActions";
 import Divider from "@material-ui/core/Divider";
-// import { DropzoneDialog } from "material-ui-dropzone";
 import Avatar from "@material-ui/core/Avatar";
-import { getUser } from "../../../../ducks/reducer";
 
+//Material-UI Styling
 const styles = theme => ({
   profile: {
     height: "55vh",
@@ -58,6 +64,7 @@ class ProfileCard extends Component {
       this.props.history.push("/");
     });
   };
+
   handleClickOpen = () => {
     this.setState({ open: true });
   };
@@ -79,6 +86,7 @@ class ProfileCard extends Component {
         getUser();
       });
   };
+
   // These handlers go along side the possible later inclusion of the dropzone component
   // handleDropzoneClose = () => {
   //   this.setState({ dropzoneOpen: false });
@@ -136,6 +144,7 @@ class ProfileCard extends Component {
         >
           Delete Account
         </Button>
+        {/* This is the dialog warning the user to make sure they actively want to delete there account */}
         <Dialog
           open={this.state.open}
           onClose={this.handleClose}

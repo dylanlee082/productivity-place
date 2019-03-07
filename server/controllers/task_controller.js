@@ -1,5 +1,5 @@
 module.exports = {
-  create: (req, res) => {
+  createTask: (req, res) => {
     const db = req.app.get("db");
     const { listName, inputs, id } = req.body;
     inputs.map((e, i) => {
@@ -7,13 +7,13 @@ module.exports = {
     });
     res.sendStatus(200);
   },
-  read: (req, res) => {
+  readTask: (req, res) => {
     const db = req.app.get("db");
     db.get_task(req.params.id)
       .then(task => res.status(200).json(task))
       .catch(err => console.log(err));
   },
-  update: (req, res) => {
+  updateTask: (req, res) => {
     const db = req.app.get("db");
     const { list_name, body, task_id } = req.body;
     db.update_task(body, list_name, task_id)

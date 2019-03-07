@@ -1,15 +1,21 @@
+//This is the top-right part of the profile page
+
+//Main NPM Imports
 import React, { Component } from "react";
 import axios from "axios";
 import { connect } from "react-redux";
-import { getSettings } from "../../../../ducks/reducer";
+import { getSettings } from "../../../../ducks/reducers/generalReducer";
+
+//Material-UI Core Imports
 import { withStyles } from "@material-ui/core";
 import Checkbox from "@material-ui/core/Checkbox";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Paper from "@material-ui/core/Paper";
 
+//Material-UI Styling
 const styles = theme => ({
   settings: {
-    background: "green",
+    background: "white",
     height: "42.5vh",
     width: "33vw"
   },

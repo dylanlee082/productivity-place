@@ -1,6 +1,15 @@
+//This is the pop-up for updating a contact
+
+//Main NPM Imports
 import React, { Component } from "react";
 import axios from "axios";
 import { connect } from "react-redux";
+import {
+  updateContactToggle,
+  getContact
+} from "../../../../ducks/reducers/contactReducer";
+
+//Material-UI Core Imports
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Dialog from "@material-ui/core/Dialog";
@@ -8,7 +17,6 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
-import { updateContactToggle, getContact } from "../../../../ducks/reducer";
 
 class UpdateContactForm extends Component {
   constructor() {

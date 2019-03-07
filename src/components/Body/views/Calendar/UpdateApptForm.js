@@ -1,6 +1,15 @@
+//This is the pop-up for updating a calendar appt
+
+//Main NPM Imports
 import React, { Component } from "react";
 import axios from "axios";
 import { connect } from "react-redux";
+import {
+  updateApptToggle,
+  getAppt
+} from "../../../../ducks/reducers/apptReducer";
+
+//Material-UI Core Imports
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Dialog from "@material-ui/core/Dialog";
@@ -8,7 +17,6 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
-import { updateApptToggle, getAppt } from "../../../../ducks/reducer";
 
 //Date-Fns Imports && Date Manipulation
 import "date-fns";
@@ -62,11 +70,11 @@ class UpdateApptForm extends Component {
           onClose={() => this.props.updateApptToggle(this.props.open)}
           aria-labelledby="form-dialog-title"
         >
-          <DialogTitle id="form-dialog-title">Subscribe</DialogTitle>
+          <DialogTitle id="form-dialog-title">Update Appointment</DialogTitle>
           <DialogContent>
             <DialogContentText>
-              To subscribe to this website, please enter your email address
-              here. We will send updates occasionally.
+              Alter the fields you wish to change on your appointment and press
+              submit to save the changes.
             </DialogContentText>
             {/* Built using the advanced Material-UI Pickers */}
             <MuiPickersUtilsProvider utils={DateFnsUtils}>

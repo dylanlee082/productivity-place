@@ -1,3 +1,5 @@
+//This is the overall contacts page
+
 //Main NPM Imports
 import React, { Component } from "react";
 import axios from "axios";
@@ -6,7 +8,7 @@ import {
   updateContactToggle,
   getContact,
   updateContact
-} from "../../../../ducks/reducer";
+} from "../../../../ducks/reducers/contactReducer";
 import UpdateContactForm from "./UpdateContactForm";
 
 //Material-UI Core Imports
@@ -21,6 +23,7 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Clear from "@material-ui/icons/Clear";
 import Edit from "@material-ui/icons/Edit";
 
+//Material-UI Styling
 const styles = theme => ({
   root: {
     width: "100%"

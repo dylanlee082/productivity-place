@@ -71,6 +71,7 @@
 .finalPage {
   position: absolute;
   width: 70vw;
+  font-size: 4em;
   top: 45%;
   left: 50%;
   font-size: 0.5em;
@@ -81,12 +82,40 @@
   animation-duration: 2s;
   opacity: 1;
   display: flex;
+  justify-content: space-between;
+}
+
+.left {
+  width: 35vw;
+  height: 40vh;
+  display: flex;
+  flex-direction: column;
   justify-content: space-evenly;
 }
 
-.register {
+.mainHeader {
+  font-size: 1.5em;
+  text-align: left;
+}
+
+.mainParagraph {
+  text-align: left;
+}
+
+.right {
   background: white;
   color: black;
+  height: 50vh;
+  width: 20vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.register {
+  display: flex;
+  flex-direction: column;
+  width: 15vw;
 }
 
 .typedfadeout {

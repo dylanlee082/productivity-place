@@ -1,8 +1,13 @@
+//This is the login modal that pops up for the user to either register for an account or sign into an existing account
+
+// Main NPM Imports
 import React, { Component, Fragment } from "react";
 import axios from "axios";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
-import { getUser, loginFormToggle } from "../../ducks/reducer";
+import { getUser, loginFormToggle } from "../../ducks/reducers/generalReducer";
+
+//Material-UI Core Imports
 import { withStyles } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
@@ -12,6 +17,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 
+//Material-UI Styling
 const styles = theme => ({
   button: {
     color: "black",
@@ -37,6 +43,7 @@ class Login extends Component {
     });
   };
 
+  //Login
   handleLogin = () => {
     axios
       .post("/auth/login", this.state)
@@ -48,6 +55,7 @@ class Login extends Component {
       .catch(err => console.log(err));
   };
 
+  //Register
   handleRegister = () => {
     axios
       .post("/auth/register", this.state)
@@ -59,6 +67,7 @@ class Login extends Component {
       .catch(err => console.log(err));
   };
 
+  //This toggle's between the two sides of the form
   handleFormSwitch = () => {
     if (this.state.mode === "Login") {
       this.setState({ mode: "Register" });
@@ -71,12 +80,14 @@ class Login extends Component {
     const { classes, open, loginFormToggle } = this.props;
     return (
       <div>
+        {/* Button that is displayed for the component */}
         <Button
           onClick={() => loginFormToggle(open)}
           className={classes.button}
         >
           Login/Register
         </Button>
+        {/* Modal that pops up on click */}
         <Dialog
           open={open}
           onClose={() => loginFormToggle(open)}
@@ -85,6 +96,7 @@ class Login extends Component {
           <DialogTitle id="form-dialog-title">{this.state.mode}</DialogTitle>
           {this.state.mode === "Register" ? (
             <Fragment>
+              {/* Register Side */}
               <DialogContent>
                 <DialogContentText>
                   If this is your first time here please fill out the
@@ -135,6 +147,7 @@ class Login extends Component {
             </Fragment>
           ) : (
             <Fragment>
+              {/* Login Side */}
               <DialogContent>
                 <DialogContentText>
                   Please enter your account information to login to your

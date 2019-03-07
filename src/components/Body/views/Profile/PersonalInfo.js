@@ -1,9 +1,11 @@
+//This is the whole middle column of the profile page
+
 // Main NPM Imports
 import React, { Component } from "react";
 import axios from "axios";
 import { connect } from "react-redux";
 import { CountryRegionData } from "react-country-region-selector";
-import { getSettings } from "../../../../ducks/reducer";
+import { getSettings } from "../../../../ducks/reducers/generalReducer";
 
 // Material-UI Core Imports
 import { withStyles } from "@material-ui/core";
@@ -15,6 +17,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import FormHelperText from "@material-ui/core/FormHelperText";
 import Divider from "@material-ui/core/Divider";
 
+//Material-UI Styling
 const styles = theme => ({
   info: {
     height: "85vh",
@@ -145,15 +148,16 @@ class PersonalInfo extends Component {
     let newBirth =
       this.state.year + "-" + this.state.month + "-" + this.state.day;
     this.setState({ birthday: newBirth }, () =>
-      axios.put("/api/personal", this.state).then(res => {
-        this.props.getSettings(this.props.user.id);
-      })
+      axios
+        .put("/api/personal", { ...this.state, id: this.props.user.id })
+        .then(res => {
+          this.props.getSettings(this.props.user.id);
+        })
     );
   };
 
   render() {
     const { classes } = this.props;
-
     //Loops for the menu item options for the birthday selectors
     const dayOptions = [];
     const monthOptions = [];

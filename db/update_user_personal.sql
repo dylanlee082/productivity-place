@@ -5,3 +5,4 @@ funfact = $4,
 birthday = $5,
 country = $6,
 region = $7
+WHERE mortal_id = $8

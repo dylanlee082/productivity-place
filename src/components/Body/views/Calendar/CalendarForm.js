@@ -1,8 +1,10 @@
+//This is the form for creating a new calendar appt
+
 //Main NPM Imports
 import React, { Component } from "react";
 import axios from "axios";
 import { connect } from "react-redux";
-import { getAppt } from "../../../../ducks/reducer";
+import { getAppt } from "../../../../ducks/reducers/apptReducer";
 
 //Date-Fns Imports && Date Manipulation
 import "date-fns";

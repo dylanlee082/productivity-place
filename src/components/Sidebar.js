@@ -1,9 +1,11 @@
+//This is the sidebar that shows on all pages in the main part of the application and is the main navigation throughout the app
+
 //Main NPM imports
 import React, { Component, Fragment } from "react";
 import axios from "axios";
 import { withRouter, Link } from "react-router-dom";
 import { connect } from "react-redux";
-import { toggleOpen } from "../ducks/reducer";
+import { toggleOpen } from "../ducks/reducers/generalReducer";
 
 //Other Components
 import CalendarForm from "./Body/views/Calendar/CalendarForm";
@@ -29,6 +31,7 @@ import ExpandMore from "@material-ui/icons/ExpandMore";
 
 const drawerWidth = 240;
 
+//Material-UI Styling
 const styles = theme => ({
   root: {
     display: "flex"
@@ -73,6 +76,7 @@ class Sidebar extends Component {
     });
   };
 
+  //Handlers for the sidebar to open and close
   handleCalendarClick = () => {
     this.setState({
       calendarOpen: !this.state.calendarOpen,
@@ -214,7 +218,7 @@ class Sidebar extends Component {
                       <CalendarForm />
                     </ListItem>
                     {/* Switch the view of the calendar to include a day view */}
-                    <ListItem button className={classes.nested}>
+                    {/* <ListItem button className={classes.nested}>
                       <ListItemIcon>
                         <StarBorder color="secondary" />
                       </ListItemIcon>
@@ -222,7 +226,7 @@ class Sidebar extends Component {
                         classes={{ primary: classes.primary }}
                         primary="Day View"
                       />
-                    </ListItem>
+                    </ListItem> */}
                   </List>
                 </Collapse>
               </Fragment>

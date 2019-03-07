@@ -69,21 +69,21 @@ app.post("/auth/login", authCon.login);
 app.get("/auth/logout", authCon.logout);
 app.delete("/auth/delete/:id", authCon.deleteUser);
 
-app.get("/api/appt/:id", apptCon.read);
-app.put("/api/appt", apptCon.update);
-app.post("/api/appt", apptCon.create);
-app.delete("/api/appt/:id", apptCon.delete);
+app.get("/api/appt/:id", apptCon.readAppt);
+app.put("/api/appt", apptCon.updateAppt);
+app.post("/api/appt", apptCon.createAppt);
+app.delete("/api/appt/:id", apptCon.deleteAppt);
 
-app.get("/api/task/:id", taskCon.read);
-app.post("/api/task", taskCon.create);
-app.put("/api/task", taskCon.update);
+app.get("/api/task/:id", taskCon.readTask);
+app.post("/api/task", taskCon.createTask);
+app.put("/api/task", taskCon.updateTask);
 app.delete("/api/task/:id", taskCon.deleteTask);
 app.delete("/api/list/:name", taskCon.deleteList);
 
-app.get("/api/contact/:id", contactCon.read);
-app.post("/api/contact", contactCon.create);
-app.put("/api/contact", contactCon.update);
-app.delete("/api/contact/:id", contactCon.delete);
+app.get("/api/contact/:id", contactCon.readContact);
+app.post("/api/contact", contactCon.createContact);
+app.put("/api/contact", contactCon.updateContact);
+app.delete("/api/contact/:id", contactCon.deleteContact);
 
 const path = require("path"); // Usually moved to the start of file
 

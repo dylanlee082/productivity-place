@@ -1,13 +1,20 @@
+//This is the container component for the overall profile, all of the other profile components are stitched together here
+
+//Main NPM Imports
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { getSettings } from "../../../../ducks/reducer";
+import { getSettings } from "../../../../ducks/reducers/generalReducer";
+
+//Material-UI Styling
 import { withStyles } from "@material-ui/core";
 import Paper from "@material-ui/core/Paper";
 
+//Other Components
 import Settings from "./Settings";
 import PersonalInfo from "./PersonalInfo";
 import ProfileCard from "./ProfileCard";
 
+//Material-UI Styling
 const styles = theme => ({
   root: {
     display: "flex"
@@ -22,14 +29,16 @@ const styles = theme => ({
   },
 
   slogan: {
-    background: "yellow",
+    background: "white",
     height: "30vh",
     width: "18vw"
   },
-  goals: {
-    background: "grey",
+  analytics: {
+    backgroundImage: `url("https://st2.depositphotos.com/1001599/7978/v/950/depositphotos_79785186-stock-illustration-pie-chart-sketch-icon.jpg")`,
+    backgroundSize: "33vw 42.5vh",
     height: "42.5vh",
-    width: "33vw"
+    width: "33vw",
+    fontSize: "2em"
   }
 });
 
@@ -71,7 +80,7 @@ class Profile extends Component {
         <PersonalInfo />
         <div className={classes.right}>
           <Settings />
-          <Paper className={classes.goals}>Coming Soon analytics</Paper>
+          <Paper className={classes.analytics}>Coming Soon Analytics</Paper>
         </div>
       </div>
     );

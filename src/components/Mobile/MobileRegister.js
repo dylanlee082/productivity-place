@@ -1,8 +1,13 @@
+//This will only show up on mobile devices and is the registration specific to mobile registration. It is similar to the one for laptop/desktop, but does not offer login functionality
+
+//Main NPM Imports
 import React, { Component } from "react";
 import axios from "axios";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
-import { getUser, loginFormToggle } from "../../ducks/reducer";
+import { getUser, loginFormToggle } from "../../ducks/reducers/generalReducer";
+
+//Material-UI Core Imports
 import { withStyles } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
@@ -12,6 +17,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 
+//Material-UI Styling
 const styles = theme => ({
   button: {
     color: theme.palette.secondary.main,

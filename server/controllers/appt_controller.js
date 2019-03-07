@@ -1,5 +1,5 @@
 module.exports = {
-  create: (req, res) => {
+  createAppt: (req, res) => {
     const db = req.app.get("db");
     const { date, name, location, id } = req.body;
     db.create_appt(date, name, location, id)
@@ -9,13 +9,13 @@ module.exports = {
         res.status(500).json("Appt was not created");
       });
   },
-  read: (req, res) => {
+  readAppt: (req, res) => {
     const db = req.app.get("db");
     db.get_appt(req.params.id)
       .then(appt => res.status(200).json(appt))
       .catch(err => console.log(err));
   },
-  update: (req, res) => {
+  updateAppt: (req, res) => {
     const db = req.app.get("db");
     const { appt_time, name, location, appt_id } = req.body;
     db.update_appt(appt_time, name, location, appt_id)
@@ -25,7 +25,7 @@ module.exports = {
         res.sendStatus(500);
       });
   },
-  delete: (req, res) => {
+  deleteAppt: (req, res) => {
     const db = req.app.get("db");
     db.delete_appt(req.params.id)
       .then(() => res.sendStatus(200))
