@@ -106,6 +106,25 @@ module.exports = {
                 });
               break;
             }
+            case "help": {
+              twiml.message(
+                "At the moment I am able to help you get information from the website. I can answer questions about what tasks, appointments and contacts you have created at The Productivity Place. I'm sorry if I am unable to assist you on a specific issue I am only "
+              );
+              resp.writeHead(200, { "Content-Type": "text/xml" });
+              resp.end(twiml.toString());
+              break;
+            }
+            case "link": {
+              twiml.message(response.output.generic[0].text);
+              resp.writeHead(200, { "Content-Type": "text/xml" });
+              resp.end(twiml.toString());
+              break;
+            }
+            case "name": {
+              twiml.message(response.output.generic[0].text);
+              resp.writeHead(200, { "Content-Type": "text/xml" });
+              resp.end(twiml.toString());
+            }
             case "get_tasks": {
               db.get_task(req.session.user.id).then(res => {
                 const singular = res.map((e, i) => {
