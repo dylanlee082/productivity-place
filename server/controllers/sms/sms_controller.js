@@ -1,9 +1,6 @@
 require("dotenv").config;
 const twilio = require("twilio");
 const MessagingResponse = twilio.twiml.MessagingResponse;
-// const accountSid = process.env.ACCOUNT_SID;
-// const authToken = process.env.AUTH_TOKEN;
-// const client = twilio(accountSid, authToken);
 
 const AssistantV2 = require("watson-developer-cloud/assistant/v2");
 const assistant = new AssistantV2({
@@ -27,7 +24,6 @@ let sessionId = function(req) {
           console.error(err);
           reject(err);
         } else {
-          // console.log(JSON.stringify(response.session_id, null, 2));
           req.session.local = response.session_id;
           resolve(response.session_id);
         }
@@ -39,8 +35,6 @@ let sessionId = function(req) {
 module.exports = {
   understand: async (req, resp) => {
     const command = req.body.Body.toLowerCase();
-    // console.log(req.body);
-    // console.log(command);
     const twiml = new MessagingResponse();
     assistant.message(
       {
@@ -55,60 +49,58 @@ module.exports = {
         if (err) {
           console.log("error:", err);
         } else {
-          // console.log(JSON.stringify(response, null, 2));
-          // console.log(response.output.generic[0].text);
           let intent = response.output.intents[0].intent;
           const db = req.app.get("db");
           switch (intent) {
-            case "update_me": {
-              // db.get_alll(req.session.user.id).then(res => {
-              //   const singular = res.map((e, i) => {
-              //     console.log(e);
-              //     return e;
-              //   });
-              //   twiml.message(response.output.generic[0].text + " " + singular);
-              //   resp.writeHead(200, { "Content-Type": "text/xml" });
-              //   resp.end(twiml.toString());
-              // });
-              // break;
-              const list = [];
-              db.get_task(req.session.user.id)
-                .then(res => {
-                  res.map(e => {
-                    list.push(e);
-                  });
-                })
-                .then(() => {
-                  db.get_appt(req.session.user.id)
-                    .then(res => {
-                      res.map(e => {
-                        list.push(e);
-                      });
-                    })
-                    .then(() => {
-                      db.get_contact(req.session.user.id)
-                        .then(res => {
-                          res.map(e => {
-                            list.push(e);
-                          });
-                        })
-                        .then(() => {
-                          console.log(list);
-                          twiml.message(
-                            response.output.generic[0].text +
-                              " " +
-                              list.map(e => e.mortal_id)
-                          );
-                          resp.writeHead(200, { "Content-Type": "text/xml" });
-                          resp.end(twiml.toString());
-                        });
-                    });
-                });
-              break;
-            }
+            // case "update_me": {
+            // db.get_alll(req.session.user.id).then(res => {
+            //   const singular = res.map((e, i) => {
+            //     console.log(e);
+            //     return e;
+            //   });
+            //   twiml.message(response.output.generic[0].text + " " + singular);
+            //   resp.writeHead(200, { "Content-Type": "text/xml" });
+            //   resp.end(twiml.toString());
+            // });
+            // break;
+            //   const list = [];
+            //   db.get_task(req.session.user.id)
+            //     .then(res => {
+            //       res.map(e => {
+            //         list.push(e);
+            //       });
+            //     })
+            //     .then(() => {
+            //       db.get_appt(req.session.user.id)
+            //         .then(res => {
+            //           res.map(e => {
+            //             list.push(e);
+            //           });
+            //         })
+            //         .then(() => {
+            //           db.get_contact(req.session.user.id)
+            //             .then(res => {
+            //               res.map(e => {
+            //                 list.push(e);
+            //               });
+            //             })
+            //             .then(() => {
+            //               console.log(list);
+            //               twiml.message(
+            //                 response.output.generic[0].text +
+            //                   " " +
+            //                   list.map(e => e.mortal_id)
+            //               );
+            //               resp.writeHead(200, { "Content-Type": "text/xml" });
+            //               resp.end(twiml.toString());
+            //             });
+            //         });
+            //     });
+            //   break;
+            // }
             case "help": {
               twiml.message(
-                "At the moment I am able to help you get information from the website. I can answer questions about what tasks, appointments and contacts you have created at The Productivity Place. I'm sorry if I am unable to assist you on a specific issue I am only "
+                "I can help you with getting any of the tasks, appointments or contacts you have created on the website."
               );
               resp.writeHead(200, { "Content-Type": "text/xml" });
               resp.end(twiml.toString());
@@ -124,13 +116,18 @@ module.exports = {
               twiml.message(response.output.generic[0].text);
               resp.writeHead(200, { "Content-Type": "text/xml" });
               resp.end(twiml.toString());
+              break;
             }
             case "get_tasks": {
               db.get_task(req.session.user.id).then(res => {
                 const singular = res.map((e, i) => {
-                  return e.body;
+                  if (i === 0) {
+                    return e.body;
+                  } else {
+                    return " " + e.body;
+                  }
                 });
-                twiml.message(response.output.generic[0].text + " " + singular);
+                twiml.message(response.output.generic[0].text + singular);
                 resp.writeHead(200, { "Content-Type": "text/xml" });
                 resp.end(twiml.toString());
               });
@@ -140,6 +137,17 @@ module.exports = {
               db.get_contact(req.session.user.id).then(res => {
                 const singular = res.map((e, i) => {
                   return e.name;
+                });
+                twiml.message(response.output.generic[0].text + " " + singular);
+                resp.writeHead(200, { "Content-Type": "text/xml" });
+                resp.end(twiml.toString());
+              });
+              break;
+            }
+            case "get_appts": {
+              db.get_appt(req.session.user.id).then(res => {
+                const singular = res.map((e, i) => {
+                  return `With ${e.name} at ${e.location} on ${e.appt_time}`;
                 });
                 twiml.message(response.output.generic[0].text + " " + singular);
                 resp.writeHead(200, { "Content-Type": "text/xml" });

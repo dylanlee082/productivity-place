@@ -6,6 +6,7 @@ import axios from "axios";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import { getUser, loginFormToggle } from "../../ducks/reducers/generalReducer";
+import NumberFormat from "react-number-format";
 
 //Material-UI Core Imports
 import { withStyles } from "@material-ui/core";
@@ -94,8 +95,9 @@ class MobileRegister extends Component {
               fullWidth
               onChange={e => this.handleChange(e)}
             />
-            <TextField
-              required
+            <NumberFormat
+              customInput={TextField}
+              format="+1 (###) ###-####"
               margin="dense"
               name="number"
               label="Phone Number"
@@ -125,7 +127,7 @@ class MobileRegister extends Component {
 
 const mapStateToProps = state => {
   return {
-    open: state.loginForm
+    open: state.generalReducer.loginForm
   };
 };
 

@@ -78,7 +78,6 @@ class Contact extends Component {
 
   render() {
     const { classes } = this.props;
-    console.log(this.props.user);
     this.props.contactList.sort(function(a, b) {
       var nameA = a.name.toUpperCase();
       var nameB = b.name.toUpperCase();
