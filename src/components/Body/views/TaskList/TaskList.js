@@ -1,11 +1,11 @@
 //Main NPM Imports
-import React, { Component } from "react";
+import React, { useEffect } from "react";
 import axios from "axios";
-import { connect } from "react-redux";
+import { connect, useSelector } from "react-redux";
 import {
   getTask,
   updateTaskToggle,
-  updateTask
+  updateTask,
 } from "../../../../ducks/reducers/taskReducer";
 
 //Material-UI Core Imports
@@ -25,93 +25,87 @@ import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import UpdateTaskForm from "./UpdateTaskForm";
 
 //Material-UI Styling
-const styles = theme => ({
+const styles = (theme) => ({
   root: {
     display: "flex",
     flexWrap: "wrap",
-    fontFamily: theme.typography.fontFamily
+    fontFamily: theme.typography.fontFamily,
   },
   background: {
     display: "flex",
     flexDirection: "column",
-    width: "20vw"
+    width: "20vw",
   },
   items: {
     display: "flex",
     alignItems: "center",
-    justifyContent: "space-between"
+    justifyContent: "space-between",
   },
   leftSide: {
     fontSize: 20,
-    marginLeft: 10
+    marginLeft: 10,
   },
   rightSide: {
-    marginRight: 10
+    marginRight: 10,
   },
   task: {
     margin: 10,
     display: "flex",
     flexDirection: "column",
-    background: "grey"
+    background: "grey",
   },
   innerItem: {
     display: "flex",
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
   },
   innerPaper: {
     background: "white",
-    width: "17.5vw"
+    width: "17.5vw",
   },
   root2: {
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    justifyContent: "space-evenly"
-  }
+    justifyContent: "space-evenly",
+  },
 });
 
-class TaskList extends Component {
-  //On Mount get the list of tasks from database based on user ID
-  componentDidMount = () => {
-    const { user, getTask } = this.props;
+const TaskList = (props) => {
+  const user = useSelector((state) => state.generalReducer.user);
+
+  useEffect(() => {
+    const { user, getTask } = props;
     if (user.id) {
       getTask(user.id);
     }
-  };
+  }, [user.id]);
 
-  //If the user refreshes the page this ensures that the user.id doesn't come back as undefined
-  componentDidUpdate = prevProps => {
-    if (prevProps.user.id !== this.props.user.id) {
-      this.props.getTask(this.props.user.id);
-    }
-  };
+  const addTask = () => {};
 
-  addTask = () => {};
-
-  deleteTask = id => {
+  const deleteTask = (id) => {
     const { user, getTask } = this.props;
     axios
       .delete(`/api/task/${id}`)
       .then(() => console.log("It worked"))
-      .catch(err => console.log(err));
+      .catch((err) => console.log(err));
     getTask(user.id);
   };
 
-  deleteTaskList = list_name => {
+  const deleteTaskList = (list_name) => {
     const { user, getTask } = this.props;
     axios
       .delete(`/api/list/${list_name}`)
       .then(() => console.log("It worked"))
-      .catch(err => console.log(err));
+      .catch((err) => console.log(err));
     getTask(user.id);
   };
 
-  determineListNames = taskList => {
+  const determineListNames = (taskList) => {
     const check = [];
     const arr = [];
     // eslint-disable-next-line
-    taskList.map(e => {
+    taskList.map((e) => {
       if (!check.includes(e.list_name)) {
         check.push(e.list_name);
         arr.push({ name: e.list_name, values: [] });
@@ -125,62 +119,60 @@ class TaskList extends Component {
     return arr;
   };
 
-  render() {
-    const { classes, taskList } = this.props;
-    let names = this.determineListNames(taskList);
-    return (
-      <div className={classes.root}>
-        <UpdateTaskForm />
-        {names.map((e, i) => {
-          return (
-            <div className={classes.background} key={i}>
-              <div className={classes.items}>
-                <h1 className={classes.leftSide}>{e.name}</h1>
-                <div className={classes.rightSide}>
-                  <AddBox onClick={() => this.addTask()} />
-                  <Clear onClick={() => this.deleteTaskList(e.name)} />
-                </div>
+  const { classes, taskList } = props;
+  let names = determineListNames(taskList);
+  return (
+    <div className={classes.root}>
+      <UpdateTaskForm />
+      {names.map((e, i) => {
+        return (
+          <div className={classes.background} key={i}>
+            <div className={classes.items}>
+              <h1 className={classes.leftSide}>{e.name}</h1>
+              <div className={classes.rightSide}>
+                <AddBox onClick={() => addTask()} />
+                <Clear onClick={() => deleteTaskList(e.name)} />
               </div>
-              <Divider />
-              <Paper className={classes.task}>
-                <List dense className={classes.root2}>
-                  {e.values.map((value, i) => {
-                    return (
-                      <Paper key={i} className={classes.innerPaper}>
-                        <ListItem button>
-                          <ListItemText primary={value.body} />
-                          <ListItemSecondaryAction>
-                            <Clear onClick={() => this.deleteTask(value.id)} />
-                            <Edit
-                              onClick={() => {
-                                this.props.updateTaskToggle(this.props.open);
-                                this.props.updateTask({
-                                  list_name: e.name,
-                                  body: value.body,
-                                  task_id: value.id
-                                });
-                              }}
-                            />
-                          </ListItemSecondaryAction>
-                        </ListItem>
-                      </Paper>
-                    );
-                  })}
-                </List>
-              </Paper>
             </div>
-          );
-        })}
-      </div>
-    );
-  }
-}
+            <Divider />
+            <Paper className={classes.task}>
+              <List dense className={classes.root2}>
+                {e.values.map((value, i) => {
+                  return (
+                    <Paper key={i} className={classes.innerPaper}>
+                      <ListItem button>
+                        <ListItemText primary={value.body} />
+                        <ListItemSecondaryAction>
+                          <Clear onClick={() => deleteTask(value.id)} />
+                          <Edit
+                            onClick={() => {
+                              props.updateTaskToggle(props.open);
+                              props.updateTask({
+                                list_name: e.name,
+                                body: value.body,
+                                task_id: value.id,
+                              });
+                            }}
+                          />
+                        </ListItemSecondaryAction>
+                      </ListItem>
+                    </Paper>
+                  );
+                })}
+              </List>
+            </Paper>
+          </div>
+        );
+      })}
+    </div>
+  );
+};
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     user: state.generalReducer.user,
     taskList: state.taskReducer.taskList,
-    open: state.taskReducer.updateTaskToggle
+    open: state.taskReducer.updateTaskToggle,
   };
 };
 

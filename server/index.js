@@ -23,12 +23,12 @@ app.use(
     resave: false,
     saveUninitialized: true,
     cookie: {
-      maxAge: 1000 * 60 * 60 * 24 * 7
-    }
+      maxAge: 1000 * 60 * 60 * 24 * 7,
+    },
   })
 );
 
-massive(process.env.CONNECTION_STRING).then(db => {
+massive(process.env.CONNECTION_STRING).then((db) => {
   console.log("db connected");
   app.set("db", db);
 });
@@ -36,12 +36,12 @@ massive(process.env.CONNECTION_STRING).then(db => {
 const userCheck = (req, resp, next) => {
   const db = req.app.get("db");
   db.get_number(req.body.From)
-    .then(res => {
+    .then((res) => {
       if (res[0] && res[0].number === req.body.From) {
         req.session.user = {
           id: res[0].mortal_id,
           username: res[0].username,
-          number: res[0].number
+          number: res[0].number,
         };
         return next();
       } else {
@@ -53,7 +53,7 @@ const userCheck = (req, resp, next) => {
         resp.end(twiml.toString());
       }
     })
-    .catch(err => console.log(err));
+    .catch((err) => console.log(err));
 };
 
 app.post("/sms", userCheck, understand);
