@@ -28,7 +28,18 @@ app.use(
   })
 );
 
-massive(process.env.CONNECTION_STRING).then((db) => {
+// massive(process.env.CONNECTION_STRING).then((db) => {
+//   console.log("db connected");
+//   app.set("db", db);
+// });
+
+massive({
+  host: process.env.HOST_NAME,
+  port: 5432,
+  database: process.env.DATABASE,
+  user: "postgres",
+  password: process.env.DATABASE_PASSWORD,
+}).then((db) => {
   console.log("db connected");
   app.set("db", db);
 });
@@ -87,9 +98,9 @@ app.delete("/api/contact/:id", contactCon.deleteContact);
 
 const path = require("path"); // Usually moved to the start of file
 
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "../build/index.html"));
-});
+// app.get("*", (req, res) => {
+//   res.sendFile(path.join(__dirname, "../build/index.html"));
+// });
 
 const PORT = process.env.SERVER_PORT;
 app.listen(PORT, () => console.log(`Listening on port: ${PORT}`));

@@ -14,7 +14,11 @@ CREATE TABLE mortal (
     number VARCHAR(20),
     taskToggle BOOLEAN,
     calendarToggle BOOLEAN,
-    contactToggle BOOLEAN
+    contactToggle BOOLEAN,
+    profile_img VARCHAR(512),
+    birthday VARCHAR(50),
+    country TEXT [],
+    region VARCHAR(50)
 );
 
 CREATE TABLE task (
